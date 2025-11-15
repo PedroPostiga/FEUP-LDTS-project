@@ -1,9 +1,8 @@
-package com.Gladiator;
+package com.gladiator;
 
 import java.io.IOException;
 
 public class Application {
     public static void main(String[] args) throws IOException {
-
     }
 }

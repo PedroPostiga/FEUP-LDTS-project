@@ -3,7 +3,7 @@ plugins {
     id 'application'
 }
 
-group = 'com.Gladiator'
+group = 'com.gladiator'
 version = '1.0-SNAPSHOT'
 
 repositories {
