@@ -10,20 +10,46 @@ import java.awt.*;
 
 public abstract class MovingEntity implements Entity {
     protected Position position;
-    protected Hitbox hitbox;
+    protected final Hitbox hitbox;
     protected Health health;
+    protected int speed;
 
     protected MovementStrategy movement;
     protected AttackStrategy attack;
 
-    protected MovingEntity(int x, int y, int w, int h, int health) {
+    protected MovingEntity(int x, int y, int w, int h, int health, int speed) {
         this.position = new Position(x, y);
         this.hitbox = new Hitbox(w, h);
         this.health = new Health(health);
+        this.speed = speed;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
     }
 
     public Position getPosition() {
         return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
+    public Hitbox getHitbox() {
+        return hitbox;
+    }
+
+    public Health getHealth() {
+        return health;
+    }
+
+    public void setHealth(Health health) {
+        this.health = health;
     }
 
     public void setMovement(MovementStrategy movement) {
