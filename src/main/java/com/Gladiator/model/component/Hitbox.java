@@ -3,8 +3,8 @@ package com.Gladiator.model.component;
 import java.awt.*;
 
 public class Hitbox {
-    private int width;
-    private int height;
+    private final int width;
+    private final int height;
 
     public Hitbox(int width, int height) {
         this.width = width;
