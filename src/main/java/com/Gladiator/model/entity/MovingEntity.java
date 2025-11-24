@@ -1,9 +1,25 @@
-package com.gladiator.model;
+package com.Gladiator.model.entity;
 
-public abstract class MovingEntity implements Entities {
+import java.awt.*;
+
+public abstract class MovingEntity implements Entity {
     protected int x, y;
+    protected int width, height;
     protected int vx,vy;
     protected int health;
+
+    protected MovingEntity(int x, int y, int w, int h, int health) {
+        this.x = x;
+        this.y = y;
+        this.width = w;
+        this.height = h;
+        this.health = health;
+    }
+
+    @Override
+    public boolean isAlive() {
+        return health > 0;
+    }
 
     public void move(int t){
         x += vx * t;
@@ -11,12 +27,17 @@ public abstract class MovingEntity implements Entities {
     }
 
     public void takeDamage(int damage) {
-        if(damage < health) {
+        if (damage < health) {
             health -= damage;
         }
         else {
             health = 0;
         }
+    }
+
+    @Override
+    public Rectangle getBounds() {
+        return new Rectangle(x, y, width, height);
     }
 
     public int getX() {
