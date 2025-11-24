@@ -2,7 +2,7 @@ package com.Gladiator.model.movement;
 
 import com.Gladiator.model.component.Position;
 import com.Gladiator.model.entity.MovingEntity;
-import com.gladiator.model.GladiatorModel;
+import com.Gladiator.model.gladiator.GladiatorModel;
 
 public class ChaseMovement implements MovementStrategy {
     private final double speed;
@@ -15,7 +15,7 @@ public class ChaseMovement implements MovementStrategy {
 
     @Override
     public void move(MovingEntity entity) {
-        Position targetPos = gladiator.getPos();
+        Position targetPos = gladiator.getPosition();
         Position pos = entity.getPosition();
 
         double dx = targetPos.getX() - pos.getX();
