@@ -1,5 +1,5 @@
 package com.Gladiator.model.entity;
 
-public interface Updatable {
+public interface Updater {
     void update();
 }

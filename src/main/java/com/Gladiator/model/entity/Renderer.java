@@ -2,6 +2,6 @@ package com.Gladiator.model.entity;
 
 import java.awt.*;
 
-public interface Renderable {
+public interface Renderer {
     void render(Graphics g);
 }
