@@ -1,4 +1,4 @@
-package com.Gladiator.model.entity;
+package com.gladiator.model.entity;
 
 public interface Entity extends Collidable, Updater, Renderer {
     boolean isAlive();

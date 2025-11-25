@@ -1,6 +1,6 @@
-package com.Gladiator.model.gladiator;
+package com.gladiator.model.gladiator;
 
-import com.Gladiator.model.entity.MovingEntity;
+import com.gladiator.model.entity.MovingEntity;
 
 public class GladiatorModel extends MovingEntity {
 

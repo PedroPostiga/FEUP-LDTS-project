@@ -1,6 +1,6 @@
-package com.Gladiator.model.attack;
+package com.gladiator.model.attack;
 
-import com.Gladiator.model.entity.MovingEntity;
+import com.gladiator.model.entity.MovingEntity;
 
 import java.util.List;
 

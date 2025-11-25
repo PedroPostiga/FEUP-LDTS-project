@@ -1,10 +1,10 @@
-package com.Gladiator.model.entity;
+package com.gladiator.model.entity;
 
-import com.Gladiator.model.attack.AttackStrategy;
-import com.Gladiator.model.component.Health;
-import com.Gladiator.model.component.Hitbox;
-import com.Gladiator.model.component.Position;
-import com.Gladiator.model.movement.MovementStrategy;
+import com.gladiator.model.attack.AttackStrategy;
+import com.gladiator.model.component.Health;
+import com.gladiator.model.component.Hitbox;
+import com.gladiator.model.component.Position;
+import com.gladiator.model.movement.MovementStrategy;
 
 import java.awt.*;
 

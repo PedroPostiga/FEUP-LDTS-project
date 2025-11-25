@@ -1,7 +1,7 @@
-package com.Gladiator.model.movement;
+package com.gladiator.model.movement;
 
-import com.Gladiator.model.component.Position;
-import com.Gladiator.model.entity.MovingEntity;
+import com.gladiator.model.component.Position;
+import com.gladiator.model.entity.MovingEntity;
 
 public class WanderMovement implements MovementStrategy {
     private double angle;

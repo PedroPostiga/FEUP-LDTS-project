@@ -1,8 +1,8 @@
-package com.Gladiator.model.attack.projectile;
+package com.gladiator.model.attack.projectile;
 
-import com.Gladiator.model.component.Hitbox;
-import com.Gladiator.model.component.Position;
-import com.Gladiator.model.entity.MovingEntity;
+import com.gladiator.model.component.Hitbox;
+import com.gladiator.model.component.Position;
+import com.gladiator.model.entity.MovingEntity;
 
 import java.awt.*;
 import java.util.List;

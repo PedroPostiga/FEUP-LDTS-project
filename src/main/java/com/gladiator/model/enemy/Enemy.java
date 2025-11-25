@@ -1,6 +1,6 @@
-package com.Gladiator.model.enemy;
+package com.gladiator.model.enemy;
 
-import com.Gladiator.model.entity.MovingEntity;
+import com.gladiator.model.entity.MovingEntity;
 
 public class Enemy extends MovingEntity {
 

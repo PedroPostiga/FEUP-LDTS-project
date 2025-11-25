@@ -1,4 +1,4 @@
-package com.Gladiator.model.component;
+package com.gladiator.model.component;
 
 public class Position {
     private double x;

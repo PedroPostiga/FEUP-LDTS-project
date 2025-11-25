@@ -1,8 +1,8 @@
-package com.Gladiator.model.movement;
+package com.gladiator.model.movement;
 
-import com.Gladiator.model.component.Position;
-import com.Gladiator.model.entity.MovingEntity;
-import com.Gladiator.model.gladiator.GladiatorModel;
+import com.gladiator.model.component.Position;
+import com.gladiator.model.entity.MovingEntity;
+import com.gladiator.model.gladiator.GladiatorModel;
 
 public class ChaseMovement implements MovementStrategy {
     private final double speed;
