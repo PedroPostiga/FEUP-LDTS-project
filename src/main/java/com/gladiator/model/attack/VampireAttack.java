@@ -1,18 +1,16 @@
 package com.gladiator.model.attack;
 
 import com.gladiator.model.entity.MovingEntity;
-import com.gladiator.model.gladiator.GladiatorModel;
-
-import java.util.List;
+import com.gladiator.model.gladiator.Gladiator;
 
 public class VampireAttack implements AttackStrategy {
 
     private final int damage;
     private final int range;
-    private final GladiatorModel gladiator;
+    private final Gladiator gladiator;
     private final double lifestealPercentage;
 
-    public VampireAttack(int damage, int range, GladiatorModel gladiator, double lifestealPercentage){
+    public VampireAttack(int damage, int range, Gladiator gladiator, double lifestealPercentage){
         this.damage = damage;
         this.range = range;
         this.gladiator = gladiator;

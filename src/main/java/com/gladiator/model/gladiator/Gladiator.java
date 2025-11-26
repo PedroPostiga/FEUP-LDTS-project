@@ -2,9 +2,9 @@ package com.gladiator.model.gladiator;
 
 import com.gladiator.model.entity.MovingEntity;
 
-public class GladiatorModel extends MovingEntity {
+public class Gladiator extends MovingEntity {
 
-    public GladiatorModel(int x, int y, int w, int h, int hp, int speed) {
+    public Gladiator(int x, int y, int w, int h, int hp, int speed) {
         super(x, y, w, h, hp, speed);
     }
 }

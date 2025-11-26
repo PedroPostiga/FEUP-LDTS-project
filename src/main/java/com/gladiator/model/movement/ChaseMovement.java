@@ -2,13 +2,13 @@ package com.gladiator.model.movement;
 
 import com.gladiator.model.component.Position;
 import com.gladiator.model.entity.MovingEntity;
-import com.gladiator.model.gladiator.GladiatorModel;
+import com.gladiator.model.gladiator.Gladiator;
 
 public class ChaseMovement implements MovementStrategy {
     private final double speed;
-    private final GladiatorModel gladiator;
+    private final Gladiator gladiator;
 
-    public ChaseMovement(double speed, GladiatorModel gladiator) {
+    public ChaseMovement(double speed, Gladiator gladiator) {
         this.speed = speed;
         this.gladiator = gladiator;
     }
