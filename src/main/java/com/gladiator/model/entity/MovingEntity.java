@@ -60,16 +60,6 @@ public abstract class MovingEntity implements Entity {
         this.attack = attack;
     }
 
-    @Override
-    public void update() {
-        if (movement != null) {
-            movement.move(this);
-        }
-        if (attack != null) {
-            attack.attack(this);
-        }
-    }
-
     public Rectangle getBounds() {
         return hitbox.getBounds(position);
     }
@@ -81,11 +71,6 @@ public abstract class MovingEntity implements Entity {
 
     public void takeDamage(int damage) {
         health.takeDamage(damage);
-    }
-
-    @Override
-    public void render(Graphics g) {
-
     }
 
 }

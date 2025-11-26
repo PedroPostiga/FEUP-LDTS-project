@@ -1,4 +1,4 @@
-package com.gladiator.model.entity;
+package com.gladiator.view;
 
 import java.awt.*;
 

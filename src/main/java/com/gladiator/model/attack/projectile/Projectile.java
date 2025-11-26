@@ -43,32 +43,8 @@ public class Projectile {
         return alive;
     }
 
-    public void update() {
-        if (!alive) return;
-
-        position.setX(position.getX() + vx);
-        position.setY(position.getY() + vy);
-
-        double dx = position.getX() - startPosition.getX();
-        double dy = position.getY() - startPosition.getY();
-        if (Math.sqrt(dx * dx + dy * dy) > maxDistance) {
-            alive = false;
-        }
-
-        for (MovingEntity t : targets) {
-            if (!t.isAlive()) continue;
-
-            if (hitbox.getBounds(position).intersects(t.getBounds())) {
-                t.takeDamage(damage);
-                alive = false;
-                break;
-            }
-        }
-
-    }
-
-    public void render(Graphics g) {
-
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 
     public Hitbox getHitbox() {
