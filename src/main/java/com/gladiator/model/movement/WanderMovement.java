@@ -14,8 +14,8 @@ public class WanderMovement implements MovementStrategy {
     public void move(MovingEntity entity) {
         Position pos = entity.getPosition();
 
-        pos.setX(pos.getX() + entity.getSpeed() * Math.cos(angle));
-        pos.setY(pos.getY() + entity.getSpeed() * Math.sin(angle));
+        pos.setX((int) (pos.getX() + entity.getSpeed() * Math.cos(angle)));
+        pos.setY((int) (pos.getY() + entity.getSpeed() * Math.sin(angle)));
 
         angle += (Math.random() - 0.5) * 0.1;
     }

@@ -23,7 +23,7 @@ public class ChaseMovement implements MovementStrategy {
         double dist = Math.sqrt(dx * dx + dy * dy);
         if (dist == 0) return;
 
-        pos.setX(pos.getX() + (dx / dist) * speed);
-        pos.setY(pos.getY() + (dy / dist) * speed);
+        pos.setX((int) (pos.getX() + (dx / dist) * speed));
+        pos.setY((int) (pos.getY() + (dy / dist) * speed));
     }
 }

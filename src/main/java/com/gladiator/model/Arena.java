@@ -9,8 +9,8 @@ import java.util.List;
 public class Arena {
     private final int width;
     private final int height;
-    private Gladiator gladiator;
-    private List<Enemy> enemies;
+    protected Gladiator gladiator;
+    protected List<Enemy> enemies;
 
     public Arena(int width, int height) {
         this.width = width;
