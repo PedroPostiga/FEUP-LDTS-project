@@ -11,4 +11,12 @@ public abstract class Enemy extends MovingEntity {
         setMovement(movement);
         setAttack(attack);
     }
+
+    public MovementStrategy getMovementStrategy() {
+        return movement;
+    }
+
+    public AttackStrategy getAttackStrategy() {
+        return attack;
+    }
 }

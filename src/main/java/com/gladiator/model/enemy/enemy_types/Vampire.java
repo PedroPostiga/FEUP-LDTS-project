@@ -16,4 +16,12 @@ public class Vampire extends Enemy {
     public double getLifestealPercentage() {
         return lifestealPercentage;
     }
+
+    public MovementStrategy getMovementStrategy() {
+        return movement;
+    }
+
+    public AttackStrategy getAttackStrategy() {
+        return attack;
+    }
 }

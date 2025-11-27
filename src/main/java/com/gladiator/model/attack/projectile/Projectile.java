@@ -54,4 +54,20 @@ public class Projectile {
     public Position getPosition() {
         return position;
     }
+
+    public double getVx() {
+        return vx;
+    }
+
+    public double getVy() {
+        return vy;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public double getMaxDistance() {
+        return maxDistance;
+    }
 }

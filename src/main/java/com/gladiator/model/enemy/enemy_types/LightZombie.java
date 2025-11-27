@@ -16,4 +16,12 @@ public class LightZombie extends Enemy {
     public double getAttackSpeedMultiplier() {
         return attackSpeedMultiplier;
     }
+
+    public MovementStrategy getMovementStrategy() {
+        return movement;
+    }
+
+    public AttackStrategy getAttackStrategy() {
+        return attack;
+    }
 }

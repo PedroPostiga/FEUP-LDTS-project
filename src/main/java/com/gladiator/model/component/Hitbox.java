@@ -12,6 +12,6 @@ public class Hitbox {
     }
 
     public Rectangle getBounds(Position p) {
-        return new Rectangle((int) p.getX(), (int) p.getY(), width, height);
+        return new Rectangle(p.getX(), p.getY(), width, height);
     }
 }

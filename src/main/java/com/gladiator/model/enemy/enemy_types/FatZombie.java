@@ -16,4 +16,12 @@ public class FatZombie extends Enemy {
     public double getAttackDamageMultiplier() {
         return attackDamageMultiplier;
     }
+
+    public MovementStrategy getMovementStrategy() {
+        return movement;
+    }
+
+    public AttackStrategy getAttackStrategy() {
+        return attack;
+    }
 }
