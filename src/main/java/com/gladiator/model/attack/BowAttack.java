@@ -1,6 +1,5 @@
 package com.gladiator.model.attack;
 
-import com.gladiator.model.attack.projectile.Projectile;
 import com.gladiator.model.attack.projectile.SingleArrowPool;
 import com.gladiator.model.enemy.Enemy;
 import com.gladiator.model.entity.MovingEntity;
