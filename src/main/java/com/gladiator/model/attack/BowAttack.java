@@ -1,7 +1,7 @@
 package com.gladiator.model.attack;
 
 import com.gladiator.model.attack.projectile.Projectile;
-import com.gladiator.model.component.Hitbox;
+import com.gladiator.model.attack.projectile.SingleArrowPool;
 import com.gladiator.model.enemy.Enemy;
 import com.gladiator.model.entity.MovingEntity;
 
@@ -13,19 +13,19 @@ public class BowAttack implements AttackStrategy {
     private final int speed;
     private final double maxDistance;
     private final List<Enemy> targets;
-    private final List<Projectile> projectiles;
-    private final Hitbox hitbox = new Hitbox(8, 8);
+    private final SingleArrowPool arrowPool;
 
-    public BowAttack(int damage, int speed, double maxDistance, List<Enemy> targets, List<Projectile> projectiles) {
+    public BowAttack(int damage, int speed, double maxDistance, List<Enemy> targets) {
         this.damage = damage;
         this.speed = speed;
         this.maxDistance = maxDistance;
         this.targets = targets;
-        this.projectiles = projectiles;
+        this.arrowPool = new SingleArrowPool();
     }
 
     @Override
     public void attack(MovingEntity attacker) {
+        if (arrowPool.isArrowActive()) return;
         if (targets.isEmpty()) return;
 
         Enemy closest = null;
@@ -48,8 +48,18 @@ public class BowAttack implements AttackStrategy {
 
         double effectiveDistance = Math.min(closestDistance, maxDistance);
 
-        Projectile p = new Projectile(attacker.getPosition(), closest.getPosition(), speed, damage, effectiveDistance, targets, hitbox);
+        arrowPool.getArrow(
+                attacker.getPosition(),
+                closest.getPosition(),
+                speed,
+                damage,
+                effectiveDistance,
+                targets
+        );
 
-        projectiles.add(p);
+    }
+
+    public SingleArrowPool getArrowPool() {
+        return arrowPool;
     }
 }
