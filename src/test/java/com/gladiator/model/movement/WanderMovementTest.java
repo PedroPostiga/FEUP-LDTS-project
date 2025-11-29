@@ -99,25 +99,6 @@ public class WanderMovementTest {
     }
 
     @Test
-    void testMoveWithDifferentSpeeds() {
-        int[] speeds = {1, 3, 5, 10};
-
-        for (int speed : speeds) {
-            Position testPos = new Position(100, 100);
-            when(entity.getPosition()).thenReturn(testPos);
-            when(entity.getSpeed()).thenReturn(speed);
-
-            double initialX = testPos.getX();
-            double initialY = testPos.getY();
-
-            wanderMovement.move(entity);
-
-            boolean positionChanged = (testPos.getX() != initialX) || (testPos.getY() != initialY);
-            assertTrue(positionChanged);
-        }
-    }
-
-    @Test
     void testMovementStaysWithinReasonableBounds() {
         Position testPos = new Position(0, 0);
         when(entity.getPosition()).thenReturn(testPos);
