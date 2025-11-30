@@ -9,7 +9,7 @@ difficult. The final objective is defeat the final boss, that will provide you a
 
 ## Authors
  
- This project was developed by Filipe Cruz (up2024), Pedro Postiga (up202404966) and Vasco Guimarães (up202403604).
+ This project was developed by Filipe Cruz (up202404158), Pedro Postiga (up202404966) and Vasco Guimarães (up202403604).
 
 
 
