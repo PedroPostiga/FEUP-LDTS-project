@@ -6,6 +6,10 @@ import com.gladiator.model.enemy.Enemy;
 import com.gladiator.model.enemy.enemy_types.FatZombie;
 import com.gladiator.model.enemy.enemy_types.LightZombie;
 import com.gladiator.model.enemy.enemy_types.Vampire;
+import com.gladiator.model.entity.LargeRock;
+import com.gladiator.model.entity.Obstacle;
+import com.gladiator.model.entity.SmallRock;
+import com.gladiator.model.entity.Tree;
 import com.gladiator.model.gladiator.Gladiator;
 import com.gladiator.model.movement.ChaseMovement;
 import com.gladiator.model.movement.WanderMovement;
@@ -20,6 +24,7 @@ public class ArenaBuilder {
 
         arena.setGladiator(createGladiator());
         arena.setEnemies(createEnemies(arena));
+        arena.setObstacles(createObstacles(arena));
 
         return arena;
     }
@@ -43,7 +48,20 @@ public class ArenaBuilder {
         return enemies;
     }
 
+    protected List<Obstacle> createObstacles(Arena arena) {
+        List<Obstacle> obstacles = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            SmallRock smallRock = new SmallRock(i,4);
+            obstacles.add(smallRock);
+            Tree tree = new Tree(i, 5);
+            obstacles.add(tree);
+            LargeRock largeRock = new LargeRock(i,6);
+            obstacles.add(largeRock);
+        }
+        return obstacles;
+    }
+
     protected Gladiator createGladiator() {
-        return new Gladiator(5,5,5,5,100,5);
+        return new Gladiator(10,10,5,5,100,5);
     }
 }

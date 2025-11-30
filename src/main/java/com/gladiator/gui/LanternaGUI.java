@@ -102,6 +102,15 @@ public class LanternaGUI implements GUI {
     }
 
     @Override
+    public void drawSmallRock(Position position) { drawCharacter(position.getX(), position.getY(), 'R', "#808080"); }
+
+    @Override
+    public void drawLargeRock(Position position) { drawCharacter(position.getX(), position.getY(), 'B', "#FFA500"); }
+
+    @Override
+    public void drawTree(Position position) { drawCharacter(position.getX(), position.getY(), 'T', "#8C3A0A"); }
+
+    @Override
     public void drawText(Position position, String text, String color) {
         TextGraphics tg = screen.newTextGraphics();
         tg.setForegroundColor(TextColor.Factory.fromString(color));

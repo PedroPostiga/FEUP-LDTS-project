@@ -32,6 +32,7 @@ public abstract class MovingEntity implements Entity {
         this.speed = speed;
     }
 
+    @Override
     public Position getPosition() {
         return position;
     }
@@ -60,11 +61,11 @@ public abstract class MovingEntity implements Entity {
         this.attack = attack;
     }
 
+    @Override
     public Rectangle getBounds() {
         return hitbox.getBounds(position);
     }
 
-    @Override
     public boolean isAlive() {
         return health.isAlive();
     }

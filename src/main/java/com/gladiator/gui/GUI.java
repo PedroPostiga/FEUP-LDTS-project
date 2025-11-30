@@ -15,6 +15,12 @@ public interface GUI {
 
     void drawVampire(Position position);
 
+    void drawSmallRock(Position position);
+
+    void drawLargeRock(Position position);
+
+    void drawTree(Position position);
+
     void drawText(Position position, String text, String color);
 
     void clear();
