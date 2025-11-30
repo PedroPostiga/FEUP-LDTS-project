@@ -39,8 +39,8 @@ public class ArenaBuilderTest {
         Gladiator gladiator = arena.getGladiator();
 
         assertNotNull(gladiator);
-        assertEquals(5, gladiator.getPosition().getX(), 0.001);
-        assertEquals(5, gladiator.getPosition().getY(), 0.001);
+        assertEquals(10, gladiator.getPosition().getX(), 0.001);
+        assertEquals(10, gladiator.getPosition().getY(), 0.001);
     }
 
     @Test
@@ -119,8 +119,8 @@ public class ArenaBuilderTest {
         Gladiator gladiator = arenaBuilder.createGladiator();
 
         assertNotNull(gladiator);
-        assertEquals(5, gladiator.getPosition().getX(), 0.001);
-        assertEquals(5, gladiator.getPosition().getY(), 0.001);
+        assertEquals(10, gladiator.getPosition().getX(), 0.001);
+        assertEquals(10, gladiator.getPosition().getY(), 0.001);
         assertTrue(gladiator.isAlive());
     }
 
