@@ -38,9 +38,9 @@ dependences, the View depends on the Model, and the Controller depends on both t
 
 #### Implementation
 The main source directory of the project has three directories that represent one of the MVC elements, they are:
-[Model](/src/main/java/model)
-[View](/src/main/java/view)
-[Controller](/src/main/java/controller)
+[Model](/src/main/java/com.gladiator/model)
+[View](/src/main/java/com.gladiator/view)
+[Controller](/src/main/java/com.gladiator/controller)
 ![](https://i.imgur.com/7k56rmg.png)
 
 #### Consequences
