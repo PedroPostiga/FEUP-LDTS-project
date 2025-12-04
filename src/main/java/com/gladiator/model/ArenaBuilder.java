@@ -29,6 +29,10 @@ public class ArenaBuilder {
         return arena;
     }
 
+    public WaveManager createWaveManager(Arena arena) {
+        return new WaveManager(arena);
+    }
+
     protected List<Enemy> createEnemies(Arena arena) {
         List<Enemy> enemies = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
