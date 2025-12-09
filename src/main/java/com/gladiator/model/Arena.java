@@ -2,6 +2,7 @@ package com.gladiator.model;
 
 import com.gladiator.model.component.Position;
 import com.gladiator.model.enemy.Enemy;
+import com.gladiator.model.entity.InvisibleWall;
 import com.gladiator.model.entity.Obstacle;
 import com.gladiator.model.gladiator.Gladiator;
 
@@ -17,6 +18,23 @@ public class Arena {
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
+        createInvisibleBorders();
+    }
+
+    private void createInvisibleBorders() {
+        // Create 4 invisible walls around the entire arena
+
+        // Top border: 1 unit thick, runs across the entire top
+        obstacles.add(new InvisibleWall(0, -1, width, 1));
+
+        // Bottom border: 1 unit thick, runs across the entire bottom
+        obstacles.add(new InvisibleWall(0, height, width, 1));
+
+        // Left border: 1 unit thick, runs along the entire left side
+        obstacles.add(new InvisibleWall(-1, 0, 1, height));
+
+        // Right border: 1 unit thick, runs along the entire right side
+        obstacles.add(new InvisibleWall(width, 0, 1, height));
     }
 
     public int getWidth() {

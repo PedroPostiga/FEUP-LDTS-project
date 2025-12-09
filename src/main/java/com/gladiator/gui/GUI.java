@@ -7,6 +7,8 @@ import java.io.IOException;
 public interface GUI {
     ACTION getNextAction() throws IOException;
 
+    void drawSprite(String img, Position position) throws IOException;
+
     void drawGladiator(Position position);
 
     void drawFatZombie(Position position);

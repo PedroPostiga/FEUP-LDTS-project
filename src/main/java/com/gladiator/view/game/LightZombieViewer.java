@@ -8,6 +8,6 @@ import java.io.IOException;
 public class LightZombieViewer implements EntityViewer<LightZombie> {
     @Override
     public void draw(LightZombie lightZombie, GUI gui) throws IOException {
-        gui.drawLightZombie(lightZombie.getPosition());
+        gui.drawSprite("sprites/light_zombie_right.png",lightZombie.getPosition());
     }
 }
