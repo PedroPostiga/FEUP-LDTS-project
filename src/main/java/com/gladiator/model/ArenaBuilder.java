@@ -19,8 +19,11 @@ import java.util.Collection;
 import java.util.List;
 
 public class ArenaBuilder {
+    private static final int ARENA_WIDTH = 400;
+    private static final int ARENA_HEIGHT = 300;
+
     public Arena createArena() {
-        Arena arena = new Arena(20, 20);
+        Arena arena = new Arena(ARENA_WIDTH, ARENA_HEIGHT);
 
         arena.setGladiator(createGladiator());
         arena.setEnemies(createEnemies(arena));
@@ -54,18 +57,23 @@ public class ArenaBuilder {
 
     protected List<Obstacle> createObstacles(Arena arena) {
         List<Obstacle> obstacles = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            SmallRock smallRock = new SmallRock(i,4);
-            obstacles.add(smallRock);
-            Tree tree = new Tree(i, 5);
-            obstacles.add(tree);
-            LargeRock largeRock = new LargeRock(i,6);
-            obstacles.add(largeRock);
-        }
+
+        obstacles.add(new Tree(100, 100));
+        obstacles.add(new LargeRock(200, 100));
+        obstacles.add(new Tree(300, 100));
+
+        obstacles.add(new LargeRock(100, 200));
+        obstacles.add(new Tree(200, 200));
+        obstacles.add(new LargeRock(300, 200));
+
+        obstacles.add(new Tree(100, ARENA_HEIGHT - 100));
+        obstacles.add(new LargeRock(200, ARENA_HEIGHT - 100));
+        obstacles.add(new Tree(300, ARENA_HEIGHT - 100));
+
         return obstacles;
     }
 
     protected Gladiator createGladiator() {
-        return new Gladiator(10,10,5,5,100,5);
+        return new Gladiator(ARENA_WIDTH / 2, ARENA_HEIGHT / 2,5,5,100,5);
     }
 }

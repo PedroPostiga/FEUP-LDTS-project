@@ -8,6 +8,7 @@ import com.gladiator.model.movement.ChaseMovement;
 import com.gladiator.model.movement.WanderMovement;
 import com.gladiator.model.attack.SwordAttack;
 import com.gladiator.model.attack.VampireAttack;
+import com.gladiator.model.enemy.EnemyPool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ public class WaveManager {
     private boolean waveInProgress;
     private List<Enemy> currentWaveEnemies;
     private final Arena arena;
+    private final EnemyPool enemyPool;
 
     // Wave configuration
     private static final int BASE_ENEMIES_PER_WAVE = 5;
@@ -27,6 +29,8 @@ public class WaveManager {
         this.currentWave = 0;
         this.waveInProgress = false;
         this.currentWaveEnemies = new ArrayList<>();
+        this.enemyPool = new EnemyPool(arena.getGladiator()); // INITIALIZE
+        this.enemyPool.preWarmPools(); // PRE-WARM
     }
 
     public void startNextWave() {
@@ -77,12 +81,13 @@ public class WaveManager {
             int x = (i * 3) % arena.getWidth();
             int y = 1;
 
-            Vampire vampire = new Vampire(
-                    x, y,
-                    new ChaseMovement(3.0, arena.getGladiator()),
-                    new VampireAttack(15, 8, arena.getGladiator(), 0.3)
+            Enemy vampire = enemyPool.acquireEnemy(
+                    EnemyPool.EnemyType.VAMPIRE, x, y
             );
-            enemies.add(vampire);
+
+            if (vampire != null) {
+                enemies.add(vampire);
+            }
         }
     }
 
@@ -91,12 +96,13 @@ public class WaveManager {
             int x = (i * 2) % arena.getWidth();
             int y = 2;
 
-            FatZombie fatZombie = new FatZombie(
-                    x, y,
-                    new ChaseMovement(2.0, arena.getGladiator()),
-                    new SwordAttack(12, 8, List.of(arena.getGladiator()))
+            Enemy fatZombie = enemyPool.acquireEnemy(
+                    EnemyPool.EnemyType.FAT_ZOMBIE, x, y
             );
-            enemies.add(fatZombie);
+
+            if (fatZombie != null) {
+                enemies.add(fatZombie);
+            }
         }
     }
 
@@ -105,17 +111,22 @@ public class WaveManager {
             int x = i % arena.getWidth();
             int y = 3;
 
-            // Mix of chasing and wandering light zombies
-            boolean shouldChase = i % 2 == 0;
-
-            LightZombie lightZombie = new LightZombie(
-                    x, y,
-                    shouldChase ?
-                            new ChaseMovement(4.0, arena.getGladiator()) :
-                            new WanderMovement(),
-                    new SwordAttack(8, 6, List.of(arena.getGladiator()))
+            Enemy lightZombie = enemyPool.acquireEnemy(
+                    EnemyPool.EnemyType.LIGHT_ZOMBIE, x, y
             );
-            enemies.add(lightZombie);
+
+            if (lightZombie != null) {
+                enemies.add(lightZombie);
+            }
+        }
+    }
+
+    public void enemyDied(Enemy enemy) {
+        enemyPool.releaseEnemy(enemy);
+        currentWaveEnemies.remove(enemy);
+
+        if (waveInProgress && currentWaveEnemies.isEmpty()) {
+            waveInProgress = false;
         }
     }
 
@@ -149,7 +160,13 @@ public class WaveManager {
     public void reset() {
         currentWave = 0;
         waveInProgress = false;
+
+        // Return all enemies to pool
+        for (Enemy enemy : currentWaveEnemies) {
+            enemyPool.releaseEnemy(enemy);
+        }
         currentWaveEnemies.clear();
+        enemyPool.clear(); // clear pool completely
     }
 
     public List<Enemy> getCurrentWaveEnemies() {

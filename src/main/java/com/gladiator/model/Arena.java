@@ -59,9 +59,28 @@ public class Arena {
     public void setObstacles(List<Obstacle> obstacles) { this.obstacles = obstacles; }
 
     public boolean isEnemy(Position position) {
-        for(Enemy enemy : enemies)
-            if (enemy.getPosition().equals(position))
+        for (Enemy enemy : enemies) {
+            if (enemy.getPosition().equals(position)) {
                 return true;
+            }
+        }
         return false;
+    }
+
+    public boolean isObstacle(Position position) {
+        for (Obstacle obstacle : obstacles) {
+            if (obstacle.getBounds().contains(position.getX(), position.getY())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isGladiator(Position position) {
+        return gladiator.getPosition().equals(position);
+    }
+
+    public boolean isEmpty(Position position) {
+        return !(isEnemy(position) || isObstacle(position) || isGladiator(position));
     }
 }
