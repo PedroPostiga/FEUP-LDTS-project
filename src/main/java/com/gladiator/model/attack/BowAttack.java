@@ -49,11 +49,10 @@ public class BowAttack implements AttackStrategy {
 
         arrowPool.getArrow(
                 attacker.getPosition(),
-                closest.getPosition(),
                 speed,
                 damage,
                 effectiveDistance,
-                targets
+                closest
         );
 
     }

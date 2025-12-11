@@ -2,56 +2,56 @@ package com.gladiator.model.attack.projectile;
 
 import com.gladiator.model.component.Hitbox;
 import com.gladiator.model.component.Position;
-import com.gladiator.model.entity.MovingEntity;
-
-import java.awt.*;
-import java.util.List;
+import com.gladiator.model.enemy.Enemy;
 
 public class Projectile {
 
     private Position position;
-    private Position startPosition;
-    private double vx;
-    private double vy;
     private int damage;
+    private int speed;
     private double maxDistance;
 
-    private Hitbox hitbox;
-    private List<? extends MovingEntity> targets;
+    private final Hitbox hitbox;
+    private Enemy target;
 
-    private boolean alive = true;
+    private boolean active = true;
 
-    public Projectile(Position start, Position target, int speed, int damage,
-                      double maxDistance, List<? extends MovingEntity> targets, Hitbox hitbox) {
-        configure(start, target, speed, damage, maxDistance, targets);
-        this.hitbox = hitbox;
-    }
-
-    public void configure(Position start, Position target, int speed, int damage,
-                          double maxDistance, List<? extends MovingEntity> targets) {
+    public Projectile(Position start, int speed, int damage,
+                      double maxDistance, Enemy target) {
         this.position = new Position(start.getX(), start.getY());
-        this.startPosition = new Position(start.getX(), start.getY());
         this.damage = damage;
         this.maxDistance = maxDistance;
-        this.targets = targets;
-        this.alive = true;
-
-        double dx = target.getX() - start.getX();
-        double dy = target.getY() - start.getY();
-        double dist = Math.sqrt(dx * dx + dy * dy);
-
-        if (dist == 0) dist = 1;
-
-        this.vx = (dx / dist) * speed;
-        this.vy = (dy / dist) * speed;
+        this.target = target;
+        this.speed = speed;
+        this.hitbox = new Hitbox(8, 8);
     }
 
-    public boolean isAlive() {
-        return alive;
+    public boolean isActive() {
+        return active;
     }
 
-    public void setAlive(boolean alive) {
-        this.alive = alive;
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public void setMaxDistance(double maxDistance) {
+        this.maxDistance = maxDistance;
+    }
+
+    public void setTarget(Enemy target) {
+        this.target = target;
     }
 
     public Hitbox getHitbox() {
@@ -62,19 +62,15 @@ public class Projectile {
         return position;
     }
 
-    public double getVx() {
-        return vx;
-    }
-
-    public double getVy() {
-        return vy;
-    }
-
     public int getDamage() {
         return damage;
     }
 
     public double getMaxDistance() {
         return maxDistance;
+    }
+
+    public int getSpeed() {
+        return speed;
     }
 }
