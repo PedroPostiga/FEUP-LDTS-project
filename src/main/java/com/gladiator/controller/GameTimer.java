@@ -22,4 +22,3 @@ public class GameTimer {
         lastTickTime = System.currentTimeMillis();
     }
 }
-}

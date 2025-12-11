@@ -12,7 +12,7 @@ public class EnemyUpdater {
         List<Enemy> enemies = arena.getActiveEnemies();
         Gladiator g = arena.getGladiator();
 
-        for (int i = enemies.size - 1; i >= 0; i--) {
+        for (int i = enemies.size() - 1; i >= 0; i--) {
             Enemy e = enemies.get(i);
 
             if (!e.isAlive()) {

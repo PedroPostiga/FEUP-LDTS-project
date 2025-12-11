@@ -18,7 +18,7 @@ public class WanderMovement implements MovementStrategy {
         int dx = (random.nextInt(3) - 1) * enemy.getSpeed();
         int dy = (random.nextInt(3) - 1) * enemy.getSpeed();
 
-        if (arena.isEmpty(enemy.getPosition().getX() + dx, enemy.getPosition().getY() + dy)) {
+        if (arena.isEmpty(new Position(enemy.getPosition().getX() + dx, enemy.getPosition().getY() + dy))) {
             enemy.setPosition(new Position(enemy.getPosition().getX() + dx, enemy.getPosition().getY() + dy));
         }
     }

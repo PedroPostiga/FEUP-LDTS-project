@@ -1,6 +1,7 @@
 package com.gladiator;
 
 import com.gladiator.controller.Controller;
+import com.gladiator.controller.MenuController;
 import com.gladiator.gui.GUI;
 import com.gladiator.gui.LanternaGUI;
 import com.gladiator.model.menu.MenuModel;

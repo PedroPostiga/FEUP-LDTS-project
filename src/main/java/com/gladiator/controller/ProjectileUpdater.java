@@ -12,7 +12,7 @@ public class ProjectileUpdater {
     public void update(Arena arena) {
         List<Projectile> projectiles = arena.getActiveProjectiles();
 
-        for (int i = projectiles.size - 1; i >= 0; i--) {
+        for (int i = projectiles.size() - 1; i >= 0; i--) {
             Projectile p = projectiles.get(i);
 
             if (!p.isActive()) {
@@ -31,7 +31,7 @@ public class ProjectileUpdater {
             int newX = p.getPosition().getX() + dx;
             int newY = p.getPosition().getY() + dy;
 
-            if (!arena.isEmpty(newX, newY)) {
+            if (!arena.isEmpty(new Position(newX, newY))) {
                 arena.removeProjectile(i);
                 continue;
             }

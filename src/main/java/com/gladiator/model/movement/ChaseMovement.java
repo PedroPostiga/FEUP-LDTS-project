@@ -21,7 +21,7 @@ public class ChaseMovement implements MovementStrategy {
                 enemy.getPosition().getX()) * enemy.getSpeed();
         int dy = Integer.compare(arena.getGladiator().getPosition().getY(),
                 enemy.getPosition().getY()) * enemy.getSpeed();
-        if (arena.isEmpty(enemy.getPosition().getX() + dx, enemy.getPosition().getY() + dy)) {
+        if (arena.isEmpty(new Position(enemy.getPosition().getX() + dx, enemy.getPosition().getY() + dy))) {
             enemy.setPosition(new Position(enemy.getPosition().getX() + dx, enemy.getPosition().getY() + dy));
         }
     }

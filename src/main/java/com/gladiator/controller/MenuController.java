@@ -1,6 +1,7 @@
 package com.gladiator.controller;
 
 import com.gladiator.gui.GUI;
+import com.gladiator.view.menu.MenuViewer;
 
 import java.io.IOException;
 
