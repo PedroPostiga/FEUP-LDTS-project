@@ -1,6 +1,8 @@
 package com.gladiator.model.movement;
 
+import com.gladiator.model.Arena;
 import com.gladiator.model.component.Position;
+import com.gladiator.model.enemy.Enemy;
 import com.gladiator.model.entity.MovingEntity;
 import com.gladiator.model.gladiator.Gladiator;
 
@@ -14,16 +16,13 @@ public class ChaseMovement implements MovementStrategy {
     }
 
     @Override
-    public void move(MovingEntity entity) {
-        Position targetPos = gladiator.getPosition();
-        Position pos = entity.getPosition();
-
-        double dx = targetPos.getX() - pos.getX();
-        double dy = targetPos.getY() - pos.getY();
-        double dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist == 0) return;
-
-        pos.setX((int) (pos.getX() + (dx / dist) * speed));
-        pos.setY((int) (pos.getY() + (dy / dist) * speed));
+    public void move(Enemy enemy, Arena arena) {
+        int dx = Integer.compare(arena.getGladiator().getPosition().getX(),
+                enemy.getPosition().getX()) * enemy.getSpeed();
+        int dy = Integer.compare(arena.getGladiator().getPosition().getY(),
+                enemy.getPosition().getY()) * enemy.getSpeed();
+        if (arena.isEmpty(enemy.getPosition().getX() + dx, enemy.getPosition().getY() + dy)) {
+            enemy.setPosition(new Position(enemy.getPosition().getX() + dx, enemy.getPosition().getY() + dy));
+        }
     }
 }

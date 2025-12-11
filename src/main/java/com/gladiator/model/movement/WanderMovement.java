@@ -1,22 +1,25 @@
 package com.gladiator.model.movement;
 
+import com.gladiator.model.Arena;
 import com.gladiator.model.component.Position;
-import com.gladiator.model.entity.MovingEntity;
+import com.gladiator.model.enemy.Enemy;
+
+import java.util.Random;
 
 public class WanderMovement implements MovementStrategy {
-    private double angle;
+    private final Random random;
 
     public WanderMovement() {
-        this.angle = Math.random() * 2 * Math.PI;
+        random = new Random();
     }
 
     @Override
-    public void move(MovingEntity entity) {
-        Position pos = entity.getPosition();
+    public void move(Enemy enemy, Arena arena) {
+        int dx = (random.nextInt(3) - 1) * enemy.getSpeed();
+        int dy = (random.nextInt(3) - 1) * enemy.getSpeed();
 
-        pos.setX((int) (pos.getX() + entity.getSpeed() * Math.cos(angle)));
-        pos.setY((int) (pos.getY() + entity.getSpeed() * Math.sin(angle)));
-
-        angle += (Math.random() - 0.5) * 0.1;
+        if (arena.isEmpty(enemy.getPosition().getX() + dx, enemy.getPosition().getY() + dy)) {
+            enemy.setPosition(new Position(enemy.getPosition().getX() + dx, enemy.getPosition().getY() + dy));
+        }
     }
 }

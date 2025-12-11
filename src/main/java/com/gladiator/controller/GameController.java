@@ -10,6 +10,7 @@ import java.io.IOException;
 public class GameController extends Controller{
     private final Arena arena;
     private final ArenaViewer viewer;
+    ArenaUpdater updater = new ArenaUpdater();
 
     public GameController(Arena arena) {
         super(5); // 5 ticks per second
@@ -55,7 +56,7 @@ public class GameController extends Controller{
 
     @Override
     protected void update() {
-        arena.updateEnemies();
+        updater.update(arena);
         if (arena.isGameOver()) {
             stop();
         }
