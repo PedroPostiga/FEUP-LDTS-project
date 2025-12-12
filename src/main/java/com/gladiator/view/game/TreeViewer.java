@@ -8,7 +8,7 @@ import java.io.IOException;
 public class TreeViewer implements EntityViewer<Tree>{
     @Override
     public void draw(Tree tree, GUI gui) throws IOException {
-        gui.drawSprite("sprites/tree.png" ,tree.getPosition());
+        gui.drawSprite("sprites/obstacle/tree.png",tree.getPosition());
     }
 }
 

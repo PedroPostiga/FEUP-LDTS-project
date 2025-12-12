@@ -4,7 +4,7 @@ public class MenuModel {
     public enum Option { PLAY, CREDITS, EXIT }
 
     private Option selected = Option.PLAY;
-    private Option[] options = Option.values();
+    private final Option[] options = Option.values();
 
     public Option getSelected() {
         return selected;
@@ -26,12 +26,4 @@ public class MenuModel {
         selected = options[previousIndex];
     }
 
-    public String getSelectedText() {
-        switch (selected) {
-            case PLAY: return "PLAY";
-            case CREDITS: return "CREDITS";
-            case EXIT: return "EXIT";
-            default: return "";
-        }
-    }
 }
