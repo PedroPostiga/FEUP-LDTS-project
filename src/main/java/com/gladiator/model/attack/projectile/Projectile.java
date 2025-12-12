@@ -14,7 +14,6 @@ public class Projectile {
     private final Hitbox hitbox;
     private Enemy target;
 
-    private boolean active = true;
 
     public Projectile(Position start, int speed, int damage,
                       double maxDistance, Enemy target) {
@@ -24,14 +23,6 @@ public class Projectile {
         this.target = target;
         this.speed = speed;
         this.hitbox = new Hitbox(8, 8);
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     public void setPosition(Position position) {
@@ -72,5 +63,9 @@ public class Projectile {
 
     public int getSpeed() {
         return speed;
+    }
+
+    public Enemy getTarget() {
+        return target;
     }
 }

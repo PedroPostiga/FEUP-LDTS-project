@@ -1,7 +1,9 @@
 package com.gladiator.controller;
 
 import com.gladiator.model.Arena;
+import com.gladiator.model.attack.projectile.Arrow;
 import com.gladiator.model.attack.projectile.Projectile;
+import com.gladiator.model.attack.projectile.SingleArrowPool;
 import com.gladiator.model.component.Position;
 import com.gladiator.model.enemy.Enemy;
 
@@ -10,33 +12,29 @@ import java.util.List;
 public class ProjectileUpdater {
 
     public void update(Arena arena) {
-        List<Projectile> projectiles = arena.getActiveProjectiles();
+        SingleArrowPool singleArrowPool = arena.getArrowPool();
+        List<Arrow> arrows = singleArrowPool.getActiveArrows();
 
-        for (int i = projectiles.size() - 1; i >= 0; i--) {
-            Projectile p = projectiles.get(i);
+        for (int i = arrows.size() - 1; i >= 0; i--) {
+            Arrow a = arrows.get(i);
 
-            if (!p.isActive()) {
-                arena.removeProjectile(i);
-                continue;
-            }
+            Enemy enemy = a.getTarget();
 
-            Enemy enemy = p.getTarget();
-
-            int dx = Integer.compare(p.getPosition().getX(),
-                    enemy.getPosition().getX()) * p.getSpeed();
-            int dy = Integer.compare(p.getPosition().getY(),
-                    enemy.getPosition().getY()) * p.getSpeed();
+            int dx = Integer.compare(a.getPosition().getX(),
+                    enemy.getPosition().getX()) * a.getSpeed();
+            int dy = Integer.compare(a.getPosition().getY(),
+                    enemy.getPosition().getY()) * a.getSpeed();
 
             // Move projectile
-            int newX = p.getPosition().getX() + dx;
-            int newY = p.getPosition().getY() + dy;
+            int newX = a.getPosition().getX() + dx;
+            int newY = a.getPosition().getY() + dy;
 
             if (!arena.isEmpty(new Position(newX, newY))) {
-                arena.removeProjectile(i);
+                singleArrowPool.releaseArrow(a);
                 continue;
             }
 
-            p.setPosition(new Position(newX, newY));
+            a.setPosition(new Position(newX, newY));
         }
     }
 }

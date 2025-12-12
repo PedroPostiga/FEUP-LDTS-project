@@ -2,6 +2,7 @@ package com.gladiator.controller;
 
 import com.gladiator.gui.GUI;
 import com.gladiator.model.Arena;
+import com.gladiator.model.WaveManager;
 import com.gladiator.model.component.Position;
 import com.gladiator.view.game.ArenaViewer;
 
@@ -10,12 +11,14 @@ import java.io.IOException;
 public class GameController extends Controller{
     private final Arena arena;
     private final ArenaViewer viewer;
+    private final WaveManager waveManager;
     ArenaUpdater updater = new ArenaUpdater();
 
     public GameController(Arena arena) {
         super(5); // 5 ticks per second
         this.arena = arena;
         this.viewer = new ArenaViewer(arena);
+        this.waveManager = new WaveManager(arena);
     }
 
     @Override
@@ -56,10 +59,13 @@ public class GameController extends Controller{
 
     @Override
     protected void update() {
-        updater.update(arena);
-        if (arena.isGameOver()) {
-            stop();
+        if (!waveManager.isWaveInProgress()) {
+            waveManager.startNextWave();
         }
+        updater.update(arena);
+        /*if (arena.isGameOver()) {
+            stop();
+        }*/
     }
 
     @Override

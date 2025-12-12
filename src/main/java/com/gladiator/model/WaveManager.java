@@ -16,7 +16,6 @@ import java.util.List;
 public class WaveManager {
     private int currentWave;
     private boolean waveInProgress;
-    private List<Enemy> currentWaveEnemies;
     private final Arena arena;
     private final EnemyPool enemyPool;
 
@@ -28,104 +27,43 @@ public class WaveManager {
         this.arena = arena;
         this.currentWave = 0;
         this.waveInProgress = false;
-        this.currentWaveEnemies = new ArrayList<>();
-        this.enemyPool = new EnemyPool(arena.getGladiator()); // INITIALIZE
-        this.enemyPool.preWarmPools(); // PRE-WARM
+        this.enemyPool = arena.getEnemiePool();
     }
 
     public void startNextWave() {
         currentWave++;
         waveInProgress = true;
-        currentWaveEnemies.clear();
 
-        List<Enemy> waveEnemies = generateWaveEnemies();
-        arena.setEnemies(waveEnemies);
-        currentWaveEnemies.addAll(waveEnemies);
-    }
-
-    private List<Enemy> generateWaveEnemies() {
-        List<Enemy> enemies = new ArrayList<>();
         int totalEnemies = calculateTotalEnemies();
 
-        // Enemy type distribution based on wave number
-        int vampires = calculateVampireCount(totalEnemies);
-        int fatZombies = calculateFatZombieCount(totalEnemies);
-        int lightZombies = totalEnemies - vampires - fatZombies;
+        // Spawn enemies through the pool
+        for (int i = 0; i < totalEnemies; i++) {
+            EnemyPool.EnemyType type = chooseEnemyType(i, totalEnemies);
 
-        // Create enemies
-        createVampires(enemies, vampires);
-        createFatZombies(enemies, fatZombies);
-        createLightZombies(enemies, lightZombies);
+            // Random or pattern-based positions
+            int x = i % arena.getWidth();
+            int y = i / arena.getWidth();
 
-        return enemies;
+            enemyPool.acquireEnemy(type, x, y);
+        }
     }
 
     private int calculateTotalEnemies() {
         return (int) (BASE_ENEMIES_PER_WAVE * Math.pow(ENEMY_SCALING_FACTOR, currentWave - 1));
     }
 
-    private int calculateVampireCount(int totalEnemies) {
-        // Vampires start appearing after wave 3
-        if (currentWave < 3) return 0;
-        return (int) (totalEnemies * 0.3); // 30% vampires
-    }
-
-    private int calculateFatZombieCount(int totalEnemies) {
-        // Fat zombies from the beginning, increasing presence
-        double percentage = 0.2 + (currentWave * 0.05); // 20% to 45%
-        return Math.min((int) (totalEnemies * percentage), totalEnemies / 2);
-    }
-
-    private void createVampires(List<Enemy> enemies, int count) {
-        for (int i = 0; i < count; i++) {
-            int x = (i * 3) % arena.getWidth();
-            int y = 1;
-
-            Enemy vampire = enemyPool.acquireEnemy(
-                    EnemyPool.EnemyType.VAMPIRE, x, y
-            );
-
-            if (vampire != null) {
-                enemies.add(vampire);
-            }
-        }
-    }
-
-    private void createFatZombies(List<Enemy> enemies, int count) {
-        for (int i = 0; i < count; i++) {
-            int x = (i * 2) % arena.getWidth();
-            int y = 2;
-
-            Enemy fatZombie = enemyPool.acquireEnemy(
-                    EnemyPool.EnemyType.FAT_ZOMBIE, x, y
-            );
-
-            if (fatZombie != null) {
-                enemies.add(fatZombie);
-            }
-        }
-    }
-
-    private void createLightZombies(List<Enemy> enemies, int count) {
-        for (int i = 0; i < count; i++) {
-            int x = i % arena.getWidth();
-            int y = 3;
-
-            Enemy lightZombie = enemyPool.acquireEnemy(
-                    EnemyPool.EnemyType.LIGHT_ZOMBIE, x, y
-            );
-
-            if (lightZombie != null) {
-                enemies.add(lightZombie);
-            }
-        }
+    private EnemyPool.EnemyType chooseEnemyType(int index, int total) {
+        // Simple distribution: 30% Vampire, 30% FatZombie, 40% LightZombie
+        double ratio = (double) index / total;
+        if (ratio < 0.3 && currentWave >= 3) return EnemyPool.EnemyType.VAMPIRE;
+        if (ratio < 0.6) return EnemyPool.EnemyType.FAT_ZOMBIE;
+        return EnemyPool.EnemyType.LIGHT_ZOMBIE;
     }
 
     public void enemyDied(Enemy enemy) {
         enemyPool.releaseEnemy(enemy);
-        currentWaveEnemies.remove(enemy);
 
-        if (waveInProgress && currentWaveEnemies.isEmpty()) {
+        if (enemyPool.getAllActiveEnemies().isEmpty()) {
             waveInProgress = false;
         }
     }
@@ -142,34 +80,8 @@ public class WaveManager {
         return currentWave;
     }
 
-    public int getRemainingEnemies() {
-        return currentWaveEnemies.size();
-    }
 
     public int getTotalWaveEnemies() {
         return calculateTotalEnemies();
-    }
-
-    public double getWaveProgress() {
-        if (currentWave == 0) return 0.0;
-        int total = getTotalWaveEnemies();
-        int remaining = getRemainingEnemies();
-        return ((double) (total - remaining) / total) * 100.0;
-    }
-
-    public void reset() {
-        currentWave = 0;
-        waveInProgress = false;
-
-        // Return all enemies to pool
-        for (Enemy enemy : currentWaveEnemies) {
-            enemyPool.releaseEnemy(enemy);
-        }
-        currentWaveEnemies.clear();
-        enemyPool.clear(); // clear pool completely
-    }
-
-    public List<Enemy> getCurrentWaveEnemies() {
-        return new ArrayList<>(currentWaveEnemies);
     }
 }

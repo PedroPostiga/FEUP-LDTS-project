@@ -4,6 +4,7 @@ import com.gladiator.gui.GUI;
 import com.gladiator.model.Arena;
 import com.gladiator.model.component.Position;
 import com.gladiator.model.enemy.Enemy;
+import com.gladiator.model.entity.InvisibleWall;
 import com.gladiator.model.entity.Obstacle;
 import com.gladiator.model.gladiator.Gladiator;
 import com.gladiator.view.Viewer;
@@ -25,7 +26,7 @@ public class ArenaViewer extends Viewer<Arena> {
         gui.drawSprite("sprites/arena.png", new Position(0,0));
 
         Gladiator gladiator = arena.getGladiator();
-        List<Enemy> enemies = arena.getEnemies();
+        List<Enemy> enemies = arena.getEnemiePool().getAllActiveEnemies();
         List<Obstacle> obstacles = arena.getObstacles();
 
         new GladiatorViewer().draw(gladiator, gui);
@@ -36,6 +37,7 @@ public class ArenaViewer extends Viewer<Arena> {
         }
 
         for (Obstacle obstacle : obstacles) {
+            if (obstacle instanceof InvisibleWall) {continue;}
             EntityViewer<Obstacle> viewer = (EntityViewer<Obstacle>) ViewerRegistry.getViewer(obstacle);
             viewer.draw(obstacle, gui);
         }

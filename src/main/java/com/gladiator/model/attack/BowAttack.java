@@ -24,7 +24,7 @@ public class BowAttack implements AttackStrategy {
 
     @Override
     public void attack(MovingEntity attacker) {
-        if (arrowPool.isArrowActive()) return;
+        if (arrowPool.getActiveArrows().isEmpty()) return;
         if (targets.isEmpty()) return;
 
         Enemy closest = null;
@@ -47,7 +47,7 @@ public class BowAttack implements AttackStrategy {
 
         double effectiveDistance = Math.min(closestDistance, maxDistance);
 
-        arrowPool.getArrow(
+        arrowPool.acquireArrow(
                 attacker.getPosition(),
                 speed,
                 damage,
