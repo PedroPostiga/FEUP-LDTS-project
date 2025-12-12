@@ -8,6 +8,6 @@ import java.io.IOException;
 public class VampireViewer implements EntityViewer<Vampire> {
     @Override
     public void draw(Vampire vampire, GUI gui) throws IOException {
-        gui.drawSprite("sprite/vampire.png" ,vampire.getPosition());
+        gui.drawSprite("sprites/movingEntity/vampire.png" ,vampire.getPosition());
     }
 }

@@ -8,7 +8,7 @@ import java.io.IOException;
 public class LargeRockViewer implements EntityViewer<LargeRock> {
     @Override
     public void draw(LargeRock largeRock, GUI gui) throws IOException {
-        gui.drawLargeRock(largeRock.getPosition());
+        gui.drawSprite("sprites/obstacle/large_rock.png", largeRock.getPosition());
     }
 }
 
