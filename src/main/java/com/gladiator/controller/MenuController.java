@@ -18,13 +18,13 @@ public class MenuController extends Controller {
     protected void processInput(GUI gui) throws IOException {
         GUI.ACTION action = gui.getNextAction();
 
-        switch (action) {
+        /*switch (action) {
             case UP -> viewer.moveUp();
             case DOWN -> viewer.moveDown();
             case SELECT -> viewer.select();
             case QUIT -> stop();
             default -> {}
-        }
+        }*/
     }
 
     @Override
