@@ -3,6 +3,8 @@ package com.gladiator.model.attack;
 import com.gladiator.model.entity.MovingEntity;
 import com.gladiator.model.gladiator.Gladiator;
 
+import java.util.List;
+
 public class VampireAttack implements AttackStrategy {
 
     private final int damage;
@@ -34,5 +36,16 @@ public class VampireAttack implements AttackStrategy {
             int healAmount = (int) (damage * lifestealPercentage);
             attacker.getHealth().heal(healAmount);
         }
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+    public int getRange() {
+        return range;
+    }
+
+    public double getLifestealPercentage() {
+        return lifestealPercentage;
     }
 }

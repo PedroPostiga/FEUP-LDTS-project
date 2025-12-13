@@ -33,8 +33,19 @@ public class SwordAttack implements AttackStrategy {
 
             if (dist <= range) {
                 target.takeDamage(damage);
+                System.out.println("hit to gladiator");
             }
         }
 
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+    public int getRange() {
+        return range;
+    }
+    public List<? extends MovingEntity> getTargets() {
+        return targets;
     }
 }

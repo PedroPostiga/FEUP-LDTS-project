@@ -66,6 +66,9 @@ public class GameController extends Controller{
             waveManager.startNextWave();
         }
         updater.update(arena);
+        if (!arena.getGladiator().isAlive()){
+            System.out.println("gladiator is dead");
+        }
         /*if (arena.isGameOver()) {
             stop();
         }*/
