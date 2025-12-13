@@ -70,20 +70,51 @@ public class LanternaGUI implements GUI {
     }
 
     public ACTION getNextAction() throws IOException {
-        KeyStroke keyStroke = screen.pollInput();
-        if (keyStroke == null) return ACTION.NONE;
+        ACTION lastAction = ACTION.NONE;
+        KeyStroke keyStroke;
+        boolean foundEvent = false;
+        
+        // Process all pending input events to drain the buffer
+        // This prevents queued key events from causing continued movement
+        // Only return an action if we actually found new events in this frame
+        while ((keyStroke = screen.pollInput()) != null) {
+            foundEvent = true;
+            
+            if (keyStroke.getKeyType() == KeyType.EOF) {
+                lastAction = ACTION.QUIT;
+                continue;
+            }
+            if (keyStroke.getKeyType() == KeyType.Character && keyStroke.getCharacter() == 'q') {
+                lastAction = ACTION.QUIT;
+                continue;
+            }
 
-        if (keyStroke.getKeyType() == KeyType.EOF) return ACTION.QUIT;
-        if (keyStroke.getKeyType() == KeyType.Character && keyStroke.getCharacter() == 'q') return ACTION.QUIT;
+            if (keyStroke.getKeyType() == KeyType.ArrowUp) {
+                lastAction = ACTION.UP;
+                continue;
+            }
+            if (keyStroke.getKeyType() == KeyType.ArrowRight) {
+                lastAction = ACTION.RIGHT;
+                continue;
+            }
+            if (keyStroke.getKeyType() == KeyType.ArrowDown) {
+                lastAction = ACTION.DOWN;
+                continue;
+            }
+            if (keyStroke.getKeyType() == KeyType.ArrowLeft) {
+                lastAction = ACTION.LEFT;
+                continue;
+            }
 
-        if (keyStroke.getKeyType() == KeyType.ArrowUp) return ACTION.UP;
-        if (keyStroke.getKeyType() == KeyType.ArrowRight) return ACTION.RIGHT;
-        if (keyStroke.getKeyType() == KeyType.ArrowDown) return ACTION.DOWN;
-        if (keyStroke.getKeyType() == KeyType.ArrowLeft) return ACTION.LEFT;
-
-        if (keyStroke.getKeyType() == KeyType.Enter) return ACTION.SELECT;
-
-        return ACTION.NONE;
+            if (keyStroke.getKeyType() == KeyType.Enter) {
+                lastAction = ACTION.SELECT;
+                continue;
+            }
+        }
+        
+        // Only return an action if we actually found new events
+        // This ensures immediate response when keys are released
+        return foundEvent ? lastAction : ACTION.NONE;
     }
 
     public void drawSprite(String img, Position position) throws IOException {

@@ -8,6 +8,6 @@ import java.io.IOException;
 public class FatZombieViewer implements EntityViewer<FatZombie> {
     @Override
     public void draw(FatZombie fatZombie, GUI gui) throws IOException {
-        gui.drawSprite("sprites/movingEntity/fat_zombie", fatZombie.getPosition());
+        gui.drawSprite("sprites/movingEntity/fat_zombie.png", fatZombie.getPosition());
     }
 }

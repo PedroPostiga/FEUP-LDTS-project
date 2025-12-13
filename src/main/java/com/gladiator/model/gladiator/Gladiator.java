@@ -11,7 +11,7 @@ public class Gladiator extends MovingEntity {
 
     public Gladiator(int x, int y, int w, int h, int hp, int speed) {
         super(x, y, w, h, hp, speed);
-        this.bowAttack = new BowAttack(20, 2, 5, );
-        this.swordAttack = new SwordAttack(75, 1.5, );
+        //this.bowAttack = new BowAttack(20, 2, 5, );
+        //this.swordAttack = new SwordAttack(75, 1.5, );
     }
 }
