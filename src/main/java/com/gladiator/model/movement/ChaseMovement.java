@@ -6,6 +6,8 @@ import com.gladiator.model.enemy.Enemy;
 import com.gladiator.model.entity.MovingEntity;
 import com.gladiator.model.gladiator.Gladiator;
 
+import java.awt.*;
+
 public class ChaseMovement implements MovementStrategy {
     private final double speed;
     private final Gladiator gladiator;
@@ -21,7 +23,8 @@ public class ChaseMovement implements MovementStrategy {
                 enemy.getPosition().getX()) * enemy.getSpeed();
         int dy = Integer.compare(arena.getGladiator().getPosition().getY(),
                 enemy.getPosition().getY()) * enemy.getSpeed();
-        if (arena.isEmpty(new Position(enemy.getPosition().getX() + dx, enemy.getPosition().getY() + dy))) {
+        if (arena.isEmpty(new Rectangle(enemy.getPosition().getX() + dx, enemy.getPosition().getY() + dy,
+                                        enemy.getHitbox().width, enemy.getHitbox().height), enemy)) {
             enemy.setPosition(new Position(enemy.getPosition().getX() + dx, enemy.getPosition().getY() + dy));
         }
     }

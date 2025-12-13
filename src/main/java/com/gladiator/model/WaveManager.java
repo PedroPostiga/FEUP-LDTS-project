@@ -10,6 +10,7 @@ import com.gladiator.model.attack.SwordAttack;
 import com.gladiator.model.attack.VampireAttack;
 import com.gladiator.model.enemy.EnemyPool;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,10 +42,24 @@ public class WaveManager {
             EnemyPool.EnemyType type = chooseEnemyType(i, totalEnemies);
 
             // Random or pattern-based positions
-            int x = i % arena.getWidth();
-            int y = i / arena.getWidth();
+            int x = 20;
+            int y = 20;
+            int w, h;
 
-            enemyPool.acquireEnemy(type, x, y);
+            if (type == EnemyPool.EnemyType.LIGHT_ZOMBIE){
+                w = 16; h = 16;
+            }
+            else if (type == EnemyPool.EnemyType.FAT_ZOMBIE){
+                w = 25; h = 25;
+            }
+            else if (type == EnemyPool.EnemyType.VAMPIRE){
+                w = 16; h = 16;
+            }
+            else continue;
+
+            if (arena.isEmpty(new Rectangle(x,y,w,h))) {
+                enemyPool.acquireEnemy(type, x, y);
+            }
         }
     }
 

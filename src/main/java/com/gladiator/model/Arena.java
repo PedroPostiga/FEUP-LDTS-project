@@ -9,6 +9,7 @@ import com.gladiator.model.entity.InvisibleWall;
 import com.gladiator.model.entity.Obstacle;
 import com.gladiator.model.gladiator.Gladiator;
 
+import java.awt.*;
 import java.util.List;
 
 public class Arena {
@@ -52,38 +53,60 @@ public class Arena {
     public List<Obstacle> getObstacles() { return obstacles; }
     public void setObstacles(List<Obstacle> obstacles) { this.obstacles = obstacles; }
 
-    public boolean isEnemy(Position position) {
+    public boolean isEnemy(Rectangle hitbox) {
+        return isEnemy(hitbox, null);
+    }
+
+    public boolean isEnemy(Rectangle hitbox, Enemy excludeEnemy) {
+        if (enemyPool == null) return false;
         for (Enemy enemy : enemyPool.getAllActiveEnemies()) {
-            if (enemy.getPosition().equals(position)) {
+            if (enemy == excludeEnemy) continue;
+            if (enemy.getHitbox().intersects(hitbox)) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean isObstacle(Position position) {
+    public boolean isObstacle(Rectangle hitbox) {
+        if (obstacles == null) return false;
         for (Obstacle obstacle : obstacles) {
-            if (obstacle.getBounds().contains(position.getX(), position.getY())) {
+            if (obstacle.getHitbox().intersects(hitbox)) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean isArrow(Position position) {
+    public boolean isArrow(Rectangle hitbox) {
+        if (singleArrowPool == null) return false;
         for (Arrow arrow : singleArrowPool.getActiveArrows()){
-            if (arrow.getPosition().equals(position)) {
+            if (arrow.getHitbox().intersects(hitbox)) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean isGladiator(Position position) {
-        return gladiator.getPosition().equals(position);
+    public boolean isGladiator(Rectangle hitbox) {
+        return isGladiator(hitbox, null);
     }
 
-    public boolean isEmpty(Position position) {
-        return !(isEnemy(position) || isObstacle(position) || isGladiator(position));
+    public boolean isGladiator(Rectangle hitbox, Gladiator excludeGladiator) {
+        if (gladiator == null) return false;
+        if (gladiator == excludeGladiator) return false;
+        return gladiator.getHitbox().intersects(hitbox);
+    }
+
+    public boolean isEmpty(Rectangle hitbox) {
+        return isEmpty(hitbox, null, null);
+    }
+
+    public boolean isEmpty(Rectangle hitbox, Enemy excludeEnemy) {
+        return isEmpty(hitbox, excludeEnemy, null);
+    }
+
+    public boolean isEmpty(Rectangle hitbox, Enemy excludeEnemy, Gladiator excludeGladiator) {
+        return !(isEnemy(hitbox, excludeEnemy) || isObstacle(hitbox) || isGladiator(hitbox, excludeGladiator));
     }
 }

@@ -7,7 +7,6 @@ import com.gladiator.model.movement.MovementStrategy;
 
 public abstract class Enemy extends MovingEntity {
 
-    private boolean active;
     private int maxHealth;
 
     public Enemy(int x, int y, int w, int h, int hp, int speed, MovementStrategy movement, AttackStrategy attack){
@@ -15,7 +14,6 @@ public abstract class Enemy extends MovingEntity {
         setMovement(movement);
         setAttack(attack);
         this.maxHealth = hp;
-        this.active = true;
     }
 
     public MovementStrategy getMovementStrategy() {
@@ -28,19 +26,10 @@ public abstract class Enemy extends MovingEntity {
 
     public void reset() {
         setHealth(new Health(maxHealth));
-        active = false;
     }
 
     public void resetHealth() {
         setHealth(new Health(maxHealth));
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     public void setMaxHealth(int maxHealth) {

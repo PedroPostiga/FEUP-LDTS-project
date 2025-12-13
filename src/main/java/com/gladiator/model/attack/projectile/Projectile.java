@@ -1,8 +1,9 @@
 package com.gladiator.model.attack.projectile;
 
-import com.gladiator.model.component.Hitbox;
 import com.gladiator.model.component.Position;
 import com.gladiator.model.enemy.Enemy;
+
+import java.awt.*;
 
 public class Projectile {
 
@@ -11,7 +12,7 @@ public class Projectile {
     private int speed;
     private double maxDistance;
 
-    private final Hitbox hitbox;
+    private Rectangle hitbox;
     private Enemy target;
 
 
@@ -22,7 +23,7 @@ public class Projectile {
         this.maxDistance = maxDistance;
         this.target = target;
         this.speed = speed;
-        this.hitbox = new Hitbox(8, 8);
+        this.hitbox = new Rectangle(start.getX(), start.getY(),8, 8);
     }
 
     public void setPosition(Position position) {
@@ -45,7 +46,7 @@ public class Projectile {
         this.target = target;
     }
 
-    public Hitbox getHitbox() {
+    public Rectangle getHitbox() {
         return hitbox;
     }
 

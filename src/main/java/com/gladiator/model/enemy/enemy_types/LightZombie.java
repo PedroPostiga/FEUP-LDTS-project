@@ -9,7 +9,7 @@ public class LightZombie extends Enemy {
     private final double attackSpeedMultiplier;
 
     public LightZombie(int x, int y, MovementStrategy movement, AttackStrategy attack) {
-        super(x, y, 30, 30, 50, 2, movement, attack);
+        super(x, y, 16, 16, 50, 2, movement, attack);
         attackSpeedMultiplier = 1.5;
     }
 

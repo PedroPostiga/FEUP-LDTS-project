@@ -4,6 +4,7 @@ import com.gladiator.model.Arena;
 import com.gladiator.model.component.Position;
 import com.gladiator.model.enemy.Enemy;
 
+import java.awt.*;
 import java.util.Random;
 
 public class WanderMovement implements MovementStrategy {
@@ -18,7 +19,8 @@ public class WanderMovement implements MovementStrategy {
         int dx = (random.nextInt(3) - 1) * enemy.getSpeed();
         int dy = (random.nextInt(3) - 1) * enemy.getSpeed();
 
-        if (arena.isEmpty(new Position(enemy.getPosition().getX() + dx, enemy.getPosition().getY() + dy))) {
+        if (arena.isEmpty(new Rectangle(enemy.getPosition().getX() + dx, enemy.getPosition().getY() + dy,
+                                        enemy.getHitbox().width, enemy.getHitbox().height), enemy)) {
             enemy.setPosition(new Position(enemy.getPosition().getX() + dx, enemy.getPosition().getY() + dy));
         }
     }

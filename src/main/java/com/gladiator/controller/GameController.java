@@ -6,6 +6,7 @@ import com.gladiator.model.WaveManager;
 import com.gladiator.model.component.Position;
 import com.gladiator.view.game.ArenaViewer;
 
+import java.awt.*;
 import java.io.IOException;
 
 public class GameController extends Controller{
@@ -52,7 +53,9 @@ public class GameController extends Controller{
     }
 
     private void moveGladiator(Position position) {
-        if (arena.isEmpty(position)) {
+        Rectangle hitbox = arena.getGladiator().getHitbox();
+        Rectangle newHitbox = new Rectangle(position.getX(), position.getY(), hitbox.width, hitbox.height);
+        if (arena.isEmpty(newHitbox, null, arena.getGladiator())) {
             arena.getGladiator().setPosition(position);
         }
     }

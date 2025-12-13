@@ -2,7 +2,6 @@ package com.gladiator.model.entity;
 
 import com.gladiator.model.attack.AttackStrategy;
 import com.gladiator.model.component.Health;
-import com.gladiator.model.component.Hitbox;
 import com.gladiator.model.component.Position;
 import com.gladiator.model.movement.MovementStrategy;
 
@@ -10,7 +9,7 @@ import java.awt.*;
 
 public abstract class MovingEntity implements Entity {
     protected Position position;
-    protected final Hitbox hitbox;
+    protected final Rectangle hitbox;
     protected Health health;
     protected int speed;
 
@@ -19,7 +18,7 @@ public abstract class MovingEntity implements Entity {
 
     protected MovingEntity(int x, int y, int w, int h, int health, int speed) {
         this.position = new Position(x, y);
-        this.hitbox = new Hitbox(w, h);
+        this.hitbox = new Rectangle(x, y, w, h);
         this.health = new Health(health);
         this.speed = speed;
     }
@@ -39,9 +38,10 @@ public abstract class MovingEntity implements Entity {
 
     public void setPosition(Position position) {
         this.position = position;
+        this.hitbox.setLocation(position.getX(), position.getY());
     }
 
-    public Hitbox getHitbox() {
+    public Rectangle getHitbox() {
         return hitbox;
     }
 
@@ -59,11 +59,6 @@ public abstract class MovingEntity implements Entity {
 
     public void setAttack(AttackStrategy attack) {
         this.attack = attack;
-    }
-
-    @Override
-    public Rectangle getBounds() {
-        return hitbox.getBounds(position);
     }
 
     public boolean isAlive() {

@@ -7,6 +7,7 @@ import com.gladiator.model.attack.projectile.SingleArrowPool;
 import com.gladiator.model.component.Position;
 import com.gladiator.model.enemy.Enemy;
 
+import java.awt.*;
 import java.util.List;
 
 public class ProjectileUpdater {
@@ -29,7 +30,7 @@ public class ProjectileUpdater {
             int newX = a.getPosition().getX() + dx;
             int newY = a.getPosition().getY() + dy;
 
-            if (!arena.isEmpty(new Position(newX, newY))) {
+            if (!arena.isEmpty(new Rectangle(newX, newY, a.getHitbox().width, a.getHitbox().height))) {
                 singleArrowPool.releaseArrow(a);
                 continue;
             }

@@ -84,7 +84,6 @@ public class EnemyPool {
             enemy = pool.poll();
             enemy.setPosition(new Position(x, y));
             enemy.resetHealth();
-            enemy.setActive(true);
         } else {
             if (poolSizes.get(type) < MAX_POOL_SIZE) {
                 enemy = createNewEnemy(type, x, y);
@@ -106,7 +105,6 @@ public class EnemyPool {
 
         activeEnemies.get(type).remove(enemy);
         enemy.reset();
-        enemy.setActive(false);
         availablePools.get(type).offer(enemy);
     }
 
@@ -123,7 +121,6 @@ public class EnemyPool {
             Queue<Enemy> pool = availablePools.get(type);
             for (int i = 0; i < INITIAL_POOL_SIZE && poolSizes.get(type) < MAX_POOL_SIZE; i++) {
                 Enemy enemy = createNewEnemy(type, -100, -100);
-                enemy.setActive(false);
                 pool.offer(enemy);
                 poolSizes.put(type, poolSizes.get(type) + 1);
             }
