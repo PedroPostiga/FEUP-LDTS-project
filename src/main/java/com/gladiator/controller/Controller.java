@@ -26,7 +26,7 @@ public abstract class Controller {
             limitFPS(startTime, 60);
         }
 
-        gui.close();
+
     }
 
     protected abstract void processInput(GUI gui) throws IOException;
