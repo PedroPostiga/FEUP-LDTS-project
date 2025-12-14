@@ -41,5 +41,22 @@ public class ArenaViewer extends Viewer<Arena> {
             EntityViewer<Obstacle> viewer = (EntityViewer<Obstacle>) ViewerRegistry.getViewer(obstacle);
             viewer.draw(obstacle, gui);
         }
+
+        // Draw hitboxes
+        if (gladiator != null) {
+            java.awt.Rectangle hitbox = gladiator.getHitbox();
+            gui.drawHitbox(hitbox.x, hitbox.y, hitbox.width, hitbox.height, "#00FFFF"); // Cyan for gladiator
+        }
+
+        for (Enemy enemy : enemies) {
+            java.awt.Rectangle hitbox = enemy.getHitbox();
+            gui.drawHitbox(hitbox.x, hitbox.y, hitbox.width, hitbox.height, "#FF00FF"); // Magenta for enemies
+        }
+
+        for (Obstacle obstacle : obstacles) {
+            if (obstacle instanceof InvisibleWall) {continue;}
+            java.awt.Rectangle hitbox = obstacle.getHitbox();
+            gui.drawHitbox(hitbox.x, hitbox.y, hitbox.width, hitbox.height, "#FFFF00"); // Yellow for obstacles
+        }
     }
 }

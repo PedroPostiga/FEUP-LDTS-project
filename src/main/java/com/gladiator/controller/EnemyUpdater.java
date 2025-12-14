@@ -1,6 +1,7 @@
 package com.gladiator.controller;
 
 import com.gladiator.model.Arena;
+import com.gladiator.model.attack.AttackStrategy;
 import com.gladiator.model.enemy.Enemy;
 import com.gladiator.model.enemy.EnemyPool;
 import com.gladiator.model.gladiator.Gladiator;
@@ -26,6 +27,12 @@ public class EnemyUpdater {
             // Move according to strategy
             if (movementStrategy != null) {
                 movementStrategy.move(e, arena);
+            }
+
+            AttackStrategy attackStrategy = e.getAttackStrategy();
+
+            if (attackStrategy != null) {
+                attackStrategy.attack(e);
             }
         }
     }

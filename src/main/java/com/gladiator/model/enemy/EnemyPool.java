@@ -53,7 +53,7 @@ public class EnemyPool {
         enemyFactories.put(EnemyType.FAT_ZOMBIE, (x, y) -> new FatZombie(
                 x, y,
                 new ChaseMovement(2.0, gladiator),
-                new SwordAttack(12, 8, List.of(gladiator))
+                new SwordAttack(12, 30, List.of(gladiator))
         ));
 
         enemyFactories.put(EnemyType.LIGHT_ZOMBIE, (x, y) -> {
