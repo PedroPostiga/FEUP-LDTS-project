@@ -1,5 +1,6 @@
 package com.gladiator.model;
 
+import com.gladiator.model.attack.BowAttack;
 import com.gladiator.model.attack.SwordAttack;
 import com.gladiator.model.attack.VampireAttack;
 import com.gladiator.model.attack.projectile.SingleArrowPool;
@@ -33,7 +34,20 @@ public class ArenaBuilder {
         arena.setArrowPool(singleArrowPool);
         arena.setObstacles(createObstacles(arena));
 
+        // Initialize gladiator attacks after enemy pool is set up
+        initializeGladiatorAttacks(gladiator, enemyPool, singleArrowPool);
+
         return arena;
+    }
+
+    private void initializeGladiatorAttacks(Gladiator gladiator, EnemyPool enemyPool, SingleArrowPool arrowPool) {
+        // Initialize with empty lists - will be updated dynamically when attacking
+        // For sword attack - melee attack on nearby enemies (20 damage, 30 range)
+        gladiator.setSwordAttack(new SwordAttack(20, 30, new ArrayList<>()));
+        
+        // For bow attack - ranged attack on enemies (15 damage, speed 5, max distance 200)
+        // Use the arena's arrow pool so projectiles are updated by ProjectileUpdater
+        gladiator.setBowAttack(new BowAttack(15, 5, 200, new ArrayList<>(), arrowPool));
     }
 
     public WaveManager createWaveManager(Arena arena) {
@@ -73,6 +87,6 @@ public class ArenaBuilder {
     }
 
     protected Gladiator createGladiator() {
-        return new Gladiator(ARENA_WIDTH / 2, ARENA_HEIGHT / 2,5,5,100,5);
+        return new Gladiator(ARENA_WIDTH / 2, ARENA_HEIGHT / 2,5,5,100000,5);
     }
 }

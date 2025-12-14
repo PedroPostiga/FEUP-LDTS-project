@@ -174,6 +174,35 @@ public class LanternaGUI implements GUI {
         tg.putString(position.getX(), position.getY(), text);
     }
 
+    @Override
+    public void drawHitbox(int x, int y, int width, int height, String color) {
+        TextGraphics tg = screen.newTextGraphics();
+        TextColor boxColor = TextColor.Factory.fromString(color);
+        tg.setForegroundColor(boxColor);
+
+        // Draw top and bottom borders using simple characters
+        for (int i = 0; i < width; i++) {
+            tg.setCharacter(x + i, y, new TextCharacter('-', boxColor, TextColor.ANSI.BLACK));
+            if (y + height - 1 >= 0) {
+                tg.setCharacter(x + i, y + height - 1, new TextCharacter('-', boxColor, TextColor.ANSI.BLACK));
+            }
+        }
+
+        // Draw left and right borders
+        for (int i = 0; i < height; i++) {
+            tg.setCharacter(x, y + i, new TextCharacter('|', boxColor, TextColor.ANSI.BLACK));
+            tg.setCharacter(x + width - 1, y + i, new TextCharacter('|', boxColor, TextColor.ANSI.BLACK));
+        }
+
+        // Draw corners
+        tg.setCharacter(x, y, new TextCharacter('+', boxColor, TextColor.ANSI.BLACK));
+        tg.setCharacter(x + width - 1, y, new TextCharacter('+', boxColor, TextColor.ANSI.BLACK));
+        if (y + height - 1 >= 0) {
+            tg.setCharacter(x, y + height - 1, new TextCharacter('+', boxColor, TextColor.ANSI.BLACK));
+            tg.setCharacter(x + width - 1, y + height - 1, new TextCharacter('+', boxColor, TextColor.ANSI.BLACK));
+        }
+    }
+
     private void drawCharacter(int x, int y, char c, String color) {
         TextGraphics tg = screen.newTextGraphics();
         tg.setForegroundColor(TextColor.Factory.fromString(color));

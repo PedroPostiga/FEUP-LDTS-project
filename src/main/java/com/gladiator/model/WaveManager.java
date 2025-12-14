@@ -134,6 +134,16 @@ public class WaveManager {
         }
     }
 
+    /**
+     * Checks if all enemies are dead and updates wave status accordingly.
+     * Should be called after enemies are updated to detect when a wave is complete.
+     */
+    public void checkWaveCompletion() {
+        if (waveInProgress && enemyPool.getAllActiveEnemies().isEmpty()) {
+            waveInProgress = false;
+        }
+    }
+
     public boolean isWaveInProgress() {
         return waveInProgress;
     }

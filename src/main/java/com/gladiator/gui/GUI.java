@@ -25,6 +25,8 @@ public interface GUI {
 
     void drawText(Position position, String text, String color);
 
+    void drawHitbox(int x, int y, int width, int height, String color);
+
     void clear();
 
     void refresh() throws IOException;
