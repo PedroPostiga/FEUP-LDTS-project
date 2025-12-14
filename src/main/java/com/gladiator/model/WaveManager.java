@@ -13,22 +13,26 @@ import com.gladiator.model.enemy.EnemyPool;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class WaveManager {
     private int currentWave;
     private boolean waveInProgress;
     private final Arena arena;
     private final EnemyPool enemyPool;
+    private final Random random;
 
     // Wave configuration
     private static final int BASE_ENEMIES_PER_WAVE = 5;
     private static final double ENEMY_SCALING_FACTOR = 1.2;
+    private static final int MIN_SPAWN_DISTANCE_FROM_GLADIATOR = 100; // Minimum distance from gladiator to spawn
 
     public WaveManager(Arena arena) {
         this.arena = arena;
         this.currentWave = 0;
         this.waveInProgress = false;
         this.enemyPool = arena.getEnemiePool();
+        this.random = new Random();
     }
 
     public void startNextWave() {
@@ -41,11 +45,7 @@ public class WaveManager {
         for (int i = 0; i < totalEnemies; i++) {
             EnemyPool.EnemyType type = chooseEnemyType(i, totalEnemies);
 
-            // Random or pattern-based positions
-            int x = 20;
-            int y = 20;
             int w, h;
-
             if (type == EnemyPool.EnemyType.LIGHT_ZOMBIE){
                 w = 16; h = 16;
             }
@@ -57,10 +57,61 @@ public class WaveManager {
             }
             else continue;
 
-            if (arena.isEmpty(new Rectangle(x,y,w,h))) {
-                enemyPool.acquireEnemy(type, x, y);
+            // Find a random spawn position outside the minimum range from gladiator
+            Point spawnPos = findRandomSpawnPosition(w, h);
+            if (spawnPos != null) {
+                enemyPool.acquireEnemy(type, spawnPos.x, spawnPos.y);
             }
         }
+    }
+
+    /**
+     * Finds a random spawn position outside the minimum distance from the gladiator.
+     * Tries up to 50 times to find a valid position.
+     * @param enemyWidth Width of the enemy to spawn
+     * @param enemyHeight Height of the enemy to spawn
+     * @return A valid spawn position, or null if no valid position found
+     */
+    private Point findRandomSpawnPosition(int enemyWidth, int enemyHeight) {
+        if (arena.getGladiator() == null) {
+            // Fallback if gladiator is not available
+            return new Point(20, 20);
+        }
+
+        int gladiatorX = arena.getGladiator().getPosition().getX();
+        int gladiatorY = arena.getGladiator().getPosition().getY();
+        int arenaWidth = arena.getWidth();
+        int arenaHeight = arena.getHeight();
+
+        // Try to find a valid spawn position
+        for (int attempts = 0; attempts < 50; attempts++) {
+            int x = random.nextInt(arenaWidth - enemyWidth);
+            int y = random.nextInt(arenaHeight - enemyHeight);
+
+            // Calculate distance from gladiator
+            double distance = Math.sqrt(Math.pow(x - gladiatorX, 2) + Math.pow(y - gladiatorY, 2));
+
+            // Check if position is far enough from gladiator and is empty
+            if (distance >= MIN_SPAWN_DISTANCE_FROM_GLADIATOR) {
+                Rectangle spawnRect = new Rectangle(x, y, enemyWidth, enemyHeight);
+                if (arena.isEmpty(spawnRect)) {
+                    return new Point(x, y);
+                }
+            }
+        }
+
+        // If we couldn't find a position outside the range, try anywhere in the arena
+        for (int attempts = 0; attempts < 50; attempts++) {
+            int x = random.nextInt(arenaWidth - enemyWidth);
+            int y = random.nextInt(arenaHeight - enemyHeight);
+            Rectangle spawnRect = new Rectangle(x, y, enemyWidth, enemyHeight);
+            if (arena.isEmpty(spawnRect)) {
+                return new Point(x, y);
+            }
+        }
+
+        // Last resort: return a default position
+        return new Point(20, 20);
     }
 
     private int calculateTotalEnemies() {

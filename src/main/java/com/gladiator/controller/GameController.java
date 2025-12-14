@@ -37,19 +37,27 @@ public class GameController extends Controller{
     }
 
     public void moveGladiatorLeft() {
-        moveGladiator(arena.getGladiator().getPosition().getLeft());
+        int speed = arena.getGladiator().getSpeed();
+        Position currentPos = arena.getGladiator().getPosition();
+        moveGladiator(new Position(currentPos.getX() - speed, currentPos.getY()));
     }
 
     public void moveGladiatorRight() {
-        moveGladiator(arena.getGladiator().getPosition().getRight());
+        int speed = arena.getGladiator().getSpeed();
+        Position currentPos = arena.getGladiator().getPosition();
+        moveGladiator(new Position(currentPos.getX() + speed, currentPos.getY()));
     }
 
     public void moveGladiatorUp() {
-        moveGladiator(arena.getGladiator().getPosition().getUp());
+        int speed = arena.getGladiator().getSpeed();
+        Position currentPos = arena.getGladiator().getPosition();
+        moveGladiator(new Position(currentPos.getX(), currentPos.getY() - speed));
     }
 
     public void moveGladiatorDown() {
-        moveGladiator(arena.getGladiator().getPosition().getDown());
+        int speed = arena.getGladiator().getSpeed();
+        Position currentPos = arena.getGladiator().getPosition();
+        moveGladiator(new Position(currentPos.getX(), currentPos.getY() + speed));
     }
 
     private void moveGladiator(Position position) {
