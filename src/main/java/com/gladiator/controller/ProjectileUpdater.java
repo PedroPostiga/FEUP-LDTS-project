@@ -21,10 +21,10 @@ public class ProjectileUpdater {
 
             Enemy enemy = a.getTarget();
 
-            int dx = Integer.compare(a.getPosition().getX(),
-                    enemy.getPosition().getX()) * a.getSpeed();
-            int dy = Integer.compare(a.getPosition().getY(),
-                    enemy.getPosition().getY()) * a.getSpeed();
+            int dx = Integer.compare(enemy.getPosition().getX(),
+                    a.getPosition().getX()) * a.getSpeed();
+            int dy = Integer.compare(enemy.getPosition().getY(),
+                    a.getPosition().getY()) * a.getSpeed();
 
             // Move projectile
             int newX = a.getPosition().getX() + dx;
@@ -32,13 +32,18 @@ public class ProjectileUpdater {
 
             Rectangle newHitbox = new Rectangle(newX, newY, a.getHitbox().width, a.getHitbox().height);
 
-            if (!arena.isEmpty(newHitbox, null, arena.getGladiator())) {
+            if (enemy == null || !enemy.isAlive()){
                 singleArrowPool.releaseArrow(a);
                 continue;
             }
 
             if(arena.isEnemy(newHitbox)){
                 enemy.takeDamage(a.getDamage());
+                singleArrowPool.releaseArrow(a);
+                continue;
+            }
+
+            if (!arena.isEmpty(newHitbox, null, arena.getGladiator())) {
                 singleArrowPool.releaseArrow(a);
                 continue;
             }

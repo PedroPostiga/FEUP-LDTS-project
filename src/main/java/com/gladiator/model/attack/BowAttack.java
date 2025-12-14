@@ -70,13 +70,11 @@ public class BowAttack implements AttackStrategy {
 
         if (closest == null) return;
 
-        double effectiveDistance = Math.min(closestDistance, maxDistance);
-
         arrowPool.acquireArrow(
                 attacker.getPosition(),
                 speed,
                 damage,
-                effectiveDistance,
+                maxDistance,
                 closest
         );
 

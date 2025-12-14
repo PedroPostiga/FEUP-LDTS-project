@@ -2,10 +2,11 @@ package com.gladiator.model.attack.projectile;
 
 import com.gladiator.model.component.Position;
 import com.gladiator.model.enemy.Enemy;
+import com.gladiator.model.entity.Entity;
 
 import java.awt.*;
 
-public class Projectile {
+public class Projectile implements Entity {
 
     private Position position;
     private Position startPosition; // Track starting position for distance calculation

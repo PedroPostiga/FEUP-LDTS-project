@@ -15,9 +15,9 @@ public class LightZombieViewer implements EntityViewer<LightZombie> {
         String sprite;
         if (attacking) {
             // Use attack sprite - defaulting to right, you can add direction tracking later
-            sprite = "sprites/movingEntity/light_zombie_attack_right.png";
+            sprite = "sprites/movingEntity/light_zombie_attack.png";
         } else {
-            sprite = "sprites/movingEntity/light_zombie_right.png";
+            sprite = "sprites/movingEntity/light_zombie.png";
         }
         
         gui.drawSprite(sprite, lightZombie.getPosition());

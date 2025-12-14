@@ -9,7 +9,7 @@ public class Vampire extends Enemy {
     private final double lifestealPercentage;
 
     public Vampire(int x, int y, MovementStrategy movement, AttackStrategy attack) {
-        super(x, y, 16, 16, 80, 3, movement, attack);
+        super(x, y, 16, 16, 40, 3, movement, attack);
         this.lifestealPercentage = 0.3;
     }
 
