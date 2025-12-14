@@ -30,12 +30,26 @@ public class ProjectileUpdater {
             int newX = a.getPosition().getX() + dx;
             int newY = a.getPosition().getY() + dy;
 
-            if (!arena.isEmpty(new Rectangle(newX, newY, a.getHitbox().width, a.getHitbox().height))) {
+            Rectangle newHitbox = new Rectangle(newX, newY, a.getHitbox().width, a.getHitbox().height);
+
+            if (!arena.isEmpty(newHitbox, null, arena.getGladiator())) {
+                singleArrowPool.releaseArrow(a);
+                continue;
+            }
+
+            if(arena.isEnemy(newHitbox)){
+                enemy.takeDamage(a.getDamage());
                 singleArrowPool.releaseArrow(a);
                 continue;
             }
 
             a.setPosition(new Position(newX, newY));
+            
+            // Check if projectile has exceeded max distance
+            if (a.getDistanceTraveled() > a.getMaxDistance()) {
+                singleArrowPool.releaseArrow(a);
+                continue;
+            }
         }
     }
 }

@@ -46,6 +46,7 @@ public class SingleArrowPool {
         // Reset state before use
         resetProjectileState(arrow);
         arrow.setPosition(start);
+        arrow.setStartPosition(start);
         arrow.setSpeed(speed);
         arrow.setDamage(damage);
         arrow.setMaxDistance(maxDistance);

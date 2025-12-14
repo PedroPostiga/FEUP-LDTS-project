@@ -67,6 +67,18 @@ public class SwordAttack implements AttackStrategy {
         }
     }
 
+    @Override
+    public boolean isAttacking(MovingEntity attacker) {
+        Integer lastTick = lastAttackTick.get(attacker);
+        if (lastTick == null) return false;
+        
+        int currentTick = getCurrentTick();
+        int ticksSinceAttack = currentTick - lastTick;
+        
+        // Show attack animation for first 3 ticks after attack (600ms at 5 ticks/sec)
+        return ticksSinceAttack < 3;
+    }
+
     private int getCurrentTick() {
         // Convert current time to ticks (5 ticks/sec = 200ms per tick)
         return (int) (System.currentTimeMillis() / 200L);

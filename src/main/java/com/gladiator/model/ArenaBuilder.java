@@ -35,19 +35,19 @@ public class ArenaBuilder {
         arena.setObstacles(createObstacles(arena));
 
         // Initialize gladiator attacks after enemy pool is set up
-        initializeGladiatorAttacks(gladiator, enemyPool, singleArrowPool);
+        initializeGladiatorAttacks(gladiator, singleArrowPool);
 
         return arena;
     }
 
-    private void initializeGladiatorAttacks(Gladiator gladiator, EnemyPool enemyPool, SingleArrowPool arrowPool) {
+    private void initializeGladiatorAttacks(Gladiator gladiator, SingleArrowPool arrowPool) {
         // Initialize with empty lists - will be updated dynamically when attacking
         // For sword attack - melee attack on nearby enemies (20 damage, 30 range)
         gladiator.setSwordAttack(new SwordAttack(20, 30, new ArrayList<>()));
         
         // For bow attack - ranged attack on enemies (15 damage, speed 5, max distance 200)
         // Use the arena's arrow pool so projectiles are updated by ProjectileUpdater
-        gladiator.setBowAttack(new BowAttack(15, 5, 200, new ArrayList<>(), arrowPool));
+        gladiator.setBowAttack(new BowAttack(150, 1, 200, new ArrayList<>(), arrowPool));
     }
 
     public WaveManager createWaveManager(Arena arena) {

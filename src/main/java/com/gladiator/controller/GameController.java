@@ -13,16 +13,24 @@ import java.awt.*;
 import java.io.IOException;
 
 public class GameController extends Controller{
+    public enum GameState {
+        PLAYING,
+        WON,
+        LOST
+    }
+
     private final Arena arena;
     private final ArenaViewer viewer;
     private final WaveManager waveManager;
     ArenaUpdater updater = new ArenaUpdater();
+    private GameState gameState;
 
     public GameController(Arena arena) {
         super(5); // 5 ticks per second
         this.arena = arena;
         this.viewer = new ArenaViewer(arena);
         this.waveManager = new WaveManager(arena);
+        this.gameState = GameState.PLAYING;
     }
 
     @Override
@@ -118,25 +126,47 @@ public class GameController extends Controller{
 
     @Override
     protected void update() {
+        // Don't update if game is already over
+        if (isGameOver()) {
+            return;
+        }
+
         // Perform gladiator attacks automatically
         performGladiatorAttacks();
         
         updater.update(arena);
         
         // Check if all enemies are dead and wave should complete
-        waveManager.checkWaveCompletion();
+        boolean gameWon = waveManager.checkWaveCompletion();
+        
+        // Check lose condition: gladiator is dead
+        if (arena.getGladiator() != null && !arena.getGladiator().isAlive()) {
+            gameState = GameState.LOST;
+            System.out.println("GAME OVER: You lost! The gladiator has died.");
+            stop();
+            return;
+        }
+        
+        // Check win condition: completed all waves
+        if (gameWon) {
+            gameState = GameState.WON;
+            System.out.println("GAME OVER: You won! Completed " + waveManager.getCurrentWave() + " waves!");
+            stop();
+            return;
+        }
         
         // Start next wave if current wave is complete
         if (!waveManager.isWaveInProgress()) {
             waveManager.startNextWave();
         }
-        
-        if (!arena.getGladiator().isAlive()){
-            System.out.println("gladiator is dead");
-        }
-        /*if (arena.isGameOver()) {
-            stop();
-        }*/
+    }
+
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    public boolean isGameOver() {
+        return gameState == GameState.WON || gameState == GameState.LOST;
     }
 
     @Override

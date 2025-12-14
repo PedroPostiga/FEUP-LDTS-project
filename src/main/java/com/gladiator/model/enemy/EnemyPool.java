@@ -47,7 +47,7 @@ public class EnemyPool {
         enemyFactories.put(EnemyType.VAMPIRE, (x, y) -> new Vampire(
                 x, y,
                 new ChaseMovement(3.0, gladiator),
-                new VampireAttack(15, 8, gladiator, 0.3)
+                new VampireAttack(15, 30, gladiator, 0.3)
         ));
 
         enemyFactories.put(EnemyType.FAT_ZOMBIE, (x, y) -> new FatZombie(
@@ -63,7 +63,7 @@ public class EnemyPool {
                     shouldChase ?
                             new ChaseMovement(4.0, gladiator) :
                             new WanderMovement(),
-                    new SwordAttack(8, 6, List.of(gladiator))
+                    new SwordAttack(8, 30, List.of(gladiator))
             );
         });
     }
@@ -84,6 +84,14 @@ public class EnemyPool {
             enemy = pool.poll();
             enemy.setPosition(new Position(x, y));
             enemy.resetHealth();
+            
+        // For LightZombie, update movement strategy based on actual spawn position
+        if (type == EnemyType.LIGHT_ZOMBIE && enemy instanceof LightZombie) {
+            boolean shouldChase = (x + y) % 2 == 0;
+            enemy.setMovement(shouldChase ?
+                    new ChaseMovement(4.0, gladiator) :
+                    new WanderMovement());
+        }
         } else {
             if (poolSizes.get(type) < MAX_POOL_SIZE) {
                 enemy = createNewEnemy(type, x, y);
