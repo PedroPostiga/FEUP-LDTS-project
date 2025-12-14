@@ -87,6 +87,6 @@ public class ArenaBuilder {
     }
 
     protected Gladiator createGladiator() {
-        return new Gladiator(ARENA_WIDTH / 2, ARENA_HEIGHT / 2,5,5,100000,5);
+        return new Gladiator(ARENA_WIDTH / 2, ARENA_HEIGHT / 2,16,16,100000,5);
     }
 }

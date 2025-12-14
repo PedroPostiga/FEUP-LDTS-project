@@ -1,5 +1,6 @@
 package com.gladiator.model;
 
+import com.gladiator.model.component.Position;
 import com.gladiator.model.enemy.Enemy;
 import com.gladiator.model.enemy.enemy_types.FatZombie;
 import com.gladiator.model.enemy.enemy_types.LightZombie;
@@ -58,9 +59,9 @@ public class WaveManager {
             else continue;
 
             // Find a random spawn position outside the minimum range from gladiator
-            Point spawnPos = findRandomSpawnPosition(w, h);
+            Position spawnPos = findRandomSpawnPosition(w, h);
             if (spawnPos != null) {
-                enemyPool.acquireEnemy(type, spawnPos.x, spawnPos.y);
+                enemyPool.acquireEnemy(type, spawnPos.getX(), spawnPos.getY());
             }
         }
     }
@@ -72,10 +73,10 @@ public class WaveManager {
      * @param enemyHeight Height of the enemy to spawn
      * @return A valid spawn position, or null if no valid position found
      */
-    private Point findRandomSpawnPosition(int enemyWidth, int enemyHeight) {
+    private Position findRandomSpawnPosition(int enemyWidth, int enemyHeight) {
         if (arena.getGladiator() == null) {
             // Fallback if gladiator is not available
-            return new Point(20, 20);
+            return new Position(20, 20);
         }
 
         int gladiatorX = arena.getGladiator().getPosition().getX();
@@ -95,7 +96,7 @@ public class WaveManager {
             if (distance >= MIN_SPAWN_DISTANCE_FROM_GLADIATOR) {
                 Rectangle spawnRect = new Rectangle(x, y, enemyWidth, enemyHeight);
                 if (arena.isEmpty(spawnRect)) {
-                    return new Point(x, y);
+                    return new Position(x, y);
                 }
             }
         }
@@ -106,12 +107,12 @@ public class WaveManager {
             int y = random.nextInt(arenaHeight - enemyHeight);
             Rectangle spawnRect = new Rectangle(x, y, enemyWidth, enemyHeight);
             if (arena.isEmpty(spawnRect)) {
-                return new Point(x, y);
+                return new Position(x, y);
             }
         }
 
         // Last resort: return a default position
-        return new Point(20, 20);
+        return new Position(20, 20);
     }
 
     private int calculateTotalEnemies() {
