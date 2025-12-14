@@ -36,7 +36,7 @@ public class ArenaBuilder {
         // Initialize with empty lists - will be updated dynamically when attacking
         // For sword attack - melee attack on nearby enemies (20 damage, 30 range)
         gladiator.setSwordAttack(new SwordAttack(20, 30, new ArrayList<>()));
-        
+
         // For bow attack - ranged attack on enemies (10 damage, speed 5, max distance 200)
         // Use the arena's arrow pool so projectiles are updated by ProjectileUpdater
         gladiator.setBowAttack(new BowAttack(10, 5, 200, new ArrayList<>(), arrowPool));
