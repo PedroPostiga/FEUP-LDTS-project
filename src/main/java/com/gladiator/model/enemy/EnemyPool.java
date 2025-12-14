@@ -1,10 +1,7 @@
 package com.gladiator.model.enemy;
 
 import com.gladiator.model.component.Position;
-import com.gladiator.model.enemy.Enemy;
 import com.gladiator.model.enemy.enemy_types.*;
-import com.gladiator.model.attack.AttackStrategy;
-import com.gladiator.model.movement.MovementStrategy;
 import com.gladiator.model.gladiator.Gladiator;
 import com.gladiator.model.attack.VampireAttack;
 import com.gladiator.model.attack.SwordAttack;
@@ -47,13 +44,13 @@ public class EnemyPool {
         enemyFactories.put(EnemyType.VAMPIRE, (x, y) -> new Vampire(
                 x, y,
                 new ChaseMovement(3.0, gladiator),
-                new VampireAttack(15, 8, gladiator, 0.3)
+                new VampireAttack(8, 8, gladiator, 0.3)
         ));
 
         enemyFactories.put(EnemyType.FAT_ZOMBIE, (x, y) -> new FatZombie(
                 x, y,
                 new ChaseMovement(2.0, gladiator),
-                new SwordAttack(12, 30, List.of(gladiator))
+                new SwordAttack(10, 30, List.of(gladiator))
         ));
 
         enemyFactories.put(EnemyType.LIGHT_ZOMBIE, (x, y) -> {
@@ -63,7 +60,7 @@ public class EnemyPool {
                     shouldChase ?
                             new ChaseMovement(4.0, gladiator) :
                             new WanderMovement(),
-                    new SwordAttack(8, 6, List.of(gladiator))
+                    new SwordAttack(5, 6, List.of(gladiator))
             );
         });
     }

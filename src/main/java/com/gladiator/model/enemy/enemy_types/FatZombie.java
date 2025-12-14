@@ -6,15 +6,8 @@ import com.gladiator.model.movement.MovementStrategy;
 
 public class FatZombie extends Enemy {
 
-    private final double attackDamageMultiplier;
-
     public FatZombie(int x, int y, MovementStrategy movement, AttackStrategy attack) {
-        super(x, y, 25, 25, 120, 2, movement, attack);
-        attackDamageMultiplier = 2.0;
-    }
-
-    public double getAttackDamageMultiplier() {
-        return attackDamageMultiplier;
+        super(x, y, 23, 23, 40, 2, movement, attack);
     }
 
     public MovementStrategy getMovementStrategy() {

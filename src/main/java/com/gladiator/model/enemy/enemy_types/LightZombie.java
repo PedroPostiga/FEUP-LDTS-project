@@ -6,15 +6,8 @@ import com.gladiator.model.movement.MovementStrategy;
 
 public class LightZombie extends Enemy {
 
-    private final double attackSpeedMultiplier;
-
     public LightZombie(int x, int y, MovementStrategy movement, AttackStrategy attack) {
-        super(x, y, 16, 16, 50, 2, movement, attack);
-        attackSpeedMultiplier = 1.5;
-    }
-
-    public double getAttackSpeedMultiplier() {
-        return attackSpeedMultiplier;
+        super(x, y, 16, 16, 20, 2, movement, attack);
     }
 
     public MovementStrategy getMovementStrategy() {

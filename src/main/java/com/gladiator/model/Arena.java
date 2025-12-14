@@ -2,10 +2,8 @@ package com.gladiator.model;
 
 import com.gladiator.model.attack.projectile.Arrow;
 import com.gladiator.model.attack.projectile.SingleArrowPool;
-import com.gladiator.model.component.Position;
 import com.gladiator.model.enemy.Enemy;
 import com.gladiator.model.enemy.EnemyPool;
-import com.gladiator.model.entity.InvisibleWall;
 import com.gladiator.model.entity.Obstacle;
 import com.gladiator.model.gladiator.Gladiator;
 

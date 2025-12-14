@@ -6,15 +6,8 @@ import com.gladiator.model.movement.MovementStrategy;
 
 public class Vampire extends Enemy {
 
-    private final double lifestealPercentage;
-
     public Vampire(int x, int y, MovementStrategy movement, AttackStrategy attack) {
-        super(x, y, 16, 16, 80, 3, movement, attack);
-        this.lifestealPercentage = 0.3;
-    }
-
-    public double getLifestealPercentage() {
-        return lifestealPercentage;
+        super(x, y, 16, 16, 20, 3, movement, attack);
     }
 
     public MovementStrategy getMovementStrategy() {

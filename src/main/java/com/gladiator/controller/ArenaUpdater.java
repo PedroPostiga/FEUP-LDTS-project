@@ -1,8 +1,6 @@
 package com.gladiator.controller;
 
 import com.gladiator.model.Arena;
-import com.gladiator.model.attack.projectile.Projectile;
-import com.gladiator.model.enemy.Enemy;
 
 public class ArenaUpdater implements Updater {
 

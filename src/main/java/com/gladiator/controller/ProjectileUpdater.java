@@ -2,7 +2,6 @@ package com.gladiator.controller;
 
 import com.gladiator.model.Arena;
 import com.gladiator.model.attack.projectile.Arrow;
-import com.gladiator.model.attack.projectile.Projectile;
 import com.gladiator.model.attack.projectile.SingleArrowPool;
 import com.gladiator.model.component.Position;
 import com.gladiator.model.enemy.Enemy;

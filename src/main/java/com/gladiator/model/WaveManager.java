@@ -1,18 +1,9 @@
 package com.gladiator.model;
 
 import com.gladiator.model.enemy.Enemy;
-import com.gladiator.model.enemy.enemy_types.FatZombie;
-import com.gladiator.model.enemy.enemy_types.LightZombie;
-import com.gladiator.model.enemy.enemy_types.Vampire;
-import com.gladiator.model.movement.ChaseMovement;
-import com.gladiator.model.movement.WanderMovement;
-import com.gladiator.model.attack.SwordAttack;
-import com.gladiator.model.attack.VampireAttack;
 import com.gladiator.model.enemy.EnemyPool;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class WaveManager {

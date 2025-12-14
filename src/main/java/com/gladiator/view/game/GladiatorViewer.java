@@ -9,6 +9,6 @@ public class GladiatorViewer implements EntityViewer<Gladiator> {
 
     @Override
     public void draw(Gladiator gladiator, GUI gui) throws IOException {
-        gui.drawSprite("sprites/movingEntity/gladiator_down.png",gladiator.getPosition());
+        gui.drawSprite("sprites/movingEntity/gladiator.png",gladiator.getPosition());
     }
 }
