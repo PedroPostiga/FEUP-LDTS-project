@@ -26,7 +26,7 @@ public class Projectile implements Entity {
         this.maxDistance = maxDistance;
         this.target = target;
         this.speed = speed;
-        this.hitbox = new Rectangle(start.getX(), start.getY(), 2, 8);
+        this.hitbox = new Rectangle(start.getX(), start.getY(), 6, 3);
     }
 
     public void setPosition(Position position) {

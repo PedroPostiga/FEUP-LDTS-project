@@ -6,7 +6,7 @@ import com.gladiator.model.entity.MovingEntity;
 
 public class Gladiator extends MovingEntity {
 
-    private static Gladiator instance;
+    private static volatile Gladiator instance;
     private SwordAttack swordAttack;
     private BowAttack bowAttack;
 
@@ -14,9 +14,21 @@ public class Gladiator extends MovingEntity {
         super(x, y, w, h, hp, speed);
     }
 
+
+    public static Gladiator getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException("Gladiator instance has not been initialized. Use getInstance(int, int, int, int, int, int) first.");
+        }
+        return instance;
+    }
+
     public static Gladiator getInstance(int x, int y, int w, int h, int hp, int speed) {
         if (instance == null) {
-            instance = new Gladiator(x, y, w, h, hp, speed);
+            synchronized (Gladiator.class) {
+                if (instance == null) {
+                    instance = new Gladiator(x, y, w, h, hp, speed);
+                }
+            }
         }
         return instance;
     }
