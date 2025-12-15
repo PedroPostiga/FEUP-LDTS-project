@@ -127,7 +127,7 @@ public class ArenaBuilderTest {
     @Test
     void testCreateEnemiesUsesArenaGladiator() {
         Arena arena = new Arena(20, 20);
-        Gladiator testGladiator = new Gladiator(10, 10, 5, 5, 100, 5);
+        Gladiator testGladiator = Gladiator.getInstance(10, 10, 5, 5, 100, 5);
         arena.setGladiator(testGladiator);
 
         List<Enemy> enemies = arenaBuilder.createEnemies(arena);
