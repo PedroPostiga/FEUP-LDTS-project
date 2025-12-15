@@ -2,6 +2,7 @@ package com.gladiator.controller;
 
 import com.gladiator.model.Arena;
 import com.gladiator.model.attack.projectile.Arrow;
+import com.gladiator.model.attack.projectile.Projectile;
 import com.gladiator.model.attack.projectile.SingleArrowPool;
 import com.gladiator.model.component.Position;
 import com.gladiator.model.enemy.Enemy;
@@ -20,6 +21,12 @@ public class ProjectileUpdater {
 
             Enemy enemy = a.getTarget();
 
+            // Release arrow if target enemy is null, dead, or no longer in active enemies list
+            if (enemy == null || !enemy.isAlive() || !arena.getEnemiePool().getAllActiveEnemies().contains(enemy)) {
+                singleArrowPool.releaseArrow(a);
+                continue;
+            }
+
             int dx = Integer.compare(enemy.getPosition().getX(),
                     a.getPosition().getX()) * a.getSpeed();
             int dy = Integer.compare(enemy.getPosition().getY(),
@@ -30,11 +37,6 @@ public class ProjectileUpdater {
             int newY = a.getPosition().getY() + dy;
 
             Rectangle newHitbox = new Rectangle(newX, newY, a.getHitbox().width, a.getHitbox().height);
-
-            if (enemy == null || !enemy.isAlive()){
-                singleArrowPool.releaseArrow(a);
-                continue;
-            }
 
             if(arena.isEnemy(newHitbox)){
                 enemy.takeDamage(a.getDamage());
