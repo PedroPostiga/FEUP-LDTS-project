@@ -22,6 +22,6 @@ public class GladiatorViewer implements EntityViewer<Gladiator> {
             sprite = "sprites/movingEntity/gladiator.png";
         }*/
 
-        gui.drawSprite("sprites/movingEntity/gladiator_down.png", gladiator.getPosition());
+        gui.drawSprite("sprites/movingEntity/gladiator.png", gladiator.getPosition());
     }
 }
