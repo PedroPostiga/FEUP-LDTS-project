@@ -6,9 +6,14 @@ import com.gladiator.model.entity.MovingEntity;
 
 public class Gladiator extends MovingEntity {
 
+    public enum Direction {
+        UP, DOWN, LEFT, RIGHT
+    }
+
     private static volatile Gladiator instance;
     private SwordAttack swordAttack;
     private BowAttack bowAttack;
+    private Direction direction = Direction.DOWN; // Default direction
 
     private Gladiator(int x, int y, int w, int h, int hp, int speed) {
         super(x, y, w, h, hp, speed);
@@ -47,5 +52,13 @@ public class Gladiator extends MovingEntity {
 
     public void setBowAttack(BowAttack bowAttack) {
         this.bowAttack = bowAttack;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 }

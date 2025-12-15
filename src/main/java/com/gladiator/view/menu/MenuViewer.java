@@ -31,16 +31,5 @@ public class MenuViewer extends Viewer<MenuModel> {
         }
     }
 
-    public void moveUp() {
-        getModel().previousSelected();
-    }
-
-    public void moveDown() {
-        getModel().nextSelected();
-    }
-
-    public MenuModel.Option select() {
-        return getModel().getSelected(); // Return the selected option
-    }
 
 }

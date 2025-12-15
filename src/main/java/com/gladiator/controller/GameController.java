@@ -4,6 +4,7 @@ import com.gladiator.gui.GUI;
 import com.gladiator.model.Arena;
 import com.gladiator.model.WaveManager;
 import com.gladiator.model.component.Position;
+import com.gladiator.model.gladiator.Gladiator;
 import com.gladiator.view.game.ArenaViewer;
 
 import java.awt.*;
@@ -48,32 +49,34 @@ public class GameController extends Controller{
     public void moveGladiatorLeft() {
         int speed = arena.getGladiator().getSpeed();
         Position currentPos = arena.getGladiator().getPosition();
-        moveGladiator(new Position(currentPos.getX() - speed, currentPos.getY()));
+        moveGladiator(new Position(currentPos.getX() - speed, currentPos.getY()), Gladiator.Direction.LEFT);
     }
 
     public void moveGladiatorRight() {
         int speed = arena.getGladiator().getSpeed();
         Position currentPos = arena.getGladiator().getPosition();
-        moveGladiator(new Position(currentPos.getX() + speed, currentPos.getY()));
+        moveGladiator(new Position(currentPos.getX() + speed, currentPos.getY()), Gladiator.Direction.RIGHT);
     }
 
     public void moveGladiatorUp() {
         int speed = arena.getGladiator().getSpeed();
         Position currentPos = arena.getGladiator().getPosition();
-        moveGladiator(new Position(currentPos.getX(), currentPos.getY() - speed));
+        moveGladiator(new Position(currentPos.getX(), currentPos.getY() - speed), Gladiator.Direction.UP);
     }
 
     public void moveGladiatorDown() {
         int speed = arena.getGladiator().getSpeed();
         Position currentPos = arena.getGladiator().getPosition();
-        moveGladiator(new Position(currentPos.getX(), currentPos.getY() + speed));
+        moveGladiator(new Position(currentPos.getX(), currentPos.getY() + speed), Gladiator.Direction.DOWN);
     }
 
-    private void moveGladiator(Position position) {
-        Rectangle hitbox = arena.getGladiator().getHitbox();
+    private void moveGladiator(Position position, Gladiator.Direction direction) {
+        Gladiator gladiator = arena.getGladiator();
+        Rectangle hitbox = gladiator.getHitbox();
         Rectangle newHitbox = new Rectangle(position.getX(), position.getY(), hitbox.width, hitbox.height);
-        if (arena.isEmpty(newHitbox, null, arena.getGladiator())) {
-            arena.getGladiator().setPosition(position);
+        if (arena.isEmpty(newHitbox, null, gladiator)) {
+            gladiator.setPosition(position);
+            gladiator.setDirection(direction);
         }
     }
 

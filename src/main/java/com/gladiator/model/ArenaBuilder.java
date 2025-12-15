@@ -43,11 +43,11 @@ public class ArenaBuilder {
     private void initializeGladiatorAttacks(Gladiator gladiator, SingleArrowPool arrowPool) {
         // Initialize with empty lists - will be updated dynamically when attacking
         // For sword attack - melee attack on nearby enemies (20 damage, 30 range)
-        gladiator.setSwordAttack(new SwordAttack(200, 30, new ArrayList<>()));
+        gladiator.setSwordAttack(new SwordAttack(1, 30, new ArrayList<>()));
         
         // For bow attack - ranged attack on enemies (15 damage, speed 5, max distance 200)
         // Use the arena's arrow pool so projectiles are updated by ProjectileUpdater
-        gladiator.setBowAttack(new BowAttack(1000, 5, 200, new ArrayList<>(), arrowPool));
+        gladiator.setBowAttack(new BowAttack(1, 5, 200, new ArrayList<>(), arrowPool));
     }
 
     protected List<Obstacle> createObstacles(Arena arena) {
@@ -82,6 +82,6 @@ public class ArenaBuilder {
     }
 
     protected Gladiator createGladiator() {
-        return Gladiator.getInstance(ARENA_WIDTH / 2, ARENA_HEIGHT / 2,16,16,200,5);
+        return Gladiator.getInstance(ARENA_WIDTH / 2, ARENA_HEIGHT / 2,16,16,1000,5);
     }
 }

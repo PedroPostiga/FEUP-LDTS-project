@@ -9,11 +9,13 @@ import java.io.IOException;
 public class MenuController extends Controller {
 
     private final MenuViewer viewer;
+    private final MenuModel model;
     private String selectionResult = null;
 
     public MenuController(MenuViewer viewer) {
         super(10); // menu updates faster
         this.viewer = viewer;
+        this.model = viewer.getModel();
     }
 
     @Override
@@ -21,9 +23,9 @@ public class MenuController extends Controller {
         GUI.ACTION action = gui.getNextAction();
 
         switch (action) {
-            case UP -> viewer.moveUp();
-            case DOWN -> viewer.moveDown();
-            case SELECT -> handleSelection(viewer.select());
+            case UP -> model.previousSelected();
+            case DOWN -> model.nextSelected();
+            case SELECT -> handleSelection(model.getSelected());
             case QUIT -> stop();
             default -> {}
         }
