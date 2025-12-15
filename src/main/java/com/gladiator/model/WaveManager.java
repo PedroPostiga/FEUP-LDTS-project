@@ -18,6 +18,7 @@ public class WaveManager {
     private static final int BASE_ENEMIES_PER_WAVE = 5;
     private static final double ENEMY_SCALING_FACTOR = 1.2;
     private static final int MIN_SPAWN_DISTANCE_FROM_GLADIATOR = 100; // Minimum distance from gladiator to spawn
+    private static final int WINNING_WAVE = 1; // Win the game after completing this many waves
 
     public WaveManager(Arena arena) {
         this.arena = arena;
@@ -129,11 +130,18 @@ public class WaveManager {
     /**
      * Checks if all enemies are dead and updates wave status accordingly.
      * Should be called after enemies are updated to detect when a wave is complete.
+     * @return true if the game should be won (completed all waves)
      */
-    public void checkWaveCompletion() {
+    public boolean checkWaveCompletion() {
         if (waveInProgress && enemyPool.getAllActiveEnemies().isEmpty()) {
             waveInProgress = false;
+            
+            // Check if player won (completed all required waves)
+            if (currentWave >= WINNING_WAVE) {
+                return true; // Game won
+            }
         }
+        return false; // Game continues
     }
 
     public boolean isWaveInProgress() {
@@ -151,5 +159,9 @@ public class WaveManager {
 
     public int getTotalWaveEnemies() {
         return calculateTotalEnemies();
+    }
+
+    public static int getWinningWave() {
+        return WINNING_WAVE;
     }
 }

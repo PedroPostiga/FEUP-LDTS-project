@@ -70,13 +70,11 @@ public class BowAttack implements AttackStrategy {
 
         if (closest == null) return;
 
-        double effectiveDistance = Math.min(closestDistance, maxDistance);
-
         arrowPool.acquireArrow(
                 attacker.getPosition(),
                 speed,
                 damage,
-                effectiveDistance,
+                maxDistance,
                 closest
         );
 
@@ -85,6 +83,18 @@ public class BowAttack implements AttackStrategy {
 
         // Update cooldown after firing
         lastAttackTick.put(attacker, getCurrentTick());
+    }
+
+    @Override
+    public boolean isAttacking(MovingEntity attacker) {
+        Integer lastTick = lastAttackTick.get(attacker);
+        if (lastTick == null) return false;
+        
+        int currentTick = getCurrentTick();
+        int ticksSinceAttack = currentTick - lastTick;
+        
+        // Show attack animation for first 3 ticks after firing (600ms at 5 ticks/sec)
+        return ticksSinceAttack < 3;
     }
 
     private int getCurrentTick() {
