@@ -46,13 +46,13 @@ public class EnemyPool {
     private void initializeFactories() {
         enemyFactories.put(EnemyType.VAMPIRE, (x, y) -> new Vampire(
                 x, y,
-                new ChaseMovement(3.0, gladiator),
+                new ChaseMovement(2.0, gladiator),
                 new VampireAttack(15, 30, gladiator, 0.3)
         ));
 
         enemyFactories.put(EnemyType.FAT_ZOMBIE, (x, y) -> new FatZombie(
                 x, y,
-                new ChaseMovement(2.0, gladiator),
+                new ChaseMovement(1.0, gladiator),
                 new SwordAttack(12, 30, List.of(gladiator))
         ));
 
@@ -89,7 +89,7 @@ public class EnemyPool {
         if (type == EnemyType.LIGHT_ZOMBIE && enemy instanceof LightZombie) {
             boolean shouldChase = (x + y) % 2 == 0;
             enemy.setMovement(shouldChase ?
-                    new ChaseMovement(4.0, gladiator) :
+                    new ChaseMovement(2.0, gladiator) :
                     new WanderMovement());
         }
         } else {

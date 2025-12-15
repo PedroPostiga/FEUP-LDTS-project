@@ -47,7 +47,7 @@ public class ArenaBuilder {
         
         // For bow attack - ranged attack on enemies (15 damage, speed 5, max distance 200)
         // Use the arena's arrow pool so projectiles are updated by ProjectileUpdater
-        gladiator.setBowAttack(new BowAttack(1, 5, 200, new ArrayList<>(), arrowPool));
+        gladiator.setBowAttack(new BowAttack(1, 3, 200, new ArrayList<>(), arrowPool));
     }
 
     protected List<Obstacle> createObstacles(Arena arena) {
@@ -82,6 +82,6 @@ public class ArenaBuilder {
     }
 
     protected Gladiator createGladiator() {
-        return Gladiator.getInstance(ARENA_WIDTH / 2, ARENA_HEIGHT / 2,16,16,1000,5);
+        return Gladiator.getInstance(ARENA_WIDTH / 2, ARENA_HEIGHT / 2,16,16,1000,3);
     }
 }

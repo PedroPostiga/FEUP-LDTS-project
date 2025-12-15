@@ -32,7 +32,10 @@ public class ArenaViewer extends Viewer<Arena> {
         List<Obstacle> obstacles = arena.getObstacles();
         List<Arrow> arrows = arena.getArrowPool().getActiveArrows();
 
-        new GladiatorViewer().draw(gladiator, gui);
+        if (gladiator != null && gladiator.isAlive()) {
+            new GladiatorViewer().draw(gladiator, gui);
+            drawHealth(gladiator.getHealth().getHealth(), arena.getWidth(), arena.getHeight(), gui);
+        }
 
         for (Enemy enemy : enemies) {
             EntityViewer<Enemy> viewer = (EntityViewer<Enemy>) ViewerRegistry.getViewer(enemy);
@@ -70,6 +73,29 @@ public class ArenaViewer extends Viewer<Arena> {
         for (Arrow arrow : arrows) {
             java.awt.Rectangle hitbox = arrow.getHitbox();
             gui.drawHitbox(hitbox.x, hitbox.y, hitbox.width, hitbox.height, "#FF0000");
+        }
+    }
+
+    private void drawHealth(int health, int arenaWidth, int arenaHeight, GUI gui) throws IOException {
+        // Convert health to string to get individual digits
+        String healthStr = String.valueOf(health);
+        
+        // Estimate digit width (assuming numbers are about 16 pixels wide)
+        int digitWidth = 11;
+        int digitHeight = 14; // Approximate height for positioning
+        int padding = 5; // Padding from the edge
+        
+        // Start position: bottom right, drawing from right to left
+        int startX = arenaWidth - padding;
+        int startY = arenaHeight - digitHeight - padding;
+        
+        // Draw each digit from right to left
+        for (int i = healthStr.length() - 1; i >= 0; i--) {
+            char digit = healthStr.charAt(i);
+            String spritePath = "sprites/numbers/" + digit + ".png";
+            // Calculate position: rightmost digit at startX - digitWidth, then move left for each digit
+            int x = startX - digitWidth * (healthStr.length() - i);
+            gui.drawSprite(spritePath, new Position(x, startY));
         }
     }
 }

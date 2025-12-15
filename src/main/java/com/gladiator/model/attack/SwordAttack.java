@@ -17,7 +17,7 @@ public class SwordAttack implements AttackStrategy {
     private final Map<MovingEntity, Integer> lastAttackTick; // Track last attack tick per entity
 
     public SwordAttack(int damage, int range, List<? extends MovingEntity> targets) {
-        this(damage, range, targets, 10); // Default 10 ticks cooldown (2 seconds at 5 ticks/sec)
+        this(damage, range, targets, 20); // Default 20 ticks cooldown (2 seconds at 10 ticks/sec)
     }
 
     public SwordAttack(int damage, int range, List<? extends MovingEntity> targets, int cooldownTicks) {
@@ -75,13 +75,13 @@ public class SwordAttack implements AttackStrategy {
         int currentTick = getCurrentTick();
         int ticksSinceAttack = currentTick - lastTick;
         
-        // Show attack animation for first 3 ticks after attack (600ms at 5 ticks/sec)
+        // Show attack animation for first 3 ticks after attack (300ms at 10 ticks/sec)
         return ticksSinceAttack < 3;
     }
 
     private int getCurrentTick() {
-        // Convert current time to ticks (5 ticks/sec = 200ms per tick)
-        return (int) (System.currentTimeMillis() / 200L);
+        // Convert current time to ticks (10 ticks/sec = 100ms per tick)
+        return (int) (System.currentTimeMillis() / 100L);
     }
 
     public int getDamage() {

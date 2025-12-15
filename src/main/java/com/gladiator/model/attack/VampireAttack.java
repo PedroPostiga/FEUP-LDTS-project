@@ -17,7 +17,7 @@ public class VampireAttack implements AttackStrategy {
     private final Map<MovingEntity, Integer> lastAttackTick; // Track last attack tick per entity
 
     public VampireAttack(int damage, int range, Gladiator gladiator, double lifestealPercentage){
-        this(damage, range, gladiator, lifestealPercentage, 12); // Default 12 ticks cooldown (2.4 seconds)
+        this(damage, range, gladiator, lifestealPercentage, 24); // Default 24 ticks cooldown (2.4 seconds at 10 ticks/sec)
     }
 
     public VampireAttack(int damage, int range, Gladiator gladiator, double lifestealPercentage, int cooldownTicks){
@@ -71,13 +71,13 @@ public class VampireAttack implements AttackStrategy {
         int currentTick = getCurrentTick();
         int ticksSinceAttack = currentTick - lastTick;
         
-        // Show attack animation for first 3 ticks after attack (600ms at 5 ticks/sec)
+        // Show attack animation for first 3 ticks after attack (300ms at 10 ticks/sec)
         return ticksSinceAttack < 3;
     }
 
     private int getCurrentTick() {
-        // Convert current time to ticks (5 ticks/sec = 200ms per tick)
-        return (int) (System.currentTimeMillis() / 200L);
+        // Convert current time to ticks (10 ticks/sec = 100ms per tick)
+        return (int) (System.currentTimeMillis() / 100L);
     }
 
     public int getDamage() {
