@@ -210,6 +210,24 @@ public class LanternaGUI implements GUI {
     }
 
     @Override
+    public void drawCircle(int centerX, int centerY, int radius, String color) {
+        TextGraphics tg = screen.newTextGraphics();
+        TextColor circleColor = TextColor.Factory.fromString(color);
+        tg.setForegroundColor(circleColor);
+
+        // Draw circle outline using Bresenham's circle algorithm approximation
+        // Draw 8 octants for symmetry
+        for (int angle = 0; angle < 360; angle += 2) {
+            double rad = Math.toRadians(angle);
+            int x = (int) (centerX + radius * Math.cos(rad));
+            int y = (int) (centerY + radius * Math.sin(rad));
+            if (x >= 0 && y >= 0) {
+                tg.setCharacter(x, y, new TextCharacter('·', circleColor, TextColor.ANSI.BLACK));
+            }
+        }
+    }
+
+    @Override
     public void clear() {
         screen.clear();
     }

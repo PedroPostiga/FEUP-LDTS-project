@@ -27,6 +27,8 @@ public interface GUI {
 
     void drawHitbox(int x, int y, int width, int height, String color);
 
+    void drawCircle(int centerX, int centerY, int radius, String color);
+
     void clear();
 
     void refresh() throws IOException;

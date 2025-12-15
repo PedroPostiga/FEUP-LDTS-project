@@ -42,10 +42,15 @@ public class VampireAttack implements AttackStrategy {
 
         if (!gladiator.isAlive()) return;
 
-        double attackerX = attacker.getPosition().getX();
-        double attackerY = attacker.getPosition().getY();
-        double targetX = gladiator.getPosition().getX();
-        double targetY = gladiator.getPosition().getY();
+        // Calculate attacker center position
+        java.awt.Rectangle attackerHitbox = attacker.getHitbox();
+        double attackerX = attackerHitbox.getCenterX();
+        double attackerY = attackerHitbox.getCenterY();
+        
+        // Calculate target (gladiator) center position
+        java.awt.Rectangle targetHitbox = gladiator.getHitbox();
+        double targetX = targetHitbox.getCenterX();
+        double targetY = targetHitbox.getCenterY();
 
         double dist = Math.sqrt(Math.pow(targetX - attackerX, 2) + Math.pow(targetY - attackerY, 2));
 

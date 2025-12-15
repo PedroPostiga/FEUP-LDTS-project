@@ -2,6 +2,9 @@ package com.gladiator.view.game;
 
 import com.gladiator.gui.GUI;
 import com.gladiator.model.Arena;
+import com.gladiator.model.attack.AttackStrategy;
+import com.gladiator.model.attack.SwordAttack;
+import com.gladiator.model.attack.VampireAttack;
 import com.gladiator.model.attack.projectile.Arrow;
 import com.gladiator.model.component.Position;
 import com.gladiator.model.enemy.Enemy;
@@ -35,11 +38,25 @@ public class ArenaViewer extends Viewer<Arena> {
         if (gladiator != null && gladiator.isAlive()) {
             new GladiatorViewer().draw(gladiator, gui);
             drawHealth(gladiator.getHealth().getHealth(), arena.getWidth(), arena.getHeight(), gui);
+            // Draw gladiator attack range (sword attack)
+            if (gladiator.getSwordAttack() != null) {
+                java.awt.Rectangle gladiatorHitbox = gladiator.getHitbox();
+                int centerX = gladiatorHitbox.x + gladiatorHitbox.width / 2;
+                int centerY = gladiatorHitbox.y + gladiatorHitbox.height / 2;
+                drawAttackRange(centerX, centerY, gladiator.getSwordAttack(), gui);
+            }
         }
 
         for (Enemy enemy : enemies) {
             EntityViewer<Enemy> viewer = (EntityViewer<Enemy>) ViewerRegistry.getViewer(enemy);
             viewer.draw(enemy, gui);
+            // Draw enemy attack range
+            if (enemy.getAttackStrategy() != null) {
+                java.awt.Rectangle enemyHitbox = enemy.getHitbox();
+                int centerX = enemyHitbox.x + enemyHitbox.width / 2;
+                int centerY = enemyHitbox.y + enemyHitbox.height / 2;
+                drawAttackRange(centerX, centerY, enemy.getAttackStrategy(), gui);
+            }
         }
 
         for (Obstacle obstacle : obstacles) {
@@ -97,5 +114,32 @@ public class ArenaViewer extends Viewer<Arena> {
             int x = startX - digitWidth * (healthStr.length() - i);
             gui.drawSprite(spritePath, new Position(x, startY));
         }
+    }
+
+    /**
+     * Draws the attack range circle for an entity's attack strategy.
+     * @param centerX The X coordinate of the entity's center
+     * @param centerY The Y coordinate of the entity's center
+     * @param attackStrategy The attack strategy (must have a getRange() method)
+     * @param gui The GUI to draw on
+     */
+    private void drawAttackRange(int centerX, int centerY, AttackStrategy attackStrategy, GUI gui) {
+        int range = 0;
+        String color = "#888888"; // Default gray color
+        
+        // Get range based on attack type
+        if (attackStrategy instanceof SwordAttack) {
+            range = ((SwordAttack) attackStrategy).getRange();
+            color = "#00FF00"; // Green for sword attacks
+        } else if (attackStrategy instanceof VampireAttack) {
+            range = ((VampireAttack) attackStrategy).getRange();
+            color = "#FF0000"; // Red for vampire attacks
+        } else {
+            // Skip if attack doesn't have a range
+            return;
+        }
+        
+        // Draw range circle centered on entity
+        gui.drawCircle(centerX, centerY, range, color);
     }
 }

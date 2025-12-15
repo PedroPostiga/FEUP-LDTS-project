@@ -39,8 +39,10 @@ public class SwordAttack implements AttackStrategy {
             }
         }
 
-        double attackerX = attacker.getPosition().getX();
-        double attackerY = attacker.getPosition().getY();
+        // Calculate attacker center position
+        java.awt.Rectangle attackerHitbox = attacker.getHitbox();
+        double attackerX = attackerHitbox.getCenterX();
+        double attackerY = attackerHitbox.getCenterY();
 
         boolean hitAnyTarget = false;
         for (MovingEntity target : targets) {
@@ -48,8 +50,10 @@ public class SwordAttack implements AttackStrategy {
             if (target == attacker) continue;
             if (!target.isAlive()) continue;
 
-            double targetX = target.getPosition().getX();
-            double targetY = target.getPosition().getY();
+            // Calculate target center position
+            java.awt.Rectangle targetHitbox = target.getHitbox();
+            double targetX = targetHitbox.getCenterX();
+            double targetY = targetHitbox.getCenterY();
 
             double dist = Math.sqrt(Math.pow(targetX - attackerX, 2) + Math.pow(targetY - attackerY, 2));
 
