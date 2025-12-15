@@ -29,16 +29,25 @@ public class SingleArrowPool {
     }
 
     public Arrow resetProjectileState(Arrow arrow) {
+        if (arrow == null) return null;
+        
+        // Reset all state fields of the existing arrow
         Position dummyPos = new Position(0, 0);
-        arrow = new Arrow(dummyPos, 0, 0, 0, null);
+        arrow.setPosition(dummyPos);
+        arrow.setStartPosition(dummyPos);
+        arrow.setSpeed(0);
+        arrow.setDamage(0);
+        arrow.setMaxDistance(0);
+        arrow.setTarget(null);
+        
         return arrow;
     }
 
-    public Arrow acquireArrow(Position start, int speed, int damage,
-                              double maxDistance, Enemy target) {
+    public void acquireArrow(Position start, int speed, int damage,
+                             double maxDistance, Enemy target) {
 
         if (available.isEmpty()) {
-            return null;
+            return;
         }
 
         Arrow arrow = available.poll();
@@ -53,7 +62,6 @@ public class SingleArrowPool {
         arrow.setTarget(target);
 
         active.add(arrow);
-        return arrow;
     }
 
     public void releaseArrow(Arrow arrow) {
