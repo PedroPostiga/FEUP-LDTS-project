@@ -25,7 +25,7 @@ public class GameController extends Controller{
     private GameState gameState;
 
     public GameController(Arena arena) {
-        super(10); // 10 ticks per second
+        super(60); // 60 ticks per second for smoother gameplay
         this.arena = arena;
         this.viewer = new ArenaViewer(arena);
         this.waveManager = new WaveManager(arena);

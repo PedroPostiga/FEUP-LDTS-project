@@ -39,24 +39,24 @@ public class ArenaViewer extends Viewer<Arena> {
             new GladiatorViewer().draw(gladiator, gui);
             drawHealth(gladiator.getHealth().getHealth(), arena.getWidth(), arena.getHeight(), gui);
             // Draw gladiator attack range (sword attack)
-            if (gladiator.getSwordAttack() != null) {
+            /*if (gladiator.getSwordAttack() != null) {
                 java.awt.Rectangle gladiatorHitbox = gladiator.getHitbox();
                 int centerX = gladiatorHitbox.x + gladiatorHitbox.width / 2;
                 int centerY = gladiatorHitbox.y + gladiatorHitbox.height / 2;
                 drawAttackRange(centerX, centerY, gladiator.getSwordAttack(), gui);
-            }
+            }*/
         }
 
         for (Enemy enemy : enemies) {
             EntityViewer<Enemy> viewer = (EntityViewer<Enemy>) ViewerRegistry.getViewer(enemy);
             viewer.draw(enemy, gui);
             // Draw enemy attack range
-            if (enemy.getAttackStrategy() != null) {
+            /*if (enemy.getAttackStrategy() != null) {
                 java.awt.Rectangle enemyHitbox = enemy.getHitbox();
                 int centerX = enemyHitbox.x + enemyHitbox.width / 2;
                 int centerY = enemyHitbox.y + enemyHitbox.height / 2;
                 drawAttackRange(centerX, centerY, enemy.getAttackStrategy(), gui);
-            }
+            }*/
         }
 
         for (Obstacle obstacle : obstacles) {
@@ -71,7 +71,7 @@ public class ArenaViewer extends Viewer<Arena> {
         }
 
         // Draw hitboxes
-        if (gladiator != null) {
+        /*if (gladiator != null) {
             java.awt.Rectangle hitbox = gladiator.getHitbox();
             gui.drawHitbox(hitbox.x, hitbox.y, hitbox.width, hitbox.height, "#00FFFF"); // Cyan for gladiator
         }
@@ -90,7 +90,7 @@ public class ArenaViewer extends Viewer<Arena> {
         for (Arrow arrow : arrows) {
             java.awt.Rectangle hitbox = arrow.getHitbox();
             gui.drawHitbox(hitbox.x, hitbox.y, hitbox.width, hitbox.height, "#FF0000");
-        }
+        }*/
     }
 
     private void drawHealth(int health, int arenaWidth, int arenaHeight, GUI gui) throws IOException {
@@ -116,14 +116,8 @@ public class ArenaViewer extends Viewer<Arena> {
         }
     }
 
-    /**
-     * Draws the attack range circle for an entity's attack strategy.
-     * @param centerX The X coordinate of the entity's center
-     * @param centerY The Y coordinate of the entity's center
-     * @param attackStrategy The attack strategy (must have a getRange() method)
-     * @param gui The GUI to draw on
-     */
-    private void drawAttackRange(int centerX, int centerY, AttackStrategy attackStrategy, GUI gui) {
+
+    /*private void drawAttackRange(int centerX, int centerY, AttackStrategy attackStrategy, GUI gui) {
         int range = 0;
         String color = "#888888"; // Default gray color
         
@@ -141,5 +135,5 @@ public class ArenaViewer extends Viewer<Arena> {
         
         // Draw range circle centered on entity
         gui.drawCircle(centerX, centerY, range, color);
-    }
+    }*/
 }

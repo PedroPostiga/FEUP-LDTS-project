@@ -1,16 +1,16 @@
 package com.gladiator.controller;
 
 public class GameTimer {
-    private final long tickInterval; // Time between ticks in milliseconds
+    private final long tickInterval; // Time between ticks in nanoseconds
     private long lastTickTime;
 
     public GameTimer(int ticksPerSecond) {
-        this.tickInterval = 1000 / ticksPerSecond; // Convert to ms
-        this.lastTickTime = System.currentTimeMillis();
+        this.tickInterval = 1_000_000_000L / ticksPerSecond; // Convert to nanoseconds for better precision
+        this.lastTickTime = System.nanoTime();
     }
 
     public boolean shouldTick() {
-        long currentTime = System.currentTimeMillis();
+        long currentTime = System.nanoTime();
         if (currentTime - lastTickTime >= tickInterval) {
             lastTickTime = currentTime;
             return true;
@@ -19,6 +19,6 @@ public class GameTimer {
     }
 
     public void reset() {
-        lastTickTime = System.currentTimeMillis();
+        lastTickTime = System.nanoTime();
     }
 }

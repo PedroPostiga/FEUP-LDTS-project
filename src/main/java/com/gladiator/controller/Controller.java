@@ -13,8 +13,11 @@ public abstract class Controller {
     }
 
     public final void run(GUI gui) throws IOException {
+        long lastFrameTime = System.nanoTime();
+        final long targetFrameTime = 1_000_000_000L / 60; // 60 FPS in nanoseconds
+        
         while (running) {
-            long startTime = System.currentTimeMillis();
+            long currentTime = System.nanoTime();
 
             processInput(gui);
 
@@ -23,7 +26,20 @@ public abstract class Controller {
             }
 
             draw(gui);
-            limitFPS(startTime, 60);
+            
+            // Better FPS limiting using nanoTime for precision
+            long frameTime = System.nanoTime() - currentTime;
+            long sleepTime = (targetFrameTime - frameTime) / 1_000_000; // Convert to milliseconds
+            
+            if (sleepTime > 0) {
+                try {
+                    Thread.sleep(sleepTime);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+            
+            lastFrameTime = currentTime;
         }
 
     }
@@ -34,18 +50,5 @@ public abstract class Controller {
 
     protected void stop() {
         running = false;
-    }
-
-    private void limitFPS(long startTime, int targetFPS) {
-        long frameTime = System.currentTimeMillis() - startTime;
-        long targetFrameTime = 1000 / targetFPS;
-
-        if (frameTime < targetFrameTime) {
-            try {
-                Thread.sleep(targetFrameTime - frameTime);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
     }
 }

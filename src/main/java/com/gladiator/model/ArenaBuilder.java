@@ -82,6 +82,6 @@ public class ArenaBuilder {
     }
 
     protected Gladiator createGladiator() {
-        return Gladiator.getInstance(ARENA_WIDTH / 2, ARENA_HEIGHT / 2,16,16,1000,3);
+        return Gladiator.getInstance(ARENA_WIDTH / 2, ARENA_HEIGHT / 2,16,16,1000,2);
     }
 }

@@ -21,10 +21,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class LanternaGUI implements GUI {
     private final Screen screen;
+    private final Map<String, BufferedImage> spriteCache = new HashMap<>();
 
     public LanternaGUI(Screen screen) {
         this.screen = screen;
@@ -120,7 +123,14 @@ public class LanternaGUI implements GUI {
     public void drawSprite(String img, Position position) throws IOException {
         TextGraphics graphics = screen.newTextGraphics();
 
-        BufferedImage sprite = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(img)));
+        // Use sprite cache to avoid loading images every frame
+        BufferedImage sprite = spriteCache.computeIfAbsent(img, path -> {
+            try {
+                return ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(path)));
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to load sprite: " + path, e);
+            }
+        });
 
         for (int x = 0; x < sprite.getWidth(); x++){
             for (int y = 0; y < sprite.getHeight(); y++){
