@@ -9,7 +9,7 @@ import java.io.IOException;
 public class FatZombieViewer implements EntityViewer<FatZombie> {
     @Override
     public void draw(FatZombie fatZombie, GUI gui) throws IOException {
-        /*AttackStrategy attack = fatZombie.getAttackStrategy();
+        AttackStrategy attack = fatZombie.getAttackStrategy();
         boolean attacking = attack != null && attack.isAttacking(fatZombie);
 
         String sprite;
@@ -18,8 +18,8 @@ public class FatZombieViewer implements EntityViewer<FatZombie> {
             sprite = "sprites/movingEntity/fat_zombie_attack.png";
         } else {
             sprite = "sprites/movingEntity/fat_zombie.png";
-        }*/
+        }
 
-        gui.drawSprite("sprites/movingEntity/fat_zombie.png", fatZombie.getPosition());
+        gui.drawSprite(sprite, fatZombie.getPosition());
     }
 }

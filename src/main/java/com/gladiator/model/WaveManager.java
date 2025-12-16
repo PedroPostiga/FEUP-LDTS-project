@@ -18,7 +18,7 @@ public class WaveManager {
     private static final int BASE_ENEMIES_PER_WAVE = 5;
     private static final double ENEMY_SCALING_FACTOR = 1.2;
     private static final int MIN_SPAWN_DISTANCE_FROM_GLADIATOR = 100; // Minimum distance from gladiator to spawn
-    private static final int WINNING_WAVE = 1; // Win the game after completing this many waves
+    private static final int WINNING_WAVE = 3; // Win the game after completing this many waves
 
     public WaveManager(Arena arena) {
         this.arena = arena;

@@ -7,7 +7,7 @@ import com.gladiator.model.movement.MovementStrategy;
 public class LightZombie extends Enemy {
 
     public LightZombie(int x, int y, MovementStrategy movement, AttackStrategy attack) {
-        super(x, y, 16, 16, 20, 2, movement, attack);
+        super(x, y, 16, 16, 20, 3, movement, attack);
     }
 
     public MovementStrategy getMovementStrategy() {

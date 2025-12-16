@@ -9,7 +9,7 @@ import java.io.IOException;
 public class VampireViewer implements EntityViewer<Vampire> {
     @Override
     public void draw(Vampire vampire, GUI gui) throws IOException {
-        /*AttackStrategy attack = vampire.getAttackStrategy();
+        AttackStrategy attack = vampire.getAttackStrategy();
         boolean attacking = attack != null && attack.isAttacking(vampire);
 
         String sprite;
@@ -18,8 +18,8 @@ public class VampireViewer implements EntityViewer<Vampire> {
             sprite = "sprites/movingEntity/vampire_attack.png";
         } else {
             sprite = "sprites/movingEntity/vampire.png";
-        }*/
+        }
 
-        gui.drawSprite("sprites/movingEntity/vampire.png", vampire.getPosition());
+        gui.drawSprite(sprite, vampire.getPosition());
     }
 }
