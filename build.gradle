@@ -28,5 +28,7 @@ test {
 }
 
 pitest {
-    junit5PluginVersion = '1.0.0'
+    targetClasses = ['com.gladiator.*']
+    targetTests = ['com.gladiator.*']
+    junit5PluginVersion = '1.2.0'
 }
