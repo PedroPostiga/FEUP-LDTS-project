@@ -1,11 +1,10 @@
-package com.gladiator.controller;
+package com.gladiator.controller.game;
 
 import com.gladiator.gui.GUI;
 import com.gladiator.model.Arena;
 import com.gladiator.model.WaveManager;
 import com.gladiator.model.attack.projectile.SingleArrowPool;
 import com.gladiator.model.component.Position;
-import com.gladiator.model.enemy.Enemy;
 import com.gladiator.model.enemy.EnemyPool;
 import com.gladiator.model.gladiator.Gladiator;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

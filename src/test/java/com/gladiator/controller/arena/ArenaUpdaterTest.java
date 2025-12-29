@@ -1,5 +1,7 @@
-package com.gladiator.controller;
+package com.gladiator.controller.arena;
 
+import com.gladiator.controller.entity.EnemyUpdater;
+import com.gladiator.controller.projectile.ProjectileUpdater;
 import com.gladiator.model.Arena;
 import com.gladiator.model.attack.projectile.SingleArrowPool;
 import com.gladiator.model.enemy.EnemyPool;

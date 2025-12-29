@@ -1,9 +1,9 @@
 package com.gladiator;
 
-import com.gladiator.controller.CreditsController;
-import com.gladiator.controller.GameController;
-import com.gladiator.controller.GameOverController;
-import com.gladiator.controller.MenuController;
+import com.gladiator.controller.menu.CreditsController;
+import com.gladiator.controller.game.GameController;
+import com.gladiator.controller.game.GameOverController;
+import com.gladiator.controller.menu.MenuController;
 import com.gladiator.gui.GUI;
 import com.gladiator.gui.LanternaGUI;
 import com.gladiator.model.Arena;

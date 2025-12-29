@@ -1,4 +1,4 @@
-package com.gladiator.controller;
+package com.gladiator.controller.game;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

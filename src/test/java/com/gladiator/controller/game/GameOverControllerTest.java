@@ -1,4 +1,4 @@
-package com.gladiator.controller;
+package com.gladiator.controller.game;
 
 import com.gladiator.gui.GUI;
 import com.gladiator.model.menu.GameOverModel;

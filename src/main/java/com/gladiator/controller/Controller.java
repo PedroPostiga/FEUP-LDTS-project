@@ -1,11 +1,12 @@
 package com.gladiator.controller;
 
+import com.gladiator.controller.game.GameTimer;
 import com.gladiator.gui.GUI;
 import java.io.IOException;
 
 public abstract class Controller {
 
-    protected boolean running = true;
+    public boolean running = true;
     protected final GameTimer timer;
 
     protected Controller(int ticksPerSecond) {

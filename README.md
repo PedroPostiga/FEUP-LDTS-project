@@ -4,8 +4,8 @@
 ## 🎯 About the game
 
  Gladiator is a 2D combat arena game where you play as a legendary gladiator fighting for glory and survival. 
-Battle through progressively challenging waves of enemies, which will make your path to the final objective more 
-difficult. The final objective is defeat the final boss, that will provide you an epic battle.
+Battle through progressively challenging waves of enemies that will make your life no easy. Can the Gladiator
+overcome the arena's challenges and survive to tell his tale, or will this be his end ? 
 
 ## Authors
  
@@ -13,17 +13,28 @@ difficult. The final objective is defeat the final boss, that will provide you a
 
 
 
-## Implemented Features
+## Features
 
-    • Attacks - Diferent kind of attacks, each character have their own type of attack.
-    • Enemies - Diferent type of enemies, behaving differently from one another.
-    • Movement - Two types of movement, one random and one that chases the gladiator.
-
-## Planned Features
-    
-    • Multiple Waves – The game features wave-based combat where different enemy types appear as the waves progress.
-    • Bosses - Along the game fight strong enemies at the end of a wave.
-    • Multiple Arenas - Along the game the gladiator should fight in different arenas. 
+    • Main Menu Screen - Simple but appealing menu screen when launching the game, which allows the user to choose between
+    starting the game, the credits menu or exiting the application. If you want to quit mid game, you can press Q to go to
+    the menu screen.
+    • Credits Menu Screen - Easy to access menu where all the game creators names are displayed.
+    • Game Over Screen - When the Gladiator's health reaches zero, it dies and the lose menu is displayed. If the Gladiator
+    can survive all 5 waves of enemies, the win menu is displayed.
+    • Enemies - Diferent type of enemies, behaving differently from one another. Each one having their own type of attack.
+    Being these attacks used automatically when an enemy is in range.
+    • Enemy Movement - Two types of movement, one random and one that chases the gladiator.
+    • Gladiator Movement - The Gladiator can move using arrow keys. All the Gladiator's movement and attack animations change
+    according to the Gladiator's current direction.
+    • Gladiator Attacks - The Gladiator has a close range attack, similar to the ones enemies have, but also has a long range
+    attack, no one else have, that deals less damage. These attacks are used automatically too, when in range.
+    • Sprite Image Loader - Class that loads PNG images into the game and can then represent them pixel by pixel on the screen,
+    using Lanterna. 
+    This is used for the Gladiator, enemies, arena background and obstacles.
+    • Health - Gladiator has a health ammount, which is shown in the bottom right corner of the arena. The health decreases when
+    the Gladiator is attacked by an enemy.
+    • Waves - The Gladiator has to survive 5 waves of enemies. After killing all enemies from 1 wave, the next one comes stronger
+    with more enemies to fight, having ,since the 3rd wave, one more enemy type to fight.
 
 ## Design
 ### MVC

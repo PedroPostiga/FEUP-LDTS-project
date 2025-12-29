@@ -1,4 +1,4 @@
-package com.gladiator.controller;
+package com.gladiator.controller.entity;
 
 import com.gladiator.model.Arena;
 import com.gladiator.model.attack.BowAttack;

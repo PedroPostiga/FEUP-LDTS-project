@@ -1,13 +1,9 @@
 package com.gladiator;
 
-import com.gladiator.controller.GameController;
-import com.gladiator.controller.MenuController;
 import com.gladiator.gui.GUI;
-import com.gladiator.model.Arena;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 
 import static org.junit.jupiter.api.Assertions.*;
