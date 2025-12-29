@@ -9,20 +9,6 @@ public interface GUI {
 
     void drawSprite(String img, Position position) throws IOException;
 
-    void drawGladiator(Position position);
-
-    void drawFatZombie(Position position);
-
-    void drawLightZombie(Position position);
-
-    void drawVampire(Position position);
-
-    void drawSmallRock(Position position);
-
-    void drawLargeRock(Position position);
-
-    void drawTree(Position position);
-
     void drawText(Position position, String text, String color);
 
     void drawHitbox(int x, int y, int width, int height, String color);

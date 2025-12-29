@@ -27,16 +27,15 @@ import java.util.Objects;
 
 public class LanternaGUI implements GUI {
     private final Screen screen;
-    private final Map<String, BufferedImage> spriteCache = new HashMap<>();
-
-    public LanternaGUI(Screen screen) {
-        this.screen = screen;
-    }
+    private final Map<String, BufferedImage> spriteCache;
+    private final TextGraphics graphics;
 
     public LanternaGUI(int width, int height) throws IOException, FontFormatException, URISyntaxException {
         AWTTerminalFontConfiguration fontConfig = loadSquareFont();
         Terminal terminal = createTerminal(width, height, fontConfig);
+        spriteCache = new HashMap<>();
         this.screen = createScreen(terminal);
+        this.graphics = screen.newTextGraphics();
     }
 
     private Screen createScreen(Terminal terminal) throws IOException {
@@ -76,10 +75,7 @@ public class LanternaGUI implements GUI {
         ACTION lastAction = ACTION.NONE;
         KeyStroke keyStroke;
         boolean foundEvent = false;
-        
-        // Process all pending input events to drain the buffer
-        // This prevents queued key events from causing continued movement
-        // Only return an action if we actually found new events in this frame
+
         while ((keyStroke = screen.pollInput()) != null) {
             foundEvent = true;
             
@@ -114,23 +110,14 @@ public class LanternaGUI implements GUI {
                 continue;
             }
         }
-        
-        // Only return an action if we actually found new events
-        // This ensures immediate response when keys are released
+
         return foundEvent ? lastAction : ACTION.NONE;
     }
 
     public void drawSprite(String img, Position position) throws IOException {
-        TextGraphics graphics = screen.newTextGraphics();
 
         // Use sprite cache to avoid loading images every frame
-        BufferedImage sprite = spriteCache.computeIfAbsent(img, path -> {
-            try {
-                return ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(path)));
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to load sprite: " + path, e);
-            }
-        });
+        BufferedImage sprite = loadImage(img);
 
         for (int x = 0; x < sprite.getWidth(); x++){
             for (int y = 0; y < sprite.getHeight(); y++){
@@ -148,34 +135,23 @@ public class LanternaGUI implements GUI {
         }
     }
 
-    @Override
-    public void drawGladiator(Position position) {
-        drawCharacter(position.getX(), position.getY(), 'G', "#FFD700");
+    private BufferedImage loadImage(String img) throws IOException {
+        if (spriteCache.containsKey(img)) {
+            return spriteCache.get(img);
+        }
+
+        try {
+            BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResource(img)));
+
+            spriteCache.put(img, image);
+
+            return image;
+        }
+        catch (IOException e) {
+            System.err.println("Error loading image: " + img);
+            throw e;
+        }
     }
-
-    @Override
-    public void drawFatZombie(Position position) {
-        drawCharacter(position.getX(), position.getY(), 'F', "#008000");
-    }
-
-    @Override
-    public void drawLightZombie(Position position) {
-        drawCharacter(position.getX(), position.getY(), 'L', "#008000");
-    }
-
-    @Override
-    public void drawVampire(Position position) {
-        drawCharacter(position.getX(), position.getY(), 'V', "#FF0000");
-    }
-
-    @Override
-    public void drawSmallRock(Position position) { drawCharacter(position.getX(), position.getY(), 'R', "#808080"); }
-
-    @Override
-    public void drawLargeRock(Position position) { drawCharacter(position.getX(), position.getY(), 'B', "#FFA500"); }
-
-    @Override
-    public void drawTree(Position position) { drawCharacter(position.getX(), position.getY(), 'T', "#8C3A0A"); }
 
     @Override
     public void drawText(Position position, String text, String color) {

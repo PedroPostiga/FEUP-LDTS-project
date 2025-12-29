@@ -7,6 +7,8 @@ import com.gladiator.model.gladiator.Gladiator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.awt.Rectangle;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -22,9 +24,12 @@ public class VampireAttackTest {
         gladiator = mock(Gladiator.class);
         vampire = mock(Vampire.class);
 
-        when(gladiator.getPosition()).thenReturn(new Position(5, 0));
+        Rectangle gladiatorHitbox = new Rectangle(5, 0, 20, 20);
+        Rectangle vampireHitbox = new Rectangle(0, 0, 16, 16);
+
+        when(gladiator.getHitbox()).thenReturn(gladiatorHitbox);
         when(gladiator.isAlive()).thenReturn(true);
-        when(vampire.getPosition()).thenReturn(new Position(0, 0));
+        when(vampire.getHitbox()).thenReturn(vampireHitbox);
 
         vampireHealth = new Health(80);
         vampireHealth.takeDamage(30);
@@ -38,18 +43,18 @@ public class VampireAttackTest {
         vampireAttack.attack(vampire);
 
         verify(gladiator).takeDamage(15);
-
         assertEquals(54, vampireHealth.getHealth());
     }
 
     @Test
     void testVampireAttackOutOfRange() {
-        when(gladiator.getPosition()).thenReturn(new Position(20, 0));
+        Rectangle farGladiatorHitbox = new Rectangle(20, 0, 20, 20);
+        when(gladiator.getHitbox()).thenReturn(farGladiatorHitbox);
 
         vampireAttack.attack(vampire);
 
         verify(gladiator, never()).takeDamage(anyInt());
-        assertEquals(50, vampire.getHealth().getHealth());
+        assertEquals(50, vampireHealth.getHealth());
     }
 
     @Test
@@ -59,7 +64,7 @@ public class VampireAttackTest {
         vampireAttack.attack(vampire);
 
         verify(gladiator, never()).takeDamage(anyInt());
-        assertEquals(50, vampire.getHealth().getHealth());
+        assertEquals(50, vampireHealth.getHealth());
     }
 
     @Test
@@ -82,7 +87,6 @@ public class VampireAttackTest {
         vampireAttack.attack(vampire);
 
         verify(gladiator).takeDamage(15);
-
         assertEquals(80, nearMaxHealth.getHealth());
     }
 
@@ -97,7 +101,19 @@ public class VampireAttackTest {
         preciseAttack.attack(vampire);
 
         verify(gladiator).takeDamage(20);
-
         assertEquals(65, preciseHealth.getHealth());
+    }
+
+    @Test
+    void testVampireAttackWithCooldown() {
+        vampireAttack.attack(vampire);
+        verify(gladiator).takeDamage(15);
+        
+        reset(gladiator);
+        when(gladiator.getHitbox()).thenReturn(new Rectangle(5, 0, 20, 20));
+        when(gladiator.isAlive()).thenReturn(true);
+        
+        vampireAttack.attack(vampire);
+        verify(gladiator, never()).takeDamage(anyInt());
     }
 }

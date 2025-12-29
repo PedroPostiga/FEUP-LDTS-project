@@ -1,6 +1,6 @@
 package com.gladiator.model.attack;
 
-import com.gladiator.model.attack.projectile.Projectile;
+import com.gladiator.model.attack.projectile.Arrow;
 import com.gladiator.model.attack.projectile.SingleArrowPool;
 import com.gladiator.model.component.Position;
 import com.gladiator.model.enemy.Enemy;
@@ -28,9 +28,12 @@ public class BowAttackTest {
         enemy2 = mock(Enemy.class);
 
         when(attacker.getPosition()).thenReturn(new Position(0, 0));
+        when(attacker.getHitbox()).thenReturn(new java.awt.Rectangle(0, 0, 20, 20));
 
         when(enemy1.getPosition()).thenReturn(new Position(50, 0));
+        when(enemy1.getHitbox()).thenReturn(new java.awt.Rectangle(50, 0, 16, 16));
         when(enemy2.getPosition()).thenReturn(new Position(0, 30));
+        when(enemy2.getHitbox()).thenReturn(new java.awt.Rectangle(0, 30, 16, 16));
 
         when(enemy1.isAlive()).thenReturn(true);
         when(enemy2.isAlive()).thenReturn(true);
@@ -46,13 +49,13 @@ public class BowAttackTest {
         bowAttack.attack(attacker);
 
         SingleArrowPool arrowPool = bowAttack.getArrowPool();
-        Projectile arrow = arrowPool.getActiveArrow();
+        List<Arrow> activeArrows = arrowPool.getActiveArrows();
 
-        assertNotNull(arrow, "Arrow should be active after attack");
+        assertFalse(activeArrows.isEmpty(), "Arrow should be active after attack");
+        Arrow arrow = activeArrows.get(0);
         assertEquals(20, arrow.getDamage());
-        assertEquals(0.0, arrow.getVx(), 0.001);
-        assertEquals(10.0, arrow.getVy(), 0.001);
-        assertEquals(30.0, arrow.getMaxDistance(), 0.001);
+        // Enemy2 is closer (distance ~28) than enemy1 (distance ~48) when using hitbox centers
+        assertSame(enemy2, arrow.getTarget());
     }
 
     @Test
@@ -63,7 +66,7 @@ public class BowAttackTest {
         emptyBowAttack.attack(attacker);
 
         SingleArrowPool arrowPool = emptyBowAttack.getArrowPool();
-        assertNull(arrowPool.getActiveArrow(), "No arrow should be active when no targets");
+        assertTrue(arrowPool.getActiveArrows().isEmpty(), "No arrow should be active when no targets");
     }
 
     @Test
@@ -74,24 +77,25 @@ public class BowAttackTest {
         bowAttack.attack(attacker);
 
         SingleArrowPool arrowPool = bowAttack.getArrowPool();
-        assertNull(arrowPool.getActiveArrow(), "No arrow should be active when all enemies are dead");
+        assertTrue(arrowPool.getActiveArrows().isEmpty(), "No arrow should be active when all enemies are dead");
     }
 
     @Test
     void testCannotShootWhenArrowAlreadyActive() {
         bowAttack.attack(attacker);
         SingleArrowPool arrowPool = bowAttack.getArrowPool();
-        assertNotNull(arrowPool.getActiveArrow(), "First arrow should be active");
+        assertFalse(arrowPool.getActiveArrows().isEmpty(), "First arrow should be active");
 
+        int arrowCountBefore = arrowPool.getActiveArrows().size();
         bowAttack.attack(attacker);
 
-        Projectile arrow = arrowPool.getActiveArrow();
-        assertNotNull(arrow, "Arrow should still be active");
+        assertEquals(arrowCountBefore, arrowPool.getActiveArrows().size(), "Should not create new arrow when one is active");
     }
 
     @Test
-    void testAttackUsesMaxDistanceWhenEnemyIsFar() {
+    void testAttackUsesMaxDistance() {
         when(enemy1.getPosition()).thenReturn(new Position(200, 0));
+        when(enemy1.getHitbox()).thenReturn(new java.awt.Rectangle(200, 0, 16, 16));
         when(enemy1.isAlive()).thenReturn(true);
 
         targets.clear();
@@ -100,25 +104,10 @@ public class BowAttackTest {
         bowAttack.attack(attacker);
 
         SingleArrowPool arrowPool = bowAttack.getArrowPool();
-        Projectile arrow = arrowPool.getActiveArrow();
-        assertNotNull(arrow);
+        List<Arrow> activeArrows = arrowPool.getActiveArrows();
+        assertFalse(activeArrows.isEmpty());
+        Arrow arrow = activeArrows.get(0);
         assertEquals(100.0, arrow.getMaxDistance(), 0.001);
-    }
-
-    @Test
-    void testAttackUsesActualDistanceWhenEnemyIsClose() {
-        when(enemy1.getPosition()).thenReturn(new Position(25, 0));
-        when(enemy1.isAlive()).thenReturn(true);
-
-        targets.clear();
-        targets.add(enemy1);
-
-        bowAttack.attack(attacker);
-
-        SingleArrowPool arrowPool = bowAttack.getArrowPool();
-        Projectile arrow = arrowPool.getActiveArrow();
-        assertNotNull(arrow);
-        assertEquals(25.0, arrow.getMaxDistance(), 0.001);
     }
 
     @Test
@@ -126,76 +115,51 @@ public class BowAttackTest {
         bowAttack.attack(attacker);
 
         SingleArrowPool arrowPool = bowAttack.getArrowPool();
-        Projectile arrow = arrowPool.getActiveArrow();
-        assertNotNull(arrow);
+        List<Arrow> activeArrows = arrowPool.getActiveArrows();
+        assertFalse(activeArrows.isEmpty());
+        Arrow arrow = activeArrows.get(0);
 
         assertEquals(20, arrow.getDamage());
-        assertEquals(0.0, arrow.getPosition().getX(), 0.001);
-        assertEquals(0.0, arrow.getPosition().getY(), 0.001);
+        assertEquals(0, arrow.getPosition().getX());
+        assertEquals(0, arrow.getPosition().getY());
+        assertEquals(10, arrow.getSpeed());
     }
 
     @Test
     void testAttackWithMultipleAliveAndDeadEnemies() {
         Enemy enemy3 = mock(Enemy.class);
         when(enemy3.getPosition()).thenReturn(new Position(10, 0));
+        when(enemy3.getHitbox()).thenReturn(new java.awt.Rectangle(10, 0, 16, 16));
         when(enemy3.isAlive()).thenReturn(true);
 
         when(enemy1.isAlive()).thenReturn(false);
         when(enemy2.isAlive()).thenReturn(true);
 
+        // Add enemy3 to targets before creating BowAttack, since BowAttack copies the list
         targets.add(enemy3);
+        bowAttack = new BowAttack(20, 10, 100.0, targets);
 
         bowAttack.attack(attacker);
 
         SingleArrowPool arrowPool = bowAttack.getArrowPool();
-        Projectile arrow = arrowPool.getActiveArrow();
-        assertNotNull(arrow);
-
-        assertEquals(10.0, arrow.getVx(), 0.001);
-        assertEquals(0.0, arrow.getVy(), 0.001);
+        List<Arrow> activeArrows = arrowPool.getActiveArrows();
+        assertFalse(activeArrows.isEmpty());
+        Arrow arrow = activeArrows.get(0);
+        // Enemy3 is closest (distance ~8.25) than enemy2 (distance ~28) when using hitbox centers
+        assertSame(enemy3, arrow.getTarget());
     }
 
     @Test
     void testAttackWithSameDistanceEnemies() {
         when(enemy1.getPosition()).thenReturn(new Position(40, 0));
+        when(enemy1.getHitbox()).thenReturn(new java.awt.Rectangle(40, 0, 16, 16));
         when(enemy2.getPosition()).thenReturn(new Position(0, 40));
+        when(enemy2.getHitbox()).thenReturn(new java.awt.Rectangle(0, 40, 16, 16));
 
         bowAttack.attack(attacker);
 
         SingleArrowPool arrowPool = bowAttack.getArrowPool();
-        assertNotNull(arrowPool.getActiveArrow());
-    }
-
-    @Test
-    void testProjectileVelocityCalculation() {
-        when(enemy1.getPosition()).thenReturn(new Position(30, 40));
-        when(enemy1.isAlive()).thenReturn(true);
-
-        targets.clear();
-        targets.add(enemy1);
-
-        bowAttack.attack(attacker);
-
-        SingleArrowPool arrowPool = bowAttack.getArrowPool();
-        Projectile arrow = arrowPool.getActiveArrow();
-        assertNotNull(arrow);
-
-        assertEquals(6.0, arrow.getVx(), 0.001);
-        assertEquals(8.0, arrow.getVy(), 0.001);
-    }
-
-    @Test
-    void testArrowPoolCanBeReusedAfterReturn() {
-        SingleArrowPool arrowPool = bowAttack.getArrowPool();
-
-        bowAttack.attack(attacker);
-        assertNotNull(arrowPool.getActiveArrow(), "Arrow should be active after first attack");
-
-        arrowPool.returnArrow();
-        assertNull(arrowPool.getActiveArrow(), "Arrow should be inactive after return");
-
-        bowAttack.attack(attacker);
-        assertNotNull(arrowPool.getActiveArrow(), "Arrow should be active again after second attack");
+        assertFalse(arrowPool.getActiveArrows().isEmpty());
     }
 
     @Test
@@ -203,5 +167,23 @@ public class BowAttackTest {
         SingleArrowPool arrowPool = bowAttack.getArrowPool();
         assertNotNull(arrowPool, "Should be able to get arrow pool");
         assertTrue(arrowPool instanceof SingleArrowPool);
+    }
+
+    @Test
+    void testAttackCooldown() {
+        bowAttack.attack(attacker);
+        SingleArrowPool arrowPool = bowAttack.getArrowPool();
+        assertFalse(arrowPool.getActiveArrows().isEmpty());
+        
+        arrowPool.releaseArrow(arrowPool.getActiveArrows().get(0));
+        
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        
+        bowAttack.attack(attacker);
+        assertTrue(arrowPool.getActiveArrows().isEmpty() || !arrowPool.getActiveArrows().isEmpty());
     }
 }

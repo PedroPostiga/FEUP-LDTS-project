@@ -27,14 +27,32 @@ public class ProjectileUpdater {
                 continue;
             }
 
-            int dx = Integer.compare(enemy.getPosition().getX(),
-                    a.getPosition().getX()) * a.getSpeed();
-            int dy = Integer.compare(enemy.getPosition().getY(),
-                    a.getPosition().getY()) * a.getSpeed();
+            // Calculate centers for accurate targeting
+            Rectangle arrowHitbox = a.getHitbox();
+            double arrowCenterX = arrowHitbox.getCenterX();
+            double arrowCenterY = arrowHitbox.getCenterY();
+            
+            Rectangle enemyHitbox = enemy.getHitbox();
+            double enemyCenterX = enemyHitbox.getCenterX();
+            double enemyCenterY = enemyHitbox.getCenterY();
 
-            // Move projectile
-            int newX = a.getPosition().getX() + dx;
-            int newY = a.getPosition().getY() + dy;
+            // Calculate direction vector from arrow center to enemy center
+            double dx = enemyCenterX - arrowCenterX;
+            double dy = enemyCenterY - arrowCenterY;
+            double distance = Math.sqrt(dx * dx + dy * dy);
+            
+            // Normalize direction and apply speed
+            if (distance > 0) {
+                dx = (dx / distance) * a.getSpeed();
+                dy = (dy / distance) * a.getSpeed();
+            } else {
+                dx = 0;
+                dy = 0;
+            }
+
+            // Move projectile (cast to int for position)
+            int newX = a.getPosition().getX() + (int) Math.round(dx);
+            int newY = a.getPosition().getY() + (int) Math.round(dy);
 
             Rectangle newHitbox = new Rectangle(newX, newY, a.getHitbox().width, a.getHitbox().height);
 

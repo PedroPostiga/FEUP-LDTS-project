@@ -39,12 +39,12 @@ public class ArenaViewer extends Viewer<Arena> {
             new GladiatorViewer().draw(gladiator, gui);
             drawHealth(gladiator.getHealth().getHealth(), arena.getWidth(), arena.getHeight(), gui);
             // Draw gladiator attack range (sword attack)
-            /*if (gladiator.getSwordAttack() != null) {
+            if (gladiator.getSwordAttack() != null) {
                 java.awt.Rectangle gladiatorHitbox = gladiator.getHitbox();
                 int centerX = gladiatorHitbox.x + gladiatorHitbox.width / 2;
                 int centerY = gladiatorHitbox.y + gladiatorHitbox.height / 2;
                 drawAttackRange(centerX, centerY, gladiator.getSwordAttack(), gui);
-            }*/
+            }
         }
 
         for (Enemy enemy : enemies) {
@@ -117,7 +117,7 @@ public class ArenaViewer extends Viewer<Arena> {
     }
 
 
-    /*private void drawAttackRange(int centerX, int centerY, AttackStrategy attackStrategy, GUI gui) {
+    private void drawAttackRange(int centerX, int centerY, AttackStrategy attackStrategy, GUI gui) {
         int range = 0;
         String color = "#888888"; // Default gray color
         
@@ -135,5 +135,5 @@ public class ArenaViewer extends Viewer<Arena> {
         
         // Draw range circle centered on entity
         gui.drawCircle(centerX, centerY, range, color);
-    }*/
+    }
 }

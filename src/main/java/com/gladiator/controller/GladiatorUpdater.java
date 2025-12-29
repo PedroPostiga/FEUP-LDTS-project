@@ -25,16 +25,19 @@ public class GladiatorUpdater implements Updater{
             swordAttack.getTargets().clear();
             swordAttack.getTargets().addAll(enemies);
 
-            // Check if any enemy is in range before attacking
+            // Check if any enemy is in range before attacking (using center-to-center like SwordAttack does)
             boolean enemyInRange = false;
-            double gladiatorX = gladiator.getPosition().getX();
-            double gladiatorY = gladiator.getPosition().getY();
+            java.awt.Rectangle gladiatorHitbox = gladiator.getHitbox();
+            double gladiatorX = gladiatorHitbox.getCenterX();
+            double gladiatorY = gladiatorHitbox.getCenterY();
             int range = swordAttack.getRange();
 
             for (var enemy : enemies) {
                 if (!enemy.isAlive()) continue;
-                double dist = Math.sqrt(Math.pow(enemy.getPosition().getX() - gladiatorX, 2) +
-                        Math.pow(enemy.getPosition().getY() - gladiatorY, 2));
+                java.awt.Rectangle enemyHitbox = enemy.getHitbox();
+                double enemyX = enemyHitbox.getCenterX();
+                double enemyY = enemyHitbox.getCenterY();
+                double dist = Math.sqrt(Math.pow(enemyX - gladiatorX, 2) + Math.pow(enemyY - gladiatorY, 2));
                 if (dist <= range) {
                     enemyInRange = true;
                     break;

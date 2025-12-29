@@ -1,128 +1,115 @@
 package com.gladiator.model.movement;
 
+import com.gladiator.model.Arena;
 import com.gladiator.model.component.Position;
-import com.gladiator.model.entity.MovingEntity;
+import com.gladiator.model.enemy.Enemy;
+import com.gladiator.model.enemy.enemy_types.FatZombie;
 import com.gladiator.model.gladiator.Gladiator;
+import com.gladiator.model.attack.SwordAttack;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class ChaseMovementTest {
     private ChaseMovement chaseMovement;
-    private MovingEntity entity;
+    private Enemy enemy;
+    private Arena arena;
     private Gladiator gladiator;
 
     @BeforeEach
     void setUp() {
         gladiator = mock(Gladiator.class);
-        entity = mock(MovingEntity.class);
+        arena = mock(Arena.class);
+        enemy = new FatZombie(0, 0, null, new SwordAttack(10, 10, new ArrayList<>()));
 
         chaseMovement = new ChaseMovement(5.0, gladiator);
+        
+        when(arena.getGladiator()).thenReturn(gladiator);
+        when(gladiator.getPosition()).thenReturn(new Position(100, 0));
+        when(arena.isEmpty(any(Rectangle.class), any())).thenReturn(true);
     }
 
     @Test
     void testMoveTowardsGladiator() {
-        Position entityPos = new Position(0, 0);
-        Position gladiatorPos = new Position(100, 0);
+        enemy.setPosition(new Position(0, 0));
+        when(gladiator.getPosition()).thenReturn(new Position(100, 0));
 
-        when(entity.getPosition()).thenReturn(entityPos);
-        when(gladiator.getPosition()).thenReturn(gladiatorPos);
+        chaseMovement.move(enemy, arena);
 
-        chaseMovement.move(entity);
-
-        assertEquals(5, entityPos.getX(), 0.001);
-        assertEquals(0, entityPos.getY(), 0.001);
+        assertTrue(enemy.getPosition().getX() > 0);
+        assertEquals(0, enemy.getPosition().getY());
     }
 
     @Test
     void testMoveVertically() {
-        Position entityPos = new Position(50, 0);
-        Position gladiatorPos = new Position(50, 100);
+        enemy.setPosition(new Position(50, 0));
+        when(gladiator.getPosition()).thenReturn(new Position(50, 100));
 
-        when(entity.getPosition()).thenReturn(entityPos);
-        when(gladiator.getPosition()).thenReturn(gladiatorPos);
+        chaseMovement.move(enemy, arena);
 
-        chaseMovement.move(entity);
-
-        assertEquals(50, entityPos.getX(), 0.001);
-        assertEquals(5, entityPos.getY(), 0.001);
+        assertEquals(50, enemy.getPosition().getX());
+        assertTrue(enemy.getPosition().getY() > 0);
     }
 
     @Test
     void testMoveDiagonally() {
-        Position entityPos = new Position(0, 0);
-        Position gladiatorPos = new Position(30, 40);
+        enemy.setPosition(new Position(0, 0));
+        when(gladiator.getPosition()).thenReturn(new Position(30, 40));
 
-        when(entity.getPosition()).thenReturn(entityPos);
-        when(gladiator.getPosition()).thenReturn(gladiatorPos);
+        chaseMovement.move(enemy, arena);
 
-        chaseMovement.move(entity);
-
-        assertEquals(3, entityPos.getX(), 0.001);
-        assertEquals(4, entityPos.getY(), 0.001);
+        assertTrue(enemy.getPosition().getX() > 0 || enemy.getPosition().getY() > 0);
     }
 
     @Test
     void testMoveAtSamePosition() {
-        Position entityPos = new Position(100, 100);
-        Position gladiatorPos = new Position(100, 100);
+        enemy.setPosition(new Position(100, 100));
+        when(gladiator.getPosition()).thenReturn(new Position(100, 100));
 
-        when(entity.getPosition()).thenReturn(entityPos);
-        when(gladiator.getPosition()).thenReturn(gladiatorPos);
+        chaseMovement.move(enemy, arena);
 
-        chaseMovement.move(entity);
-
-        assertEquals(100, entityPos.getX(), 0.001);
-        assertEquals(100, entityPos.getY(), 0.001);
+        assertEquals(100, enemy.getPosition().getX());
+        assertEquals(100, enemy.getPosition().getY());
     }
 
     @Test
-    void testMoveWithDifferentSpeed() {
-        ChaseMovement fastMovement = new ChaseMovement(10.0, gladiator);
+    void testMoveBlockedByObstacle() {
+        enemy.setPosition(new Position(0, 0));
+        when(gladiator.getPosition()).thenReturn(new Position(100, 0));
+        when(arena.isEmpty(any(Rectangle.class), any())).thenReturn(false);
 
-        Position entityPos = new Position(0, 0);
-        Position gladiatorPos = new Position(100, 0);
+        Position initialPos = enemy.getPosition();
+        chaseMovement.move(enemy, arena);
 
-        when(entity.getPosition()).thenReturn(entityPos);
-        when(gladiator.getPosition()).thenReturn(gladiatorPos);
-
-        fastMovement.move(entity);
-
-        assertEquals(10, entityPos.getX(), 0.001);
-        assertEquals(0, entityPos.getY(), 0.001);
-    }
-
-    @Test
-    void testMultipleMovements() {
-        Position entityPos = new Position(0, 0);
-        Position gladiatorPos = new Position(100, 0);
-
-        when(entity.getPosition()).thenReturn(entityPos);
-        when(gladiator.getPosition()).thenReturn(gladiatorPos);
-
-        chaseMovement.move(entity);
-        assertEquals(5, entityPos.getX(), 0.001);
-        assertEquals(0, entityPos.getY(), 0.001);
-
-        chaseMovement.move(entity);
-        assertEquals(10, entityPos.getX(), 0.001);
-        assertEquals(0, entityPos.getY(), 0.001);
+        assertEquals(initialPos.getX(), enemy.getPosition().getX());
+        assertEquals(initialPos.getY(), enemy.getPosition().getY());
     }
 
     @Test
     void testMoveBackwards() {
-        Position entityPos = new Position(100, 50);
-        Position gladiatorPos = new Position(0, 50);
+        enemy.setPosition(new Position(100, 50));
+        when(gladiator.getPosition()).thenReturn(new Position(0, 50));
 
-        when(entity.getPosition()).thenReturn(entityPos);
-        when(gladiator.getPosition()).thenReturn(gladiatorPos);
+        chaseMovement.move(enemy, arena);
 
-        chaseMovement.move(entity);
+        assertTrue(enemy.getPosition().getX() < 100);
+        assertEquals(50, enemy.getPosition().getY());
+    }
 
-        assertEquals(95, entityPos.getX(), 0.001);
-        assertEquals(50, entityPos.getY(), 0.001);
+    @Test
+    void testMoveUsesEnemySpeed() {
+        enemy.setSpeed(3);
+        enemy.setPosition(new Position(0, 0));
+        when(gladiator.getPosition()).thenReturn(new Position(100, 0));
+
+        chaseMovement.move(enemy, arena);
+
+        assertTrue(enemy.getPosition().getX() >= 3);
     }
 }

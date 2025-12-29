@@ -17,13 +17,15 @@ public class EntityViewerTest {
         GUI gui = mock(GUI.class);
         GladiatorViewer viewer = new GladiatorViewer();
         Gladiator gladiator = mock(Gladiator.class);
-        Position position = mock(Position.class);
+        Position position = new Position(100, 100);
 
         when(gladiator.getPosition()).thenReturn(position);
+        when(gladiator.getDirection()).thenReturn(Gladiator.Direction.DOWN);
+        when(gladiator.getSwordAttack()).thenReturn(null);
 
         viewer.draw(gladiator, gui);
 
-        verify(gui).drawGladiator(position);
+        verify(gui).drawSprite(anyString(), eq(position));
     }
 
     @Test
@@ -31,13 +33,13 @@ public class EntityViewerTest {
         GUI gui = mock(GUI.class);
         FatZombieViewer viewer = new FatZombieViewer();
         FatZombie fatZombie = mock(FatZombie.class);
-        Position position = mock(Position.class);
+        Position position = new Position(50, 50);
 
         when(fatZombie.getPosition()).thenReturn(position);
 
         viewer.draw(fatZombie, gui);
 
-        verify(gui).drawFatZombie(position);
+        verify(gui).drawSprite(anyString(), eq(position));
     }
 
     @Test
@@ -45,40 +47,49 @@ public class EntityViewerTest {
         GUI gui = mock(GUI.class);
         LightZombieViewer viewer = new LightZombieViewer();
         LightZombie lightZombie = mock(LightZombie.class);
-        Position position = mock(Position.class);
+        Position position = new Position(75, 75);
 
         when(lightZombie.getPosition()).thenReturn(position);
 
         viewer.draw(lightZombie, gui);
 
-        verify(gui).drawLightZombie(position);
+        verify(gui).drawSprite(anyString(), eq(position));
     }
 
     @Test
-    public void testVampireViewerDraw() {
+    public void testVampireViewerDraw() throws IOException {
         GUI gui = mock(GUI.class);
         VampireViewer viewer = new VampireViewer();
         Vampire vampire = mock(Vampire.class);
-        Position position = mock(Position.class);
+        Position position = new Position(25, 25);
 
         when(vampire.getPosition()).thenReturn(position);
 
         viewer.draw(vampire, gui);
 
-        verify(gui).drawVampire(position);
+        verify(gui).drawSprite(anyString(), eq(position));
     }
 
     @Test
-    public void testVampireViewerDoesNotThrowIOException() {
+    public void testGladiatorViewerWithDifferentDirections() throws IOException {
         GUI gui = mock(GUI.class);
-        VampireViewer viewer = new VampireViewer();
-        Vampire vampire = mock(Vampire.class);
-        Position position = mock(Position.class);
+        GladiatorViewer viewer = new GladiatorViewer();
+        Gladiator gladiator = mock(Gladiator.class);
+        Position position = new Position(100, 100);
 
-        when(vampire.getPosition()).thenReturn(position);
+        when(gladiator.getPosition()).thenReturn(position);
+        when(gladiator.getSwordAttack()).thenReturn(null);
 
-        viewer.draw(vampire, gui);
+        when(gladiator.getDirection()).thenReturn(Gladiator.Direction.LEFT);
+        viewer.draw(gladiator, gui);
+        verify(gui).drawSprite(contains("left"), eq(position));
 
-        verify(gui).drawVampire(position);
+        when(gladiator.getDirection()).thenReturn(Gladiator.Direction.RIGHT);
+        viewer.draw(gladiator, gui);
+        verify(gui).drawSprite(contains("right"), eq(position));
+
+        when(gladiator.getDirection()).thenReturn(Gladiator.Direction.UP);
+        viewer.draw(gladiator, gui);
+        verify(gui).drawSprite(contains("up"), eq(position));
     }
 }

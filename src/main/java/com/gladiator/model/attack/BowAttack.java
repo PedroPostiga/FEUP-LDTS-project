@@ -20,11 +20,11 @@ public class BowAttack implements AttackStrategy {
     private final Map<MovingEntity, Integer> lastAttackTick; // Track last attack tick per entity
 
     public BowAttack(int damage, int speed, double maxDistance, List<Enemy> targets) {
-        this(damage, speed, maxDistance, targets, new SingleArrowPool(), 30); // Default 30 ticks cooldown (3 seconds at 10 ticks/sec)
+        this(damage, speed, maxDistance, targets, new SingleArrowPool(), 180); // Default 180 ticks cooldown (3 seconds at 60 ticks/sec)
     }
 
     public BowAttack(int damage, int speed, double maxDistance, List<Enemy> targets, SingleArrowPool arrowPool) {
-        this(damage, speed, maxDistance, targets, arrowPool, 30); // Default 30 ticks cooldown (3 seconds at 10 ticks/sec)
+        this(damage, speed, maxDistance, targets, arrowPool, 180); // Default 180 ticks cooldown (3 seconds at 60 ticks/sec)
     }
 
     public BowAttack(int damage, int speed, double maxDistance, List<Enemy> targets, SingleArrowPool arrowPool, int cooldownTicks) {
@@ -52,14 +52,24 @@ public class BowAttack implements AttackStrategy {
         if (!arrowPool.getActiveArrows().isEmpty()) return;
         if (targets.isEmpty()) return;
 
+        // Calculate attacker center position
+        java.awt.Rectangle attackerHitbox = attacker.getHitbox();
+        double attackerX = attackerHitbox.getCenterX();
+        double attackerY = attackerHitbox.getCenterY();
+
         Enemy closest = null;
         double closestDistance = Double.MAX_VALUE;
 
         for (Enemy t : targets) {
             if (!t.isAlive()) continue;
 
-            double dx = t.getPosition().getX() - attacker.getPosition().getX();
-            double dy = t.getPosition().getY() - attacker.getPosition().getY();
+            // Calculate target center position
+            java.awt.Rectangle targetHitbox = t.getHitbox();
+            double targetX = targetHitbox.getCenterX();
+            double targetY = targetHitbox.getCenterY();
+
+            double dx = targetX - attackerX;
+            double dy = targetY - attackerY;
             double dist = Math.sqrt(dx * dx + dy * dy);
 
             if (dist < closestDistance) {
@@ -93,13 +103,13 @@ public class BowAttack implements AttackStrategy {
         int currentTick = getCurrentTick();
         int ticksSinceAttack = currentTick - lastTick;
         
-        // Show attack animation for first 3 ticks after firing (300ms at 10 ticks/sec)
-        return ticksSinceAttack < 3;
+        // Show attack animation for first 18 ticks after firing (~300ms at 60 ticks/sec)
+        return ticksSinceAttack < 18;
     }
 
     private int getCurrentTick() {
-        // Convert current time to ticks (10 ticks/sec = 100ms per tick)
-        return (int) (System.currentTimeMillis() / 100L);
+        // Convert current time to ticks (60 ticks/sec = ~16.67ms per tick)
+        return (int) (System.currentTimeMillis() * 60 / 1000L);
     }
 
     public SingleArrowPool getArrowPool() {

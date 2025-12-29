@@ -1,15 +1,14 @@
 package com.gladiator.model.attack;
 
-import com.gladiator.model.component.Position;
 import com.gladiator.model.entity.MovingEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
-
 
 public class SwordAttackTest {
     private SwordAttack swordAttack;
@@ -26,10 +25,13 @@ public class SwordAttackTest {
         target1 = mock(MovingEntity.class);
         target2 = mock(MovingEntity.class);
 
-        when(attacker.getPosition()).thenReturn(new Position(0, 0));
+        Rectangle attackerHitbox = new Rectangle(0, 0, 20, 20);
+        Rectangle target1Hitbox = new Rectangle(5, 0, 16, 16);
+        Rectangle target2Hitbox = new Rectangle(50, 0, 16, 16);
 
-        when(target1.getPosition()).thenReturn(new Position(5, 0));
-        when(target2.getPosition()).thenReturn(new Position(50, 0));
+        when(attacker.getHitbox()).thenReturn(attackerHitbox);
+        when(target1.getHitbox()).thenReturn(target1Hitbox);
+        when(target2.getHitbox()).thenReturn(target2Hitbox);
 
         when(target1.isAlive()).thenReturn(true);
         when(target2.isAlive()).thenReturn(true);
@@ -53,18 +55,43 @@ public class SwordAttackTest {
 
         swordAttack.attack(attacker);
 
-        verify(target1, never()).takeDamage(10);
-        verify(target2, never()).takeDamage(10);
+        verify(target1, never()).takeDamage(anyInt());
+        verify(target2, never()).takeDamage(anyInt());
     }
 
     @Test
     void testAttackIgnoresAttackerItself() {
         targets.add(attacker);
         when(attacker.isAlive()).thenReturn(true);
-        when(attacker.getPosition()).thenReturn(new Position(0, 0));
 
         swordAttack.attack(attacker);
 
-        verify(attacker, never()).takeDamage(10);
+        verify(attacker, never()).takeDamage(anyInt());
+    }
+
+    @Test
+    void testAttackWithCooldown() throws InterruptedException {
+        swordAttack.attack(attacker);
+        verify(target1).takeDamage(10);
+        
+        reset(target1);
+        when(target1.isAlive()).thenReturn(true);
+        when(target1.getHitbox()).thenReturn(new Rectangle(5, 0, 16, 16));
+        
+        Thread.sleep(10);
+        swordAttack.attack(attacker);
+        verify(target1, never()).takeDamage(anyInt());
+    }
+
+    @Test
+    void testAttackDoesNotHitWhenNoTargetsInRange() {
+        Rectangle farTargetHitbox = new Rectangle(200, 200, 16, 16);
+        when(target1.getHitbox()).thenReturn(farTargetHitbox);
+        when(target2.getHitbox()).thenReturn(farTargetHitbox);
+
+        swordAttack.attack(attacker);
+
+        verify(target1, never()).takeDamage(anyInt());
+        verify(target2, never()).takeDamage(anyInt());
     }
 }

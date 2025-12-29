@@ -6,7 +6,7 @@ public class GameTimer {
 
     public GameTimer(int ticksPerSecond) {
         this.tickInterval = 1_000_000_000L / ticksPerSecond; // Convert to nanoseconds for better precision
-        this.lastTickTime = System.nanoTime();
+        this.lastTickTime = 0; // Initialize to 0 so first tick always happens
     }
 
     public boolean shouldTick() {
@@ -19,6 +19,6 @@ public class GameTimer {
     }
 
     public void reset() {
-        lastTickTime = System.nanoTime();
+        lastTickTime = 0; // Reset to 0 so next tick always happens
     }
 }
