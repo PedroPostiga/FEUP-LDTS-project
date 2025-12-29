@@ -90,7 +90,7 @@ methods act as factory methods that can be overridden by subclasses to create di
 Flexible Creation, Encapsulation and Extensibility: Subclasses can override factory methods to create different arena 
 configurations while centralizing creation logic and enabling easy creation of new arena types.
 ## Testing
-![](docs/TestCoverage30Nov.png)
+![](docs/TestCoverage.png)
 
 ## Self-Evaluation
     - Filipe Cruz: 33%
