@@ -40,12 +40,12 @@ overcome the arena's challenges and survive to tell his tale, or will this be hi
 ### MVC
 #### Problem in context
 Separate the data, interface and control of the game to have a more code reusability and to make the code more organized
-and easy to implement. Without this pattern, the Single Principle Responsibility could be broken, as a part of any of the 
+and easy to implement. Without this pattern, the Single Principle Responsibility could be broken, as a part of the 
 MVC parts could be implemented on another.
 
 #### The Pattern
 The MVC pattern is a way to separate all the code in three elements, Model, View and Control. The Model does not have 
-dependences, the View depends on the Model, and the Controller depends on both the Viewer and Model.
+dependencies, the View depends on the Model, and the Controller depends on both the Viewer and Model.
 
 #### Implementation
 The main source directory of the project has three directories that represent one of the MVC elements, they are:
@@ -76,7 +76,7 @@ testability. Besides that make easy the extension of new attacks and permit isol
 The game needed a flexible way to create different types of arenas with specific enemy configurations. Hard-coding 
 arena creation would make it difficult to create different arena variations or extend the game with new arena types.
 ### The Pattern
-The factory pattern is a solution for those problems. With a single instance of the factory class, it become possible
+The factory pattern is a solution for those problems. With a single instance of the factory class, it becomes possible
 to create the objects we desire with predefined parameters without needing to type it repeatedly. Also, if we didn't 
 want to change the code (obeying the open-closed solid principle) we could just create another method for the class 
 applying this design without needing to change the code.
