@@ -83,10 +83,6 @@ public class Projectile implements Entity {
         return target;
     }
 
-    /**
-     * Calculates the distance traveled from the starting position to the current position.
-     * @return the distance traveled
-     */
     public double getDistanceTraveled() {
         int dx = position.getX() - startPosition.getX();
         int dy = position.getY() - startPosition.getY();

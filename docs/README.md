@@ -40,8 +40,8 @@ overcome the arena's challenges and survive to tell his tale, or will this be hi
 ### MVC
 #### Problem in context
 Separate the data, interface and control of the game to have a more code reusability and to make the code more organized
-and easy to implement. Without this pattern, the Single Principle Resposability could be broken, as a part of any of the 
-MVC parts coulb be implemented on another.
+and easy to implement. Without this pattern, the Single Principle Responsibility could be broken, as a part of any of the 
+MVC parts could be implemented on another.
 
 #### The Pattern
 The MVC pattern is a way to separate all the code in three elements, Model, View and Control. The Model does not have 
@@ -49,13 +49,13 @@ dependences, the View depends on the Model, and the Controller depends on both t
 
 #### Implementation
 The main source directory of the project has three directories that represent one of the MVC elements, they are:
-[Model](/src/main/java/com.gladiator/model)
-[View](/src/main/java/com.gladiator/view)
-[Controller](/src/main/java/com.gladiator/controller)
+[Model](/src/main/java/com/gladiator/model)
+[View](/src/main/java/com/gladiator/view)
+[Controller](/src/main/java/com/gladiator/controller)
 ![](https://i.imgur.com/7k56rmg.png)
 
 #### Consequences
-Front-end and back-end can be done simultaneously, and relacted actions are grouped making the code more organized.
+Front-end and back-end can be done simultaneously, and related actions are grouped making the code more organized.
 The program is easy to modify and to test because the three elements are isolated from each other.
 
 ### Strategy Pattern
@@ -77,7 +77,7 @@ The game needed a flexible way to create different types of arenas with specific
 arena creation would make it difficult to create different arena variations or extend the game with new arena types.
 ### The Pattern
 The factory pattern is a solution for those problems. With a single instance of the factory class, it become possible
-to create the objects we desire with predifined parameters without needing to type it repeatdly. Also, if we didn't 
+to create the objects we desire with predefined parameters without needing to type it repeatedly. Also, if we didn't 
 want to change the code (obeying the open-closed solid principle) we could just create another method for the class 
 applying this design without needing to change the code.
 
@@ -89,14 +89,42 @@ methods act as factory methods that can be overridden by subclasses to create di
 ### Consequences
 Flexible Creation, Encapsulation and Extensibility: Subclasses can override factory methods to create different arena 
 configurations while centralizing creation logic and enabling easy creation of new arena types.
+### Known Code Smells
+
+#### 1. Long Parameter Lists
+**Locations**:
+- `Gladiator.getInstance(int x, int y, int w, int h, int hp, int speed)` - 6 parameters
+- `Enemy constructor (int x, int y, int w, int h, int hp, int speed, MovementStrategy movement, AttackStrategy attack)` - 8 parameters
+- `BowAttack constructor  (int damage, int speed, double maxDistance, List<Enemy> targets, SingleArrowPool arrowPool, int cooldownTicks)` - 6 parameters
+
+#### 2. Code Duplication - Distance Calculation
+**Locations**: Distance calculation code is duplicated in multiple places:
+- [GladiatorUpdater](/src/main/java/com/gladiator/controller/entity/GladiatorUpdater.java)
+- [SwordAttack](/src/main/java/com/gladiator/model/attack/SwordAttack.java) 
+- [BowAttack](/src/main/java/com/gladiator/model/attack/BowAttack.java) 
+- [WaveManager](/src/main/java/com/gladiator/model/WaveManager.java)
+- [ProjectileUpdater](/src/main/java/com/gladiator/controller/projectile/ProjectileUpdater.java) 
+
+
+#### 3. Class With Too Many Responsibilities
+**Location**: [Arena](/src/main/java/com/gladiator/model/Arena.java)
+
+**Issue**: The `Arena` class handles multiple responsibilities:
+- Entity storage (gladiator, enemies, obstacles, arrows)
+- Collision detection (`isEnemy`, `isObstacle`, `isArrow`, `isGladiator`, `isEmpty`)
+- State queries
+
+**Impact**:
+- Hard to maintain
+- Violates Single Responsibility Principle
+- Difficult to test individual concerns
 ## Testing
 
 ### Screenshot of coverage report
 ![](images/others/TestCoverage.png)
 
-### Link to mutation testing report
-[Mutation tests](../build/reports/pitest/index.html)
-
+### Mutation testing report
+![](images/others/pitest.png)
 ## Self-Evaluation
     - Filipe Cruz: 33%
     - Pedro Postiga: 33%

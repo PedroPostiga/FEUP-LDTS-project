@@ -64,18 +64,10 @@ public class ArenaBuilder {
         obstacles.add(new Tree(67, 67));
         obstacles.add(new SmallRock(340, 256));
         obstacles.add(new SmallRock(37, 238));
-        // Create 4 invisible walls around the entire arena
 
-        // Top border: 1 unit thick, runs across the entire top
         obstacles.add(new InvisibleWall(0, -1, ARENA_WIDTH, 1));
-
-        // Bottom border: 1 unit thick, runs across the entire bottom
         obstacles.add(new InvisibleWall(0, ARENA_HEIGHT, ARENA_WIDTH, 1));
-
-        // Left border: 1 unit thick, runs along the entire left side
         obstacles.add(new InvisibleWall(-1, 0, 1, ARENA_HEIGHT));
-
-        // Right border: 1 unit thick, runs along the entire right side
         obstacles.add(new InvisibleWall(ARENA_WIDTH, 0, 1, ARENA_HEIGHT));
 
         return obstacles;

@@ -14,15 +14,10 @@ import com.gladiator.view.menu.CreditsViewer;
 import com.gladiator.view.menu.GameOverViewer;
 import com.gladiator.view.menu.MenuViewer;
 
-/**
- * Main application orchestrator that manages the game lifecycle and state transitions.
- * Handles navigation between different screens (menu, game, credits).
- */
+
 public class GameRunner {
 
-    /**
-     * Application states for state machine pattern
-     */
+
     private enum AppState {
         MENU,
         GAME,
@@ -34,10 +29,7 @@ public class GameRunner {
     private static final int GUI_WIDTH = 400;
     private static final int GUI_HEIGHT = 300;
 
-    /**
-     * Main application entry point that runs the game loop.
-     * Manages GUI lifecycle and state transitions.
-     */
+
     public void run() throws Exception {
         GUI gui = null;
 
@@ -67,9 +59,7 @@ public class GameRunner {
         }
     }
 
-    /**
-     * Handles the menu state and returns the next state based on user selection.
-     */
+
     private AppState handleMenuState(GUI gui) throws Exception {
         MenuModel menuModel = new MenuModel();
         MenuViewer menuViewer = new MenuViewer(menuModel);
@@ -86,14 +76,10 @@ public class GameRunner {
         };
     }
 
-    /**
-     * Stores the win/loss state for the game over screen
-     */
+
     private boolean lastGameWon = false;
     
-    /**
-     * Handles the game state and transitions to game over screen when game ends.
-     */
+
     private AppState handleGameState(GUI gui) throws Exception {
         Arena arena = new ArenaBuilder().createArena();
         GameController gameController = new GameController(arena);
@@ -113,9 +99,7 @@ public class GameRunner {
         return AppState.MENU;
     }
     
-    /**
-     * Handles the game over state and returns the next state based on user selection.
-     */
+
     private AppState handleGameOverState(GUI gui) throws Exception {
         GameOverModel gameOverModel = new GameOverModel(lastGameWon);
         GameOverViewer gameOverViewer = new GameOverViewer(gameOverModel);
@@ -131,9 +115,7 @@ public class GameRunner {
         };
     }
 
-    /**
-     * Handles the credits state and returns to menu after viewing.
-     */
+
     private AppState handleCreditsState(GUI gui) throws Exception {
         CreditsViewer creditsViewer = new CreditsViewer();
         CreditsController creditsController = new CreditsController(creditsViewer);
