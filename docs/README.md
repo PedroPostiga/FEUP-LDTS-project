@@ -89,6 +89,132 @@ methods act as factory methods that can be overridden by subclasses to create di
 ### Consequences
 Flexible Creation, Encapsulation and Extensibility: Subclasses can override factory methods to create different arena 
 configurations while centralizing creation logic and enabling easy creation of new arena types.
+
+### Singleton Pattern
+#### Problem in context
+The game requires a single instance of the Gladiator throughout the entire game session. Having multiple gladiator instances 
+would break game logic and cause inconsistencies in the game state. The gladiator needs to be accessible from various parts of 
+the codebase (enemies need to target it, controllers need to update it, etc.) but there should only ever be one instance.
+
+#### The Pattern
+The Singleton Pattern ensures that a class has only one instance and provides a global point of access to it. This pattern 
+guarantees that the Gladiator instance is created only once and reused throughout the application lifecycle.
+
+#### Implementation
+The Singleton Pattern is implemented in the [Gladiator](/src/main/java/com/gladiator/model/gladiator/Gladiator.java) class using 
+double-checked locking for thread safety. The class provides two static methods: `getInstance()` for retrieving the existing 
+instance and `getInstance(int, int, int, int, int, int)` for initializing the instance with specific parameters. The instance 
+is stored in a volatile static field to ensure visibility across threads.
+
+#### Consequences
+The pattern ensures a single source of truth for the gladiator entity, preventing inconsistencies and simplifying access throughout 
+the codebase. However, it can make testing more difficult as the singleton state persists between tests, requiring careful reset 
+procedures. It also creates a global dependency that can make the code less flexible.
+
+### Object Pool Pattern
+#### Problem in context
+The game creates and destroys many enemies and projectiles during gameplay, especially during wave-based combat. Creating new 
+objects frequently causes performance issues due to garbage collection overhead. Additionally, enemies and arrows are frequently 
+reused with similar configurations, making them ideal candidates for object pooling.
+
+#### The Pattern
+The Object Pool Pattern maintains a collection of reusable objects that are expensive to create. Instead of creating new objects, 
+the pool provides pre-instantiated objects that can be reused, reducing memory allocation and garbage collection pressure.
+
+#### Implementation
+The Object Pool Pattern is implemented in two classes:
+- [EnemyPool](/src/main/java/com/gladiator/model/enemy/EnemyPool.java): Manages pools of different enemy types (Vampire, FatZombie, 
+LightZombie). Each enemy type has its own pool with available and active collections. The pool pre-warms with initial instances 
+and can grow up to a maximum size.
+- [SingleArrowPool](/src/main/java/com/gladiator/model/attack/projectile/SingleArrowPool.java): Manages a pool of arrow projectiles 
+for the gladiator's bow attack. Arrows are reset and reused rather than being recreated.
+
+Both pools provide `acquire` methods to get objects from the pool and `release` methods to return objects when they're no longer 
+needed. Objects are reset to their initial state before being reused.
+
+#### Consequences
+The pattern significantly improves performance by reducing object creation overhead and garbage collection pressure. It's 
+particularly effective for frequently created and destroyed game entities. However, it adds complexity to the codebase and requires 
+careful state management to ensure objects are properly reset before reuse.
+
+### State Pattern
+#### Problem in context
+The application needs to manage different screens and game states (Menu, Game, Credits, Game Over) with clear transitions between 
+them. Each state has different behavior and requires different controllers, models, and viewers. Without proper state management, 
+the code would become cluttered with conditional logic and state transitions would be error-prone.
+
+#### The Pattern
+The State Pattern allows an object to alter its behavior when its internal state changes. The object appears to change its class, 
+but in reality, it delegates state-specific behavior to different state handlers. In this implementation, a state machine is used 
+to manage application-level states.
+
+#### Implementation
+The State Pattern is implemented in [GameRunner](/src/main/java/com/gladiator/GameRunner.java) using an `AppState` enum that 
+represents the possible application states: MENU, GAME, CREDITS, GAME_OVER, and EXIT. The main application loop uses a switch 
+statement to handle each state, with dedicated handler methods (`handleMenuState`, `handleGameState`, `handleCreditsState`, 
+`handleGameOverState`) that return the next state based on user actions or game events.
+
+Each state handler creates the appropriate Model-View-Controller triplet for that state and manages the transition to the next state 
+based on the outcome of user interactions.
+
+#### Consequences
+The pattern provides clear separation between different application states, making the code more maintainable and easier to extend 
+with new states. State transitions are explicit and easy to follow. However, adding new states requires modifying the switch 
+statement, which could be improved with a more dynamic state management approach.
+
+### Template Method Pattern
+#### Problem in context
+All game controllers (MenuController, GameController, GameOverController, CreditsController) share the same game loop structure: 
+process input, update game state, and draw to screen. Without a common structure, each controller would duplicate this loop logic, 
+leading to code duplication and potential inconsistencies in frame timing and update cycles.
+
+#### The Pattern
+The Template Method Pattern defines the skeleton of an algorithm in a base class, allowing subclasses to override specific steps 
+of the algorithm without changing its overall structure. The base class defines the template method that calls abstract or hook 
+methods implemented by subclasses.
+
+#### Implementation
+The Template Method Pattern is implemented in the [Controller](/src/main/java/com/gladiator/controller/Controller.java) abstract 
+class. The `run()` method defines the game loop template with fixed structure: process input, update (if timer allows), and draw. 
+This method also handles frame rate limiting. Subclasses must implement three abstract methods:
+- `processInput(GUI gui)`: Handles user input specific to each controller
+- `update()`: Updates the game state specific to each controller
+- `draw(GUI gui)`: Renders the view specific to each controller
+
+All concrete controllers (MenuController, GameController, GameOverController, CreditsController) extend this base class and 
+implement these three methods according to their specific needs.
+
+#### Consequences
+The pattern eliminates code duplication across controllers and ensures consistent game loop behavior. It makes it easy to add new 
+controllers by simply extending the base class and implementing the three abstract methods. The frame rate limiting and timing logic 
+is centralized, making it easier to maintain and modify. However, it creates a rigid structure that all controllers must follow, 
+which might not be suitable for controllers with significantly different needs.
+
+### Registry Pattern
+#### Problem in context
+The game needs to render different types of enemies and obstacles, each requiring a specific viewer. Without a centralized way to 
+map entity types to their corresponding viewers, the code would need to use multiple if-else or switch statements scattered 
+throughout the codebase, leading to code duplication and making it difficult to add new entity types.
+
+#### The Pattern
+The Registry Pattern provides a centralized mapping between keys (entity types) and values (viewers). It acts as a lookup service 
+that allows clients to retrieve the appropriate viewer for a given entity type without knowing the specific implementation details.
+
+#### Implementation
+The Registry Pattern is implemented in [ViewerRegistry](/src/main/java/com/gladiator/view/ViewerRegistry.java). The class maintains 
+two static HashMaps:
+- `enemyviewers`: Maps enemy classes (Vampire, FatZombie, LightZombie) to their corresponding EntityViewer implementations
+- `obstacleviewers`: Maps obstacle classes (SmallRock, LargeRock, Tree) to their corresponding EntityViewer implementations
+
+The registry is initialized in a static block that populates both maps. The class provides generic `getViewer()` methods that accept 
+an entity instance and return the appropriate viewer based on the entity's class type. This allows type-safe retrieval of viewers 
+without explicit type checking in client code.
+
+#### Consequences
+The pattern centralizes viewer lookup logic, making it easy to add new entity types by simply registering them in the registry. It 
+eliminates scattered type-checking code and provides a clean, extensible way to map entities to viewers. However, it requires 
+maintaining the registry when new entity types are added, and the use of generics with type casting can be complex.
+
 ### Known Code Smells
 
 #### 1. Long Parameter Lists
