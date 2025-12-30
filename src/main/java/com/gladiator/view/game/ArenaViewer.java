@@ -43,7 +43,6 @@ public class ArenaViewer extends Viewer<Arena> {
                 java.awt.Rectangle gladiatorHitbox = gladiator.getHitbox();
                 int centerX = gladiatorHitbox.x + gladiatorHitbox.width / 2;
                 int centerY = gladiatorHitbox.y + gladiatorHitbox.height / 2;
-                drawAttackRange(centerX, centerY, gladiator.getSwordAttack(), gui);
             }
         }
 
