@@ -194,4 +194,58 @@ public class ArenaTest {
 
         assertFalse(arena.isEmpty(new java.awt.Rectangle(100, 100, 10, 10)));
     }
+
+    @Test
+    void testIsEnemyWithNullEnemyPool() {
+        arena.setEnemiePool(null);
+        assertFalse(arena.isEnemy(new java.awt.Rectangle(5, 5, 10, 10)));
+    }
+
+    @Test
+    void testIsArrowWithNullArrowPool() {
+        arena.setArrowPool(null);
+        assertFalse(arena.isArrow(new java.awt.Rectangle(25, 25, 10, 10)));
+    }
+
+    @Test
+    void testIsGladiatorWithNullGladiator() {
+        arena.setGladiator(null);
+        assertFalse(arena.isGladiator(new java.awt.Rectangle(100, 100, 10, 10)));
+    }
+
+    @Test
+    void testIsEmptyWithExcludedEnemy() {
+        Enemy enemy = mock(Enemy.class);
+        java.awt.Rectangle enemyHitbox = new java.awt.Rectangle(50, 50, 16, 16);
+        when(enemy.getHitbox()).thenReturn(enemyHitbox);
+        when(enemyPool.getAllActiveEnemies()).thenReturn(List.of(enemy));
+        obstacles.clear();
+        java.awt.Rectangle gladiatorHitbox = new java.awt.Rectangle(100, 100, 20, 20);
+        when(gladiator.getHitbox()).thenReturn(gladiatorHitbox);
+
+        assertTrue(arena.isEmpty(new java.awt.Rectangle(50, 50, 10, 10), enemy));
+    }
+
+    @Test
+    void testIsEmptyWithExcludedGladiator() {
+        when(enemyPool.getAllActiveEnemies()).thenReturn(new ArrayList<>());
+        obstacles.clear();
+        java.awt.Rectangle gladiatorHitbox = new java.awt.Rectangle(100, 100, 20, 20);
+        when(gladiator.getHitbox()).thenReturn(gladiatorHitbox);
+
+        assertTrue(arena.isEmpty(new java.awt.Rectangle(100, 100, 10, 10), null, gladiator));
+    }
+
+    @Test
+    void testIsEmptyWithBothExclusions() {
+        Enemy enemy = mock(Enemy.class);
+        java.awt.Rectangle enemyHitbox = new java.awt.Rectangle(50, 50, 16, 16);
+        when(enemy.getHitbox()).thenReturn(enemyHitbox);
+        when(enemyPool.getAllActiveEnemies()).thenReturn(List.of(enemy));
+        obstacles.clear();
+        java.awt.Rectangle gladiatorHitbox = new java.awt.Rectangle(100, 100, 20, 20);
+        when(gladiator.getHitbox()).thenReturn(gladiatorHitbox);
+
+        assertTrue(arena.isEmpty(new java.awt.Rectangle(50, 50, 10, 10), enemy, gladiator));
+    }
 }

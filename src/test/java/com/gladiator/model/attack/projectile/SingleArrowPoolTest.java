@@ -112,5 +112,73 @@ class SingleArrowPoolTest {
         assertEquals(1, pool.getActiveArrows().size());
         assertTrue(pool.getActiveArrows().contains(pool.getActiveArrows().get(0)));
     }
+
+    @Test
+    void testAcquireArrowWithZeroSpeed() {
+        Position start = new Position(100, 100);
+        pool.acquireArrow(start, 0, 5, 100.0, target);
+        
+        Arrow arrow = pool.getActiveArrows().get(0);
+        assertEquals(0, arrow.getSpeed());
+    }
+
+    @Test
+    void testAcquireArrowWithZeroDamage() {
+        Position start = new Position(100, 100);
+        pool.acquireArrow(start, 10, 0, 100.0, target);
+        
+        Arrow arrow = pool.getActiveArrows().get(0);
+        assertEquals(0, arrow.getDamage());
+    }
+
+    @Test
+    void testAcquireArrowWithZeroMaxDistance() {
+        Position start = new Position(100, 100);
+        pool.acquireArrow(start, 10, 5, 0.0, target);
+        
+        Arrow arrow = pool.getActiveArrows().get(0);
+        assertEquals(0.0, arrow.getMaxDistance());
+    }
+
+    @Test
+    void testAcquireArrowWithNullTarget() {
+        Position start = new Position(100, 100);
+        pool.acquireArrow(start, 10, 5, 100.0, null);
+        
+        Arrow arrow = pool.getActiveArrows().get(0);
+        assertNull(arrow.getTarget());
+    }
+
+    @Test
+    void testResetProjectileStateWithNullArrow() {
+        assertNull(pool.resetProjectileState(null));
+    }
+
+    @Test
+    void testAcquireArrowMultipleTimesReusesSameArrow() {
+        Position start1 = new Position(100, 100);
+        pool.acquireArrow(start1, 10, 5, 100.0, target);
+        Arrow arrow1 = pool.getActiveArrows().get(0);
+        pool.releaseArrow(arrow1);
+        
+        Position start2 = new Position(200, 200);
+        pool.acquireArrow(start2, 15, 8, 200.0, target);
+        Arrow arrow2 = pool.getActiveArrows().get(0);
+        
+        assertSame(arrow1, arrow2);
+    }
+
+    @Test
+    void testGetActiveArrowsReturnsSameListInstance() {
+        Position start = new Position(100, 100);
+        pool.acquireArrow(start, 10, 5, 100.0, target);
+        
+        var list1 = pool.getActiveArrows();
+        var list2 = pool.getActiveArrows();
+        
+        // getActiveArrows() returns the actual list instance, not a copy
+        assertSame(list1, list2);
+        assertEquals(list1.size(), list2.size());
+    }
 }
 

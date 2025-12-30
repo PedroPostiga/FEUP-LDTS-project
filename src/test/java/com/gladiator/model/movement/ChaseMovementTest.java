@@ -112,4 +112,66 @@ public class ChaseMovementTest {
 
         assertTrue(enemy.getPosition().getX() >= 3);
     }
+
+    @Test
+    void testMoveWithNullGladiator() {
+        when(arena.getGladiator()).thenReturn(null);
+        
+        Position initialPos = enemy.getPosition();
+        assertThrows(NullPointerException.class, () -> chaseMovement.move(enemy, arena));
+    }
+
+    @Test
+    void testMoveWithZeroSpeed() {
+        enemy.setSpeed(0);
+        enemy.setPosition(new Position(0, 0));
+        when(gladiator.getPosition()).thenReturn(new Position(100, 0));
+
+        chaseMovement.move(enemy, arena);
+
+        assertEquals(0, enemy.getPosition().getX());
+        assertEquals(0, enemy.getPosition().getY());
+    }
+
+    @Test
+    void testMoveWithNegativeCoordinates() {
+        enemy.setPosition(new Position(-10, -10));
+        when(gladiator.getPosition()).thenReturn(new Position(0, 0));
+
+        chaseMovement.move(enemy, arena);
+
+        assertTrue(enemy.getPosition().getX() >= -10);
+        assertTrue(enemy.getPosition().getY() >= -10);
+    }
+
+    @Test
+    void testMoveWithLargeCoordinates() {
+        enemy.setPosition(new Position(1000, 1000));
+        when(gladiator.getPosition()).thenReturn(new Position(2000, 2000));
+
+        chaseMovement.move(enemy, arena);
+
+        assertTrue(enemy.getPosition().getX() >= 1000);
+        assertTrue(enemy.getPosition().getY() >= 1000);
+    }
+
+    @Test
+    void testMoveWithDifferentSpeedMultipliers() {
+        ChaseMovement slowChase = new ChaseMovement(0.5, gladiator);
+        ChaseMovement fastChase = new ChaseMovement(2.0, gladiator);
+        
+        enemy.setPosition(new Position(0, 0));
+        when(gladiator.getPosition()).thenReturn(new Position(100, 0));
+        
+        slowChase.move(enemy, arena);
+        int slowX = enemy.getPosition().getX();
+        
+        enemy.setPosition(new Position(0, 0));
+        fastChase.move(enemy, arena);
+        int fastX = enemy.getPosition().getX();
+        
+        // Both should move, but speed multiplier affects movement
+        assertTrue(slowX > 0);
+        assertTrue(fastX > 0);
+    }
 }

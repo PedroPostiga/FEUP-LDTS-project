@@ -76,5 +76,43 @@ class VampireTest {
         
         assertEquals(30, vampire.getHealth().getHealth());
     }
+
+    @Test
+    void testReset() {
+        vampire.takeDamage(20);
+        vampire.reset();
+        
+        assertEquals(30, vampire.getHealth().getHealth());
+    }
+
+    @Test
+    void testSetMaxHealth() {
+        vampire.setMaxHealth(50);
+        vampire.resetHealth();
+        
+        assertEquals(50, vampire.getHealth().getHealth());
+    }
+
+    @Test
+    void testTakeExcessiveDamage() {
+        vampire.takeDamage(100);
+        
+        assertEquals(0, vampire.getHealth().getHealth());
+        assertFalse(vampire.isAlive());
+    }
+
+    @Test
+    void testGetMaxHealth() {
+        assertEquals(30, vampire.getHealth().getMaxHealth());
+    }
+
+    @Test
+    void testSetMaxHealthAndReset() {
+        vampire.setMaxHealth(50);
+        vampire.takeDamage(20);
+        vampire.resetHealth();
+        
+        assertEquals(50, vampire.getHealth().getHealth());
+    }
 }
 

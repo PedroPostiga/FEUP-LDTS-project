@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class EnemyUpdaterTest {
@@ -134,6 +135,142 @@ class EnemyUpdaterTest {
         
         verify(movement).move(enemy, arena);
         verify(enemy).getAttackStrategy();
+    }
+
+    @Test
+    void testUpdateWithBothStrategiesNull() {
+        Enemy enemy = mock(Enemy.class);
+        
+        when(enemy.isAlive()).thenReturn(true);
+        when(enemy.getMovementStrategy()).thenReturn(null);
+        when(enemy.getAttackStrategy()).thenReturn(null);
+        
+        enemies.add(enemy);
+        
+        updater.update(arena);
+        
+        verify(enemy).getMovementStrategy();
+        verify(enemy).getAttackStrategy();
+    }
+
+    @Test
+    void testUpdateWithMixedAliveAndDeadEnemies() {
+        Enemy aliveEnemy = mock(Enemy.class);
+        Enemy deadEnemy = mock(Enemy.class);
+        MovementStrategy movement = mock(MovementStrategy.class);
+        AttackStrategy attack = mock(AttackStrategy.class);
+        
+        when(aliveEnemy.isAlive()).thenReturn(true);
+        when(deadEnemy.isAlive()).thenReturn(false);
+        when(aliveEnemy.getMovementStrategy()).thenReturn(movement);
+        when(aliveEnemy.getAttackStrategy()).thenReturn(attack);
+        
+        enemies.add(deadEnemy);
+        enemies.add(aliveEnemy);
+        
+        updater.update(arena);
+        
+        verify(enemyPool).releaseEnemy(deadEnemy);
+        verify(movement).move(aliveEnemy, arena);
+        verify(attack).attack(aliveEnemy);
+    }
+
+    @Test
+    void testUpdateIteratesInReverseOrder() {
+        Enemy enemy1 = mock(Enemy.class);
+        Enemy enemy2 = mock(Enemy.class);
+        Enemy enemy3 = mock(Enemy.class);
+        
+        when(enemy1.isAlive()).thenReturn(true);
+        when(enemy2.isAlive()).thenReturn(false);
+        when(enemy3.isAlive()).thenReturn(true);
+        
+        enemies.add(enemy1);
+        enemies.add(enemy2);
+        enemies.add(enemy3);
+        
+        updater.update(arena);
+        
+        verify(enemyPool).releaseEnemy(enemy2);
+        verify(enemy1, atLeastOnce()).isAlive();
+        verify(enemy3, atLeastOnce()).isAlive();
+    }
+
+    @Test
+    void testUpdateWithNullArena() {
+        assertThrows(NullPointerException.class, () -> updater.update(null));
+    }
+
+    @Test
+    void testUpdateWithNullEnemyPool() {
+        when(arena.getEnemiePool()).thenReturn(null);
+        
+        assertThrows(NullPointerException.class, () -> updater.update(arena));
+    }
+
+    @Test
+    void testUpdateWithNullGladiator() {
+        when(arena.getGladiator()).thenReturn(null);
+        Enemy enemy = mock(Enemy.class);
+        MovementStrategy movement = mock(MovementStrategy.class);
+        
+        when(enemy.isAlive()).thenReturn(true);
+        when(enemy.getMovementStrategy()).thenReturn(movement);
+        when(enemy.getAttackStrategy()).thenReturn(mock(AttackStrategy.class));
+        
+        enemies.add(enemy);
+        
+        updater.update(arena);
+        
+        // Should still process enemies even if gladiator is null
+        verify(movement).move(enemy, arena);
+    }
+
+    @Test
+    void testUpdateWithLargeEnemyList() {
+        List<Enemy> largeEnemyList = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            Enemy enemy = mock(Enemy.class);
+            MovementStrategy movement = mock(MovementStrategy.class);
+            AttackStrategy attack = mock(AttackStrategy.class);
+            
+            when(enemy.isAlive()).thenReturn(true);
+            when(enemy.getMovementStrategy()).thenReturn(movement);
+            when(enemy.getAttackStrategy()).thenReturn(attack);
+            
+            largeEnemyList.add(enemy);
+        }
+        
+        when(enemyPool.getAllActiveEnemies()).thenReturn(largeEnemyList);
+        
+        updater.update(arena);
+        
+        // Verify all enemies were processed
+        verify(enemyPool).getAllActiveEnemies();
+    }
+
+    @Test
+    void testUpdateSkipsDeadEnemies() {
+        Enemy deadEnemy = mock(Enemy.class);
+        Enemy aliveEnemy = mock(Enemy.class);
+        MovementStrategy movement = mock(MovementStrategy.class);
+        AttackStrategy attack = mock(AttackStrategy.class);
+        
+        when(deadEnemy.isAlive()).thenReturn(false);
+        when(aliveEnemy.isAlive()).thenReturn(true);
+        when(aliveEnemy.getMovementStrategy()).thenReturn(movement);
+        when(aliveEnemy.getAttackStrategy()).thenReturn(attack);
+        
+        enemies.add(deadEnemy);
+        enemies.add(aliveEnemy);
+        
+        updater.update(arena);
+        
+        verify(enemyPool).releaseEnemy(deadEnemy);
+        verify(movement).move(aliveEnemy, arena);
+        verify(attack).attack(aliveEnemy);
+        verify(deadEnemy, never()).getMovementStrategy();
+        verify(deadEnemy, never()).getAttackStrategy();
     }
 }
 

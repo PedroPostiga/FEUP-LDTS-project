@@ -145,5 +145,72 @@ class WaveManagerTest {
         
         assertTrue(wave2Enemies >= wave1Enemies);
     }
+
+    @Test
+    void testCheckWaveCompletionWhenNotInProgress() {
+        when(enemyPool.getAllActiveEnemies()).thenReturn(new ArrayList<>());
+        
+        boolean gameWon = waveManager.checkWaveCompletion();
+        
+        assertFalse(gameWon);
+        assertFalse(waveManager.isWaveInProgress());
+    }
+
+    @Test
+    void testCheckWaveCompletionWithEnemiesStillAlive() {
+        when(enemyPool.acquireEnemy(any(), anyInt(), anyInt())).thenReturn(mock(Enemy.class));
+        waveManager.startNextWave();
+        
+        List<Enemy> activeEnemies = new ArrayList<>();
+        activeEnemies.add(mock(Enemy.class));
+        when(enemyPool.getAllActiveEnemies()).thenReturn(activeEnemies);
+        
+        boolean gameWon = waveManager.checkWaveCompletion();
+        
+        assertFalse(gameWon);
+        assertTrue(waveManager.isWaveInProgress());
+    }
+
+    @Test
+    void testGetWinningWave() {
+        int winningWave = WaveManager.getWinningWave();
+        assertTrue(winningWave > 0);
+    }
+
+    @Test
+    void testEnemyDiedWithEnemiesStillAlive() {
+        Enemy enemy1 = mock(Enemy.class);
+        Enemy enemy2 = mock(Enemy.class);
+        List<Enemy> activeEnemies = new ArrayList<>();
+        activeEnemies.add(enemy1);
+        activeEnemies.add(enemy2);
+        
+        when(enemyPool.getAllActiveEnemies()).thenReturn(activeEnemies);
+        waveManager.startNextWave();
+        
+        activeEnemies.remove(enemy1);
+        when(enemyPool.getAllActiveEnemies()).thenReturn(activeEnemies);
+        
+        waveManager.enemyDied(enemy1);
+        
+        verify(enemyPool).releaseEnemy(enemy1);
+        assertTrue(waveManager.isWaveInProgress()); // Still enemies alive
+    }
+
+    @Test
+    void testIsWaveCompleteWhenNoWavesStarted() {
+        assertFalse(waveManager.isWaveComplete());
+    }
+
+    @Test
+    void testIsWaveCompleteAfterWaveCompletion() {
+        when(enemyPool.acquireEnemy(any(), anyInt(), anyInt())).thenReturn(mock(Enemy.class));
+        waveManager.startNextWave();
+        
+        when(enemyPool.getAllActiveEnemies()).thenReturn(new ArrayList<>());
+        waveManager.checkWaveCompletion();
+        
+        assertTrue(waveManager.isWaveComplete());
+    }
 }
 

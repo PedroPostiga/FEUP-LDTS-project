@@ -77,5 +77,58 @@ class FatZombieTest {
         
         assertEquals(40, fatZombie.getHealth().getHealth());
     }
+
+    @Test
+    void testReset() {
+        fatZombie.takeDamage(30);
+        fatZombie.reset();
+        
+        assertEquals(40, fatZombie.getHealth().getHealth());
+    }
+
+    @Test
+    void testResetAndResetHealthAreSame() {
+        fatZombie.takeDamage(20);
+        int healthAfterDamage = fatZombie.getHealth().getHealth();
+        
+        fatZombie.reset();
+        int healthAfterReset = fatZombie.getHealth().getHealth();
+        
+        fatZombie.takeDamage(20);
+        fatZombie.resetHealth();
+        int healthAfterResetHealth = fatZombie.getHealth().getHealth();
+        
+        assertEquals(healthAfterReset, healthAfterResetHealth);
+    }
+
+    @Test
+    void testSetMaxHealth() {
+        fatZombie.setMaxHealth(50);
+        fatZombie.resetHealth();
+        
+        assertEquals(50, fatZombie.getHealth().getHealth());
+    }
+
+    @Test
+    void testTakeExcessiveDamage() {
+        fatZombie.takeDamage(100);
+        
+        assertEquals(0, fatZombie.getHealth().getHealth());
+        assertFalse(fatZombie.isAlive());
+    }
+
+    @Test
+    void testGetMaxHealth() {
+        assertEquals(40, fatZombie.getHealth().getMaxHealth());
+    }
+
+    @Test
+    void testSetMaxHealthAndReset() {
+        fatZombie.setMaxHealth(50);
+        fatZombie.takeDamage(20);
+        fatZombie.resetHealth();
+        
+        assertEquals(50, fatZombie.getHealth().getHealth());
+    }
 }
 

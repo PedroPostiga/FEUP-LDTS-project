@@ -87,10 +87,6 @@ public class BowAttack implements AttackStrategy {
                 maxDistance,
                 closest
         );
-
-        String attackerType = (attacker instanceof Gladiator) ? "GLADIATOR" : "ENEMY";
-        System.out.println("BowAttack: " + attackerType + " made a bow attack!");
-
         // Update cooldown after firing
         lastAttackTick.put(attacker, getCurrentTick());
     }

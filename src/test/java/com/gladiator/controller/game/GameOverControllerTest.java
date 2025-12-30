@@ -93,5 +93,45 @@ class GameOverControllerTest {
     void testUpdate() {
         controller.update();
     }
+
+    @Test
+    void testProcessInputNone() throws IOException {
+        when(gui.getNextAction()).thenReturn(GUI.ACTION.NONE);
+        
+        controller.processInput(gui);
+        
+        assertTrue(controller.running);
+    }
+
+    @Test
+    void testProcessInputLeft() throws IOException {
+        when(gui.getNextAction()).thenReturn(GUI.ACTION.LEFT);
+        
+        controller.processInput(gui);
+        
+        // LEFT is not handled, so should remain at default (MENU)
+        assertEquals(GameOverModel.Option.MENU, model.getSelected());
+    }
+
+    @Test
+    void testProcessInputRight() throws IOException {
+        when(gui.getNextAction()).thenReturn(GUI.ACTION.RIGHT);
+        
+        controller.processInput(gui);
+        
+        // RIGHT is not handled, so should remain at default (MENU)
+        assertEquals(GameOverModel.Option.MENU, model.getSelected());
+    }
+
+    @Test
+    void testMultipleNavigation() throws IOException {
+        when(gui.getNextAction()).thenReturn(GUI.ACTION.DOWN);
+        controller.processInput(gui);
+        assertEquals(GameOverModel.Option.QUIT, model.getSelected());
+        
+        when(gui.getNextAction()).thenReturn(GUI.ACTION.DOWN);
+        controller.processInput(gui);
+        assertEquals(GameOverModel.Option.MENU, model.getSelected());
+    }
 }
 

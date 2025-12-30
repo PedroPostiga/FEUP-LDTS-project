@@ -99,4 +99,47 @@ public class ArenaBuilderTest {
         assertNotNull(gladiator.getSwordAttack());
         assertNotNull(gladiator.getBowAttack());
     }
+
+    @Test
+    void testCreateArenaGladiatorAttackStats() {
+        Arena arena = arenaBuilder.createArena();
+        Gladiator gladiator = arena.getGladiator();
+
+        assertEquals(20, gladiator.getSwordAttack().getDamage());
+        assertEquals(30, gladiator.getSwordAttack().getRange());
+        // BowAttack doesn't expose getDamage(), but we can verify it has an arrow pool
+        assertNotNull(gladiator.getBowAttack().getArrowPool());
+    }
+
+    @Test
+    void testCreateObstacles() {
+        Arena arena = arenaBuilder.createArena();
+        List<com.gladiator.model.entity.Obstacle> obstacles = arena.getObstacles();
+
+        assertNotNull(obstacles);
+        assertTrue(obstacles.size() > 0);
+        
+        // Should have trees, rocks, and invisible walls
+        boolean hasTree = obstacles.stream().anyMatch(o -> o instanceof com.gladiator.model.entity.Tree);
+        boolean hasRock = obstacles.stream().anyMatch(o -> o instanceof com.gladiator.model.entity.SmallRock || 
+                                                           o instanceof com.gladiator.model.entity.LargeRock);
+        boolean hasWall = obstacles.stream().anyMatch(o -> o instanceof com.gladiator.model.entity.InvisibleWall);
+        
+        assertTrue(hasTree || hasRock || hasWall);
+    }
+
+    @Test
+    void testCreateArenaMultipleTimes() throws Exception {
+        resetGladiatorInstance();
+        Arena arena1 = arenaBuilder.createArena();
+        
+        resetGladiatorInstance();
+        Arena arena2 = arenaBuilder.createArena();
+
+        // Both should have same structure
+        assertEquals(arena1.getWidth(), arena2.getWidth());
+        assertEquals(arena1.getHeight(), arena2.getHeight());
+        assertNotNull(arena1.getGladiator());
+        assertNotNull(arena2.getGladiator());
+    }
 }

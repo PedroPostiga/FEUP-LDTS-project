@@ -74,5 +74,41 @@ class CreditsControllerTest {
     void testUpdate() {
         controller.update();
     }
+
+    @Test
+    void testProcessInputLeft() throws IOException {
+        when(gui.getNextAction()).thenReturn(GUI.ACTION.LEFT);
+        
+        controller.processInput(gui);
+        
+        assertFalse(controller.running);
+    }
+
+    @Test
+    void testProcessInputRight() throws IOException {
+        when(gui.getNextAction()).thenReturn(GUI.ACTION.RIGHT);
+        
+        controller.processInput(gui);
+        
+        assertFalse(controller.running);
+    }
+
+    @Test
+    void testProcessInputDown() throws IOException {
+        when(gui.getNextAction()).thenReturn(GUI.ACTION.DOWN);
+        
+        controller.processInput(gui);
+        
+        assertFalse(controller.running);
+    }
+
+    @Test
+    void testProcessInputUp() throws IOException {
+        when(gui.getNextAction()).thenReturn(GUI.ACTION.UP);
+        
+        controller.processInput(gui);
+        
+        assertFalse(controller.running);
+    }
 }
 

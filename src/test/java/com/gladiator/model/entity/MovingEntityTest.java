@@ -100,5 +100,57 @@ class MovingEntityTest {
         
         assertSame(newAttack, entity.getAttackStrategy());
     }
+
+    @Test
+    void testSetAttackToNull() {
+        entity.setAttack(null);
+        assertNull(entity.getAttackStrategy());
+    }
+
+    @Test
+    void testSetMovementToNull() {
+        entity.setMovement(null);
+        assertNull(entity.getMovementStrategy());
+    }
+
+    @Test
+    void testTakeDamageMultipleTimes() {
+        entity.takeDamage(10);
+        entity.takeDamage(20);
+        int expectedHealth = 40 - 10 - 20; // FatZombie has 40 HP
+        assertEquals(expectedHealth, entity.getHealth().getHealth());
+    }
+
+    @Test
+    void testTakeDamageExceedingHealth() {
+        entity.takeDamage(100);
+        assertEquals(0, entity.getHealth().getHealth());
+        assertFalse(entity.isAlive());
+    }
+
+    @Test
+    void testSpeedZero() {
+        entity.setSpeed(0);
+        assertEquals(0, entity.getSpeed());
+    }
+
+    @Test
+    void testSpeedNegative() {
+        entity.setSpeed(-5);
+        assertEquals(-5, entity.getSpeed());
+    }
+
+    @Test
+    void testPositionChangeUpdatesHitbox() {
+        Position pos1 = new Position(100, 100);
+        entity.setPosition(pos1);
+        assertEquals(100, entity.getHitbox().x);
+        assertEquals(100, entity.getHitbox().y);
+        
+        Position pos2 = new Position(200, 300);
+        entity.setPosition(pos2);
+        assertEquals(200, entity.getHitbox().x);
+        assertEquals(300, entity.getHitbox().y);
+    }
 }
 

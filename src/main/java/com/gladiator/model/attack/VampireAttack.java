@@ -60,9 +60,6 @@ public class VampireAttack implements AttackStrategy {
             int healAmount = (int) (damage * lifestealPercentage);
             attacker.getHealth().heal(healAmount);
 
-            String attackerType = (attacker instanceof Enemy) ? "ENEMY" : "UNKNOWN";
-            System.out.println("VampireAttack: " + attackerType + " made a vampire attack!");
-
             // Update cooldown after successful attack
             lastAttackTick.put(attacker, getCurrentTick());
         }

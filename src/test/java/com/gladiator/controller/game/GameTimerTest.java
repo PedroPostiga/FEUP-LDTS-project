@@ -54,5 +54,36 @@ class GameTimerTest {
         assertTrue(fastTimer.shouldTick());
         assertTrue(slowTimer.shouldTick());
     }
+
+    @Test
+    void testResetAfterMultipleTicks() throws InterruptedException {
+        timer.shouldTick();
+        Thread.sleep(20);
+        timer.shouldTick();
+        Thread.sleep(5);
+        
+        assertFalse(timer.shouldTick());
+        
+        timer.reset();
+        assertTrue(timer.shouldTick());
+    }
+
+    @Test
+    void testShouldTickImmediatelyAfterCreation() {
+        GameTimer newTimer = new GameTimer(60);
+        assertTrue(newTimer.shouldTick());
+    }
+
+    @Test
+    void testShouldTickWithVeryHighRate() {
+        GameTimer veryFastTimer = new GameTimer(1000);
+        assertTrue(veryFastTimer.shouldTick());
+    }
+
+    @Test
+    void testShouldTickWithVeryLowRate() {
+        GameTimer verySlowTimer = new GameTimer(1);
+        assertTrue(verySlowTimer.shouldTick());
+    }
 }
 

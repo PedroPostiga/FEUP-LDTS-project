@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
@@ -59,6 +60,51 @@ class ArenaUpdaterTest {
     void testUpdateDelegatesToProjectileUpdater() {
         updater.update(arena);
         
+        verify(projectileUpdater).update(arena);
+    }
+
+    @Test
+    void testUpdateCallsBothUpdatersInOrder() {
+        updater.update(arena);
+        
+        // Verify both updaters are called
+        verify(enemyUpdater).update(arena);
+        verify(projectileUpdater).update(arena);
+    }
+
+    @Test
+    void testUpdateWithNullArena() {
+        // Should not throw exception
+        assertDoesNotThrow(() -> updater.update(null));
+    }
+
+    @Test
+    void testUpdateMultipleTimes() {
+        updater.update(arena);
+        updater.update(arena);
+        updater.update(arena);
+        
+        verify(enemyUpdater, times(3)).update(arena);
+        verify(projectileUpdater, times(3)).update(arena);
+    }
+
+    @Test
+    void testUpdateWithEmptyEnemyPool() {
+        when(enemyPool.getAllActiveEnemies()).thenReturn(new ArrayList<>());
+        
+        updater.update(arena);
+        
+        verify(enemyUpdater).update(arena);
+        verify(projectileUpdater).update(arena);
+    }
+
+    @Test
+    void testUpdateWithEmptyArrowPool() {
+        when(arrowPool.getActiveArrows()).thenReturn(new ArrayList<>());
+        
+        updater.update(arena);
+        
+        verify(enemyUpdater).update(arena);
         verify(projectileUpdater).update(arena);
     }
 }

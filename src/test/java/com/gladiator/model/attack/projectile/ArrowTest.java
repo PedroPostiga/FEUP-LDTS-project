@@ -98,5 +98,69 @@ class ArrowTest {
         assertEquals(6, arrow.getHitbox().width);
         assertEquals(3, arrow.getHitbox().height);
     }
+
+    @Test
+    void testGetDistanceTraveledZero() {
+        // Arrow hasn't moved
+        double distance = arrow.getDistanceTraveled();
+        assertEquals(0.0, distance, 0.001);
+    }
+
+    @Test
+    void testGetDistanceTraveledNegativeMovement() {
+        arrow.setPosition(new Position(90, 100));
+        double distance = arrow.getDistanceTraveled();
+        assertEquals(10.0, distance, 0.1);
+    }
+
+    @Test
+    void testGetDistanceTraveledAfterStartPositionChange() {
+        arrow.setPosition(new Position(110, 100));
+        arrow.setStartPosition(new Position(105, 100));
+        double distance = arrow.getDistanceTraveled();
+        assertEquals(5.0, distance, 0.1);
+    }
+
+    @Test
+    void testHitboxUpdatesWithPosition() {
+        Position newPos = new Position(150, 200);
+        arrow.setPosition(newPos);
+        
+        assertEquals(150, arrow.getHitbox().x);
+        assertEquals(200, arrow.getHitbox().y);
+    }
+
+    @Test
+    void testHitboxUpdatesWithStartPosition() {
+        Position newStart = new Position(50, 50);
+        arrow.setStartPosition(newStart);
+        
+        assertEquals(50, arrow.getHitbox().x);
+        assertEquals(50, arrow.getHitbox().y);
+    }
+
+    @Test
+    void testSetTargetToNull() {
+        arrow.setTarget(null);
+        assertNull(arrow.getTarget());
+    }
+
+    @Test
+    void testArrowWithZeroSpeed() {
+        Arrow zeroSpeedArrow = new Arrow(startPos, 0, 5, 100.0, target);
+        assertEquals(0, zeroSpeedArrow.getSpeed());
+    }
+
+    @Test
+    void testArrowWithZeroDamage() {
+        Arrow zeroDamageArrow = new Arrow(startPos, 10, 0, 100.0, target);
+        assertEquals(0, zeroDamageArrow.getDamage());
+    }
+
+    @Test
+    void testArrowWithZeroMaxDistance() {
+        Arrow zeroDistanceArrow = new Arrow(startPos, 10, 5, 0.0, target);
+        assertEquals(0.0, zeroDistanceArrow.getMaxDistance());
+    }
 }
 

@@ -92,19 +92,20 @@ public class ArenaViewer extends Viewer<Arena> {
         }*/
     }
 
+
     private void drawHealth(int health, int arenaWidth, int arenaHeight, GUI gui) throws IOException {
         // Convert health to string to get individual digits
         String healthStr = String.valueOf(health);
-        
+
         // Estimate digit width (assuming numbers are about 16 pixels wide)
         int digitWidth = 11;
         int digitHeight = 14; // Approximate height for positioning
         int padding = 5; // Padding from the edge
-        
+
         // Start position: bottom right, drawing from right to left
         int startX = arenaWidth - padding;
         int startY = arenaHeight - digitHeight - padding;
-        
+
         // Draw each digit from right to left
         for (int i = healthStr.length() - 1; i >= 0; i--) {
             char digit = healthStr.charAt(i);
@@ -116,7 +117,7 @@ public class ArenaViewer extends Viewer<Arena> {
     }
 
 
-    private void drawAttackRange(int centerX, int centerY, AttackStrategy attackStrategy, GUI gui) {
+    /*private void drawAttackRange(int centerX, int centerY, AttackStrategy attackStrategy, GUI gui) {
         int range = 0;
         String color = "#888888"; // Default gray color
         
@@ -134,5 +135,5 @@ public class ArenaViewer extends Viewer<Arena> {
         
         // Draw range circle centered on entity
         gui.drawCircle(centerX, centerY, range, color);
-    }
+    }*/
 }

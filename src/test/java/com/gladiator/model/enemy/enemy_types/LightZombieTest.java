@@ -77,5 +77,43 @@ class LightZombieTest {
         
         assertEquals(20, lightZombie.getHealth().getHealth());
     }
+
+    @Test
+    void testReset() {
+        lightZombie.takeDamage(15);
+        lightZombie.reset();
+        
+        assertEquals(20, lightZombie.getHealth().getHealth());
+    }
+
+    @Test
+    void testSetMaxHealth() {
+        lightZombie.setMaxHealth(30);
+        lightZombie.resetHealth();
+        
+        assertEquals(30, lightZombie.getHealth().getHealth());
+    }
+
+    @Test
+    void testTakeExcessiveDamage() {
+        lightZombie.takeDamage(100);
+        
+        assertEquals(0, lightZombie.getHealth().getHealth());
+        assertFalse(lightZombie.isAlive());
+    }
+
+    @Test
+    void testGetMaxHealth() {
+        assertEquals(20, lightZombie.getHealth().getMaxHealth());
+    }
+
+    @Test
+    void testSetMaxHealthAndReset() {
+        lightZombie.setMaxHealth(30);
+        lightZombie.takeDamage(10);
+        lightZombie.resetHealth();
+        
+        assertEquals(30, lightZombie.getHealth().getHealth());
+    }
 }
 

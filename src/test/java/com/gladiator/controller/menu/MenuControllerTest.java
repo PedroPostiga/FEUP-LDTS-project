@@ -104,5 +104,50 @@ class MenuControllerTest {
     void testUpdate() {
         menuController.update();
     }
+
+    @Test
+    void testProcessInputNone() throws IOException {
+        when(gui.getNextAction()).thenReturn(GUI.ACTION.NONE);
+        
+        menuController.processInput(gui);
+        
+        // Should not change selection or stop
+        assertTrue(menuController.running);
+    }
+
+    @Test
+    void testProcessInputLeft() throws IOException {
+        when(gui.getNextAction()).thenReturn(GUI.ACTION.LEFT);
+        
+        menuController.processInput(gui);
+        
+        // LEFT is not handled, so should remain at default (PLAY)
+        assertEquals(MenuModel.Option.PLAY, model.getSelected());
+    }
+
+    @Test
+    void testProcessInputRight() throws IOException {
+        when(gui.getNextAction()).thenReturn(GUI.ACTION.RIGHT);
+        
+        menuController.processInput(gui);
+        
+        // RIGHT is not handled, so should remain at default (PLAY)
+        assertEquals(MenuModel.Option.PLAY, model.getSelected());
+    }
+
+    @Test
+    void testMultipleNavigation() throws IOException {
+        when(gui.getNextAction()).thenReturn(GUI.ACTION.DOWN);
+        menuController.processInput(gui);
+        assertEquals(MenuModel.Option.CREDITS, model.getSelected());
+        
+        when(gui.getNextAction()).thenReturn(GUI.ACTION.DOWN);
+        menuController.processInput(gui);
+        assertEquals(MenuModel.Option.EXIT, model.getSelected());
+        
+        when(gui.getNextAction()).thenReturn(GUI.ACTION.DOWN);
+        menuController.processInput(gui);
+        assertEquals(MenuModel.Option.PLAY, model.getSelected());
+    }
 }
 

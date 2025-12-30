@@ -65,8 +65,6 @@ public class SwordAttack implements AttackStrategy {
 
         // Only update cooldown if we actually hit something
         if (hitAnyTarget) {
-            String attackerType = (attacker instanceof Gladiator) ? "GLADIATOR" : "ENEMY";
-            System.out.println("SwordAttack: " + attackerType + " made a sword attack!");
             lastAttackTick.put(attacker, getCurrentTick());
         }
     }

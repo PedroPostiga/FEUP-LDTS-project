@@ -94,5 +94,55 @@ class GladiatorTest {
         assertEquals(5, gladiator.getSpeed());
         assertTrue(gladiator.isAlive());
     }
+
+    @Test
+    void testGetInstanceWithDifferentParameters() throws Exception {
+        resetGladiatorInstance();
+        
+        Gladiator g = Gladiator.getInstance(200, 300, 30, 40, 150, 10);
+        
+        assertEquals(200, g.getPosition().getX());
+        assertEquals(300, g.getPosition().getY());
+        assertEquals(10, g.getSpeed());
+    }
+
+    @Test
+    void testSetSwordAttackToNull() {
+        gladiator.setSwordAttack(null);
+        assertNull(gladiator.getSwordAttack());
+    }
+
+    @Test
+    void testSetBowAttackToNull() {
+        gladiator.setBowAttack(null);
+        assertNull(gladiator.getBowAttack());
+    }
+
+    @Test
+    void testAllDirections() {
+        for (Gladiator.Direction dir : Gladiator.Direction.values()) {
+            gladiator.setDirection(dir);
+            assertEquals(dir, gladiator.getDirection());
+        }
+    }
+
+    @Test
+    void testDefaultDirection() throws Exception {
+        resetGladiatorInstance();
+        Gladiator g = Gladiator.getInstance(0, 0, 10, 10, 50, 1);
+        assertEquals(Gladiator.Direction.DOWN, g.getDirection());
+    }
+
+    @Test
+    void testSingletonIgnoresSubsequentParameters() throws Exception {
+        resetGladiatorInstance();
+        
+        Gladiator g1 = Gladiator.getInstance(100, 100, 20, 20, 100, 5);
+        Gladiator g2 = Gladiator.getInstance(999, 999, 99, 99, 999, 99);
+        
+        assertSame(g1, g2);
+        // First initialization parameters should be used
+        assertEquals(100, g2.getPosition().getX());
+    }
 }
 

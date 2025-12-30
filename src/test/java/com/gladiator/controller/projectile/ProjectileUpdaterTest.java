@@ -192,5 +192,87 @@ class ProjectileUpdaterTest {
         
         verify(arrowPool).releaseArrow(arrow);
     }
+
+    @Test
+    void testUpdateArrowWithZeroDistance() {
+        Arrow arrow = mock(Arrow.class);
+        Enemy target = mock(Enemy.class);
+        Rectangle arrowHitbox = new Rectangle(100, 100, 6, 3);
+        Rectangle enemyHitbox = new Rectangle(100, 100, 16, 16);
+        
+        when(arrow.getTarget()).thenReturn(target);
+        when(target.isAlive()).thenReturn(true);
+        when(arrow.getPosition()).thenReturn(new Position(100, 100));
+        when(arrow.getHitbox()).thenReturn(arrowHitbox);
+        when(target.getHitbox()).thenReturn(enemyHitbox);
+        when(arrow.getSpeed()).thenReturn(10);
+        when(arrow.getDistanceTraveled()).thenReturn(0.0);
+        when(arrow.getMaxDistance()).thenReturn(1000.0);
+        when(arena.isEnemy(any(Rectangle.class))).thenReturn(true);
+        enemies.add(target);
+        
+        arrows.add(arrow);
+        
+        updater.update(arena);
+        
+        verify(target).takeDamage(anyInt());
+        verify(arrowPool).releaseArrow(arrow);
+    }
+
+    @Test
+    void testUpdateArrowWithExactMaxDistance() {
+        Arrow arrow = mock(Arrow.class);
+        Enemy target = mock(Enemy.class);
+        Rectangle arrowHitbox = new Rectangle(100, 100, 6, 3);
+        Rectangle enemyHitbox = new Rectangle(150, 150, 16, 16);
+        
+        when(arrow.getTarget()).thenReturn(target);
+        when(target.isAlive()).thenReturn(true);
+        when(arrow.getPosition()).thenReturn(new Position(100, 100));
+        when(arrow.getHitbox()).thenReturn(arrowHitbox);
+        when(target.getHitbox()).thenReturn(enemyHitbox);
+        when(arrow.getSpeed()).thenReturn(10);
+        when(arrow.getDistanceTraveled()).thenReturn(1000.0);
+        when(arrow.getMaxDistance()).thenReturn(1000.0);
+        when(arena.isEnemy(any(Rectangle.class))).thenReturn(false);
+        when(arena.isEmpty(any(Rectangle.class), isNull(), eq(gladiator))).thenReturn(true);
+        enemies.add(target);
+        
+        arrows.add(arrow);
+        
+        updater.update(arena);
+        
+        // Should still move if distance equals max (not greater)
+        verify(arrow).setPosition(any(Position.class));
+    }
+
+    @Test
+    void testUpdateArrowWithZeroSpeed() {
+        Arrow arrow = mock(Arrow.class);
+        Enemy target = mock(Enemy.class);
+        Rectangle arrowHitbox = new Rectangle(100, 100, 6, 3);
+        Rectangle enemyHitbox = new Rectangle(150, 150, 16, 16);
+        
+        when(arrow.getTarget()).thenReturn(target);
+        when(target.isAlive()).thenReturn(true);
+        Position initialPos = new Position(100, 100);
+        when(arrow.getPosition()).thenReturn(initialPos);
+        when(arrow.getHitbox()).thenReturn(arrowHitbox);
+        when(target.getHitbox()).thenReturn(enemyHitbox);
+        when(arrow.getSpeed()).thenReturn(0);
+        when(arrow.getDistanceTraveled()).thenReturn(0.0);
+        when(arrow.getMaxDistance()).thenReturn(1000.0);
+        when(arena.isEnemy(any(Rectangle.class))).thenReturn(false);
+        when(arena.isEmpty(any(Rectangle.class), isNull(), eq(gladiator))).thenReturn(true);
+        enemies.add(target);
+        
+        arrows.add(arrow);
+        
+        updater.update(arena);
+        
+        // Arrow position may be set even with zero speed (to same position)
+        // But the position should remain the same
+        verify(arrow).setPosition(eq(initialPos));
+    }
 }
 

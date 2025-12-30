@@ -54,4 +54,35 @@ public class ViewerRegistryTest {
 
         assertSame(viewer1, viewer2);
     }
+
+    @Test
+    public void testGetViewerForObstacles() {
+        com.gladiator.model.entity.SmallRock smallRock = new com.gladiator.model.entity.SmallRock(0, 0);
+        com.gladiator.model.entity.LargeRock largeRock = new com.gladiator.model.entity.LargeRock(0, 0);
+        com.gladiator.model.entity.Tree tree = new com.gladiator.model.entity.Tree(0, 0);
+
+        com.gladiator.view.game.EntityViewer<com.gladiator.model.entity.SmallRock> smallRockViewer = 
+            ViewerRegistry.getViewer(smallRock);
+        com.gladiator.view.game.EntityViewer<com.gladiator.model.entity.LargeRock> largeRockViewer = 
+            ViewerRegistry.getViewer(largeRock);
+        com.gladiator.view.game.EntityViewer<com.gladiator.model.entity.Tree> treeViewer = 
+            ViewerRegistry.getViewer(tree);
+
+        assertNotNull(smallRockViewer);
+        assertNotNull(largeRockViewer);
+        assertNotNull(treeViewer);
+    }
+
+    @Test
+    public void testGetViewerForObstacleReturnsSameInstance() {
+        com.gladiator.model.entity.SmallRock rock1 = new com.gladiator.model.entity.SmallRock(0, 0);
+        com.gladiator.model.entity.SmallRock rock2 = new com.gladiator.model.entity.SmallRock(10, 10);
+
+        com.gladiator.view.game.EntityViewer<com.gladiator.model.entity.SmallRock> viewer1 = 
+            ViewerRegistry.getViewer(rock1);
+        com.gladiator.view.game.EntityViewer<com.gladiator.model.entity.SmallRock> viewer2 = 
+            ViewerRegistry.getViewer(rock2);
+
+        assertSame(viewer1, viewer2);
+    }
 }

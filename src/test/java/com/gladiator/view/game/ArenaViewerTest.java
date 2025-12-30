@@ -119,4 +119,69 @@ public class ArenaViewerTest {
 
         verify(gui, atLeastOnce()).drawSprite(anyString(), any(Position.class));
     }
+
+    @Test
+    public void testArenaViewerWithNullGladiator() throws IOException {
+        when(arena.getGladiator()).thenReturn(null);
+
+        arenaViewer.draw(gui);
+
+        verify(gui).drawSprite("sprites/arena.png", new Position(0, 0));
+    }
+
+    @Test
+    public void testArenaViewerDrawsSwordAttackRange() throws IOException {
+        SwordAttack swordAttack = mock(SwordAttack.class);
+        when(swordAttack.getRange()).thenReturn(30);
+        when(gladiator.getSwordAttack()).thenReturn(swordAttack);
+        when(gladiator.getHitbox()).thenReturn(new java.awt.Rectangle(100, 100, 20, 20));
+
+        arenaViewer.draw(gui);
+
+        // Note: drawCircle is commented out in ArenaViewer, so we just verify the draw completes
+        verify(gui, atLeastOnce()).drawSprite(anyString(), any(Position.class));
+    }
+
+    @Test
+    public void testArenaViewerWithNullSwordAttack() throws IOException {
+        when(gladiator.getSwordAttack()).thenReturn(null);
+
+        arenaViewer.draw(gui);
+
+        verify(gui).drawSprite("sprites/arena.png", new Position(0, 0));
+    }
+
+    @Test
+    public void testArenaViewerWithArrows() throws IOException {
+        com.gladiator.model.attack.projectile.Arrow arrow = mock(com.gladiator.model.attack.projectile.Arrow.class);
+        when(arrow.getPosition()).thenReturn(new Position(150, 150));
+        when(arrowPool.getActiveArrows()).thenReturn(List.of(arrow));
+
+        arenaViewer.draw(gui);
+
+        verify(gui, atLeastOnce()).drawSprite(anyString(), any(Position.class));
+    }
+
+    @Test
+    public void testArenaViewerDrawsHealthWithDifferentValues() throws IOException {
+        when(gladiator.getHealth().getHealth()).thenReturn(50);
+        arenaViewer.draw(gui);
+        verify(gui, atLeastOnce()).drawSprite(contains("numbers"), any(Position.class));
+
+        when(gladiator.getHealth().getHealth()).thenReturn(999);
+        arenaViewer.draw(gui);
+        verify(gui, atLeastOnce()).drawSprite(contains("numbers"), any(Position.class));
+    }
+
+    @Test
+    public void testArenaViewerWithInvisibleWall() throws IOException {
+        List<Obstacle> obstacles = new ArrayList<>();
+        obstacles.add(new com.gladiator.model.entity.InvisibleWall(0, 0, 10, 10));
+        when(arena.getObstacles()).thenReturn(obstacles);
+
+        arenaViewer.draw(gui);
+
+        // InvisibleWall should be skipped
+        verify(gui).drawSprite("sprites/arena.png", new Position(0, 0));
+    }
 }

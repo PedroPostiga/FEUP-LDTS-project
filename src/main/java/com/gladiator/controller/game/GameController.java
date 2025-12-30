@@ -100,7 +100,6 @@ public class GameController extends Controller {
         // Check lose condition: gladiator is dead
         if (arena.getGladiator() != null && !arena.getGladiator().isAlive()) {
             gameState = GameState.LOST;
-            System.out.println("GAME OVER: You lost! The gladiator has died.");
             stop();
             return;
         }
@@ -108,7 +107,6 @@ public class GameController extends Controller {
         // Check win condition: completed all waves
         if (gameWon) {
             gameState = GameState.WON;
-            System.out.println("GAME OVER: You won! Completed " + waveManager.getCurrentWave() + " waves!");
             stop();
             return;
         }
