@@ -47,13 +47,13 @@ public class EnemyPool {
         enemyFactories.put(EnemyType.VAMPIRE, (x, y) -> new Vampire(
                 x, y,
                 new ChaseMovement(2.0, gladiator),
-                new VampireAttack(15, 30, gladiator, 0.3)
+                new VampireAttack(15, 25, gladiator, 0.3)
         ));
 
         enemyFactories.put(EnemyType.FAT_ZOMBIE, (x, y) -> new FatZombie(
                 x, y,
                 new ChaseMovement(1.0, gladiator),
-                new SwordAttack(12, 30, List.of(gladiator))
+                new SwordAttack(12, 25, List.of(gladiator))
         ));
 
         enemyFactories.put(EnemyType.LIGHT_ZOMBIE, (x, y) -> {
@@ -63,7 +63,7 @@ public class EnemyPool {
                     shouldChase ?
                             new ChaseMovement(4.0, gladiator) :
                             new WanderMovement(),
-                    new SwordAttack(8, 30, List.of(gladiator))
+                    new SwordAttack(8, 25, List.of(gladiator))
             );
         });
     }
